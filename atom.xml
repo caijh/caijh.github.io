@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://caijh.github.io/</id>
     <title>John&apos;s Blog</title>
-    <updated>2019-06-24T09:40:06.400Z</updated>
+    <updated>2019-06-24T09:42:03.393Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://caijh.github.io/"/>
     <link rel="self" href="https://caijh.github.io//atom.xml"/>
@@ -10,15 +10,6 @@
     <logo>https://caijh.github.io//images/avatar.png</logo>
     <icon>https://caijh.github.io//favicon.ico</icon>
     <rights>All rights reserved 2019, John&apos;s Blog</rights>
-    <entry>
-        <title type="html"><![CDATA[about]]></title>
-        <id>https://caijh.github.io//post/about</id>
-        <link href="https://caijh.github.io//post/about">
-        </link>
-        <updated>2019-06-24T09:39:25.000Z</updated>
-        <content type="html"><![CDATA[<p>this is about</p>
-]]></content>
-    </entry>
     <entry>
         <title type="html"><![CDATA[MySQL规范]]></title>
         <id>https://caijh.github.io//post/mysql-gui-fan</id>
