@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>设计模式-工厂方法模式 | John&#39;s Blog</title>
+<title>设计模式-模板方法模式 | John&#39;s Blog</title>
 <meta name="description" content="搬砖大佬">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -87,7 +87,7 @@
       <div class="sm-12 md-8 col">
         <div class="paper">
           <article class="article">
-            <h1>设计模式-工厂方法模式</h1>
+            <h1>设计模式-模板方法模式</h1>
             <p class="article-meta">
               2019-06-24
               
@@ -97,90 +97,82 @@
               
             </p>
             
-              <img src="https://design-patterns.readthedocs.io/zh_CN/latest/_images/FactoryMethod.jpg" alt="设计模式-工厂方法模式">
+              <img src="https://pic3.zhimg.com/v2-49714ca1bde181ca24bfaf9bf8244cab_1200x500.jpg" alt="设计模式-模板方法模式">
             
             <div class="post-content">
               <h4 id="定义">定义</h4>
 <blockquote>
-<p>Define an interface for creating an object,but let subclasses decide which class to instantiate.Factory Method lets a class defer instantiation to subclasses.（定义一个用于创建对象的接口，让子类决定实例化哪一个类。工厂方法使一个类的实例化延迟到其子类。）</p>
+<p>Define the skeleton of an algorithm in an operation,deferring some steps to subclasses.Template Method lets subclasses redefine certain steps of an algorithm without changing the algorithm's structure.（定义一个操作中的算法的框架，而将一些步骤延迟到子类中。使得子类可以不改变一个算法的结构即可重定义该算法的某些特定步骤。）</p>
 </blockquote>
 <h4 id="uml">UML</h4>
-<p><img src="https://design-patterns.readthedocs.io/zh_CN/latest/_images/FactoryMethod.jpg" alt="IMAGE"></p>
-<!-- more -->
-<h4 id="工厂方法模式的优点">工厂方法模式的优点</h4>
-<ul>
-<li>首先，良好的封装性，代码结构清晰。一个对象创建是有条件约束的，如一个调用者需要一个具体的产品对象，只要知道这个产品的类名（或约束字符串）就可以了，不用知道创建对象的艰辛过程，降低模块间的耦合。</li>
-<li>再次，屏蔽产品类。这一特点非常重要，产品类的实现如何变化，调用者都不需要关心，它只需要关心产品的接口，只要接口保持不变，系统中的上层模块就不要发生变化。</li>
-<li>最后，工厂方法模式是典型的解耦框架。高层模块值需要知道产品的抽象类，其他的实现类都不用关心，符合迪米特法则，我不需要的就不要去交流；也符合依赖倒置原则，只依赖产品类的抽象；当然也符合里氏替换原则，使用产品子类替换产品父类，没问题！</li>
-</ul>
-<h4 id="工厂方法模式的使用场景">工厂方法模式的使用场景</h4>
-<ul>
-<li>工厂方法模式是new一个对象的替代品，所以在所有需要生成对象的地方都可以使用，但是需要慎重地考虑是否要增加一个工厂类进行管理，增加代码的复杂度。</li>
-<li>需要灵活的、可扩展的框架时，可以考虑采用工厂方法模式。</li>
-<li>工厂方法模式可以用在异构项目中</li>
-<li>可以使用在测试驱动开发的框架下</li>
-</ul>
-<h4 id="jdk中的工厂方法模式">JDK中的工厂方法模式</h4>
-<ul>
-<li>java.util.Calendar#getInstance()</li>
-<li>java.util.ResourceBundle#getBundle()</li>
-<li>java.text.NumberFormat#getInstance()</li>
-<li>java.nio.charset.Charset#forName()</li>
-<li>java.net.URLStreamHandlerFactory#createURLStreamHandler(String) (Returns singleton object per protocol)</li>
-</ul>
-<h4 id="工厂方法模式代码">工厂方法模式代码</h4>
-<pre><code>public abstract class Product {    
-     //产品类的公共方法
-     public void method1(){
-             //业务逻辑处理
-     }  
-     //抽象方法
-     public abstract void method2();    
+<p><img src="https://caijh.github.io//post-images/1561387763499.png" alt=""></p>
+<h4 id="代码实现">代码实现</h4>
+<pre><code>public abstract class AbstractClass {
+     //基本方法
+     protected abstract void doSomething();
+     //基本方法
+     protected abstract void doAnything();
+     //模板方法
+     public void templateMethod(){
+             /*
+              * 调用基本方法，完成相关的逻辑
+              */
+             this.doAnything();
+             this.doSomething();
+     }
 }
-
-public class ConcreteProduct1 extends Product {
-     public void method2() {
+public class ConcreteClass1 extends AbstractClass {
+     //实现基本方法
+     protected void doAnything() {
+             //业务逻辑处理
+     }
+     protected void doSomething() {
              //业务逻辑处理
      }
 }
-public class ConcreteProduct2 extends Product {
-     public void method2() {
+public class ConcreteClass2 extends AbstractClass {
+     //实现基本方法
+     protected void doAnything() {
+             //业务逻辑处理
+     }
+     protected void doSomething() {
              //业务逻辑处理
      }
 }
-
-public abstract class Creator {    
-     /*
-      * 创建一个产品对象，其输入参数类型可以自行设置
-      * 通常为String、Enum、Class等，当然也可以为空
-      */        
-     public abstract &lt;T extends Product&gt; T createProduct(Class&lt;T&gt; c);
-}
-
-public class ConcreteCreator extends Creator {     
-     public &lt;T extends Product&gt; T createProduct(Class&lt;T&gt; c){
-             Product product=null;
-             try {
-                    product = (Product)Class.forName(c.getName()).newInstance();
-             } catch (Exception e) {
-                    //异常处理
-             }
-             return (T)product;         
-     }
-}
-
-public class ConcreteCreator extends Creator {     
-     public &lt;T extends Product&gt; T createProduct(Class&lt;T&gt; c){
-             Product product=null;
-             try {
-                    product = (Product)Class.forName(c.getName()).newInstance();
-             } catch (Exception e) {
-                    //异常处理
-             }
-             return (T)product;         
+public class Client {
+     public static void main(String[] args) {
+             AbstractClass class1 = new ConcreteClass1();
+             AbstractClass class2 = new ConcreteClass2();               
+             //调用模板方法
+             class1.templateMethod();
+             class2.templateMethod();
      }
 }
 </code></pre>
+<h4 id="模板方法模式的优点">模板方法模式的优点</h4>
+<ul>
+<li>封装不变部分，扩展可变部分
+把认为是不变部分的算法封装到父类实现，而可变部分的则可以通过继承来继续扩展。</li>
+<li>提取公共部分代码，便于维护
+我们例子中刚刚走过的弯路就是最好的证明，如果我们不抽取到父类中，任由这种散乱的代码发生，想想后果是什么样子？维护人员为了修正一个缺陷，需要到处查找类似的代码！</li>
+<li>行为由父类控制，子类实现
+基本方法是由子类实现的，因此子类可以通过扩展的方式增加相应的功能，符合开闭原则。</li>
+</ul>
+<h4 id="模板方法模式的缺点">模板方法模式的缺点</h4>
+<p>按照我们的设计习惯，抽象类负责声明最抽象、最一般的事物属性和方法，实现类完成具体的事物属性和方法。但是模板方法模式却颠倒了，抽象类定义了部分抽象方法，由子类实现，子类执行的结果影响了父类的结果，也就是子类对父类产生了影响，这在复杂的项目中，会带来代码阅读的难度，而且也会让新手产生不适感。</p>
+<h4 id="模板方法的使用场景">模板方法的使用场景</h4>
+<ul>
+<li>多个子类有公有的方法，并且逻辑基本相同时。</li>
+<li>重要、复杂的算法，可以把核心算法设计为模板方法，周边的相关细节功能则由各个子类实现。</li>
+<li>重构时，模板方法模式是一个经常使用的模式，把相同的代码抽取到父类中，然后通过钩子函数（见“模板方法模式的扩展”）约束其行为。</li>
+</ul>
+<h4 id="jdk中的模板方法模式">JDK中的模板方法模式</h4>
+<ul>
+<li>java.util.Collections#sort()</li>
+<li>java.io.InputStream#skip()</li>
+<li>java.io.InputStream#read()</li>
+<li>java.util.AbstractList#indexOf()</li>
+</ul>
 
             </div>
           </article>
@@ -191,9 +183,9 @@ public class ConcreteCreator extends Creator {
               <div class="next">
                 下一篇
               </div>
-              <a href="https://caijh.github.io//post/she-ji-mo-shi-dan-li-mo-shi">
+              <a href="https://caijh.github.io//post/she-ji-mo-shi-chou-xiang-gong-han-mo-shi">
                 <h3 class="post-title">
-                  设计模式-单例模式
+                  设计模式-抽象工厂模式
                 </h3>
               </a>
             </div>
@@ -290,11 +282,11 @@ public class ConcreteCreator extends Creator {
           设计模式
         </a>
       
-        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge secondary">
+        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge warning">
           MySQL
         </a>
       
-        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge success">
+        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge secondary">
           Java
         </a>
       
