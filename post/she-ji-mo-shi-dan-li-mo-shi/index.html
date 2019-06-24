@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>设计模式 | John&#39;s Blog</title>
+<title>设计模式-单例模式 | John&#39;s Blog</title>
 <meta name="description" content="搬砖大佬">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -15,6 +15,12 @@
 <link rel="stylesheet" href="https://caijh.github.io//styles/main.css">
 
 
+  
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/disqusjs@1.1/dist/disqusjs.css" />
+  
+
 <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
 
 
@@ -23,6 +29,7 @@
 
   </head>
   <body>
+  
     <nav class="navbar border fixed split-nav">
   <div class="nav-brand">
     <h3><a href="https://caijh.github.io/">John&#39;s Blog</a></h3>
@@ -79,49 +86,141 @@
     <div id="top" class="row site">
       <div class="sm-12 md-8 col">
         <div class="paper">
-          <h2 class="current-tag">标签: 设计模式</h2>
-          
-  <article class="article">
-    <h2 class="article-title">
-      <a href="https://caijh.github.io//post/she-ji-mo-shi-solid-yuan-ze">设计模式-SOLID原则</a>
-    </h2>
-    <p class="article-meta">
-      2019-06-24
-      
-        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge ">
-          设计模式
-        </a>
-      
-    </p>
-    <p class="text-lead">
-      <p>运用设计模式，需要记住六大设计原则：</p>
-<ul>
-<li>Single Responsibility Principle：单一职责原则</li>
-<li>Open Closed Principle：开闭原则</li>
-<li>Liskov Substitution Principle：里氏替换原则</li>
-<li>Law of Demeter：迪米特法则</li>
-<li>Interface Segregation Principle：接口隔离原则</li>
-<li>Dependence Inversion Principle：依赖倒置原则</li>
-</ul>
+          <article class="article">
+            <h1>设计模式-单例模式</h1>
+            <p class="article-meta">
+              2019-06-24
+              
+            </p>
+            
+            <div class="post-content">
+              <blockquote>
+<p>Ensure a class has only one instance, and provide a global point of access to it.（确保某一个类只有一个实例，而且自行实例化并向整个系统提供这个实例。）</p>
+</blockquote>
+<h5 id="类图">类图</h5>
+<p><img src="https://caijh.github.io//post-images/1561372464381.png" alt=""></p>
+<!-- more -->
+<h6 id="饿汉模式">饿汉模式</h6>
+<pre><code>public class Singleton {
 
-    </p>
-    <div class="row">
-      <a href="https://caijh.github.io//post/she-ji-mo-shi-solid-yuan-ze" class="readmore-link">
-        <button>
-          Read More
-        </button>
-      </a>
-    </div>
-  </article>
+    private static final Singleton SINGLETON = new Singleton();
 
+    private Singleton() {
 
+    }
+
+    public static Singleton getInstance() {
+        return SINGLETON;
+    }
+}
+</code></pre>
+<h6 id="懒汉模式">懒汉模式</h6>
+<pre><code>public class SingletonLay {
+    private static SingletonLay singletonLay = null;
+
+    private SingletonLay() {
+
+    }
+
+    public static SingletonLay getSingletonLay() {
+        if (singletonLay == null) {
+            synchronized (SingletonLay.class) {
+                if (singletonLay == null) {
+                    singletonLay = new SingletonLay();
+                }
+            }
+        }
+        return singletonLay;
+    }
+}
+</code></pre>
+<p><strong>隐患</strong>
+上述写法看似解决了问题，但是有个很大的隐患。实例化对象的那行代码（标记为error的那行），实际上可以分解成以下三个步骤：</p>
+<ol>
+<li>
+<p>分配内存空间</p>
+</li>
+<li>
+<p>初始化对象</p>
+</li>
+<li>
+<p>将对象指向刚分配的内存空间
+但是有些编译器为了性能的原因，可能会将第二步和第三步进行重排序，顺序就成了：</p>
+</li>
+<li>
+<p>分配内存空间</p>
+</li>
+<li>
+<p>将对象指向刚分配的内存空间</p>
+</li>
+<li>
+<p>初始化对象</p>
+</li>
+</ol>
+<p>正确的双重检查锁</p>
+<pre><code>public class SingletonLay {
+    private static volilate SingletonLay singletonLay = null;
+
+    private SingletonLay() {
+
+    }
+
+    public static SingletonLay getSingletonLay() {
+        if (singletonLay == null) {
+            synchronized (SingletonLay.class) {
+                if (singletonLay == null) {
+                    singletonLay = new SingletonLay();
+                }
+            }
+        }
+        return singletonLay;
+    }
+}
+</code></pre>
+<h6 id="enum-方式">Enum 方式</h6>
+<pre><code>class Resource{
+}
+
+public enum Singleton {
+    INSTANCE;
+    private Resource instance;
+    Singleton() {
+        instance = new Resource();
+    }
+    public Resource getInstance() {
+        return instance;
+    }
+}
+</code></pre>
+
+            </div>
+          </article>
         </div>
-        <div class="row flex-edges">
-  
-  
-</div>
+        <div class="paper" data-aos="fade-in">
+          
+            <div class="next-post">
+              <div class="next">
+                下一篇
+              </div>
+              <a href="https://caijh.github.io//post/she-ji-mo-shi-solid-yuan-ze">
+                <h3 class="post-title">
+                  设计模式-SOLID原则
+                </h3>
+              </a>
+            </div>
+          
+        </div>
+        
+          
 
+          
+            <div class="paper" data-aos="fade-in">
+              <div id="disqus_thread"></div>
+            </div>
+          
+        
       </div>
+
       <div class="sm-12 md-4 col sidebar">
   <div class="paper info-container">
     <img src="https://caijh.github.io//images/avatar.png?v=1561372472567" class="no-responsive avatar">
@@ -180,7 +279,7 @@
     </div>
     <div class="row">
       
-        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge secondary">
+        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge warning">
           设计模式
         </a>
       
@@ -188,7 +287,7 @@
           MySQL
         </a>
       
-        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge ">
+        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge secondary">
           Java
         </a>
       
@@ -198,6 +297,7 @@
     Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://caijh.github.io//atom.xml" target="_blank">RSS</a>
   </div>
 </div>
+
 
     </div>
 
@@ -210,6 +310,26 @@ AOS.init();
 hljs.initHighlightingOnLoad()
 
 </script>
+
+
+
+  
+
+  
+    <script src="https://unpkg.com/disqusjs@1.1/dist/disqus.js"></script>
+    <script>
+
+    var options = {
+      shortname: 'caijh',
+      apikey: 'lO2xchFAyPIP4VOKbgm796D9jIvqLVziAqLHOPnOZySwUlyWXAhgwrIbPQ16AyUX',
+    }
+    if ('https://disqus.skk.moe/disqus/') {
+      options.api = 'https://disqus.skk.moe/disqus/'
+    }
+    var dsqjs = new DisqusJS(options)
+
+    </script>
+  
 
 
 
