@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>设计模式-模板方法模式 | John&#39;s Blog</title>
+<title>设计模式-代理模式 | John&#39;s Blog</title>
 <meta name="description" content="搬砖大佬">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -87,92 +87,68 @@
       <div class="sm-12 md-8 col">
         <div class="paper">
           <article class="article">
-            <h1>设计模式-模板方法模式</h1>
+            <h1>设计模式-代理模式</h1>
             <p class="article-meta">
               2019-06-24
               
-                <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge secondary">
+                <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge success">
                   设计模式
                 </a>
               
             </p>
             
-              <img src="https://pic3.zhimg.com/v2-49714ca1bde181ca24bfaf9bf8244cab_1200x500.jpg" alt="设计模式-模板方法模式">
-            
             <div class="post-content">
               <h4 id="定义">定义</h4>
 <blockquote>
-<p>Define the skeleton of an algorithm in an operation,deferring some steps to subclasses.Template Method lets subclasses redefine certain steps of an algorithm without changing the algorithm's structure.（定义一个操作中的算法的框架，而将一些步骤延迟到子类中。使得子类可以不改变一个算法的结构即可重定义该算法的某些特定步骤。）</p>
+<p>Provide a surrogate or placeholder for another object to control access to it.（为其他对象提供一种代理以控制对这个对象的访问。）</p>
 </blockquote>
 <h4 id="uml">UML</h4>
-<p><img src="https://caijh.github.io//post-images/1561387763499.png" alt=""></p>
+<p><img src="https://caijh.github.io//post-images/1561388635995.png" alt=""></p>
 <!-- more -->
 <h4 id="代码实现">代码实现</h4>
-<pre><code>public abstract class AbstractClass {
-     //基本方法
-     protected abstract void doSomething();
-     //基本方法
-     protected abstract void doAnything();
-     //模板方法
-     public void templateMethod(){
-             /*
-              * 调用基本方法，完成相关的逻辑
-              */
-             this.doAnything();
-             this.doSomething();
-     }
+<pre><code>public interface Subject {
+     //定义一个方法
+     public void request();
 }
-public class ConcreteClass1 extends AbstractClass {
-     //实现基本方法
-     protected void doAnything() {
-             //业务逻辑处理
-     }
-     protected void doSomething() {
+public class RealSubject implements Subject {
+     //实现方法
+     public void request() {
              //业务逻辑处理
      }
 }
-public class ConcreteClass2 extends AbstractClass {
-     //实现基本方法
-     protected void doAnything() {
-             //业务逻辑处理
+public class Proxy implements Subject {
+     //要代理哪个实现类
+     private Subject subject = null;    
+     //默认被代理者
+     public Proxy(){
+             this.subject = new RealSubject();
      }
-     protected void doSomething() {
-             //业务逻辑处理
+     //通过构造函数传递代理者
+     public Proxy(Object...objects ){
      }
-}
-public class Client {
-     public static void main(String[] args) {
-             AbstractClass class1 = new ConcreteClass1();
-             AbstractClass class2 = new ConcreteClass2();               
-             //调用模板方法
-             class1.templateMethod();
-             class2.templateMethod();
+     //实现接口中定义的方法
+     public void request() {
+             this.before();
+             this.subject.request();
+             this.after();
+     }
+     //预处理
+     private void before(){
+             //do something
+     }
+     //善后处理
+     private void after(){
+             //do something
      }
 }
 </code></pre>
-<h4 id="模板方法模式的优点">模板方法模式的优点</h4>
+<h4 id="代理模式的优点">代理模式的优点</h4>
 <ul>
-<li>封装不变部分，扩展可变部分
-把认为是不变部分的算法封装到父类实现，而可变部分的则可以通过继承来继续扩展。</li>
-<li>提取公共部分代码，便于维护
-我们例子中刚刚走过的弯路就是最好的证明，如果我们不抽取到父类中，任由这种散乱的代码发生，想想后果是什么样子？维护人员为了修正一个缺陷，需要到处查找类似的代码！</li>
-<li>行为由父类控制，子类实现
-基本方法是由子类实现的，因此子类可以通过扩展的方式增加相应的功能，符合开闭原则。</li>
-</ul>
-<h4 id="模板方法模式的缺点">模板方法模式的缺点</h4>
-<p>按照我们的设计习惯，抽象类负责声明最抽象、最一般的事物属性和方法，实现类完成具体的事物属性和方法。但是模板方法模式却颠倒了，抽象类定义了部分抽象方法，由子类实现，子类执行的结果影响了父类的结果，也就是子类对父类产生了影响，这在复杂的项目中，会带来代码阅读的难度，而且也会让新手产生不适感。</p>
-<h4 id="模板方法的使用场景">模板方法的使用场景</h4>
-<ul>
-<li>多个子类有公有的方法，并且逻辑基本相同时。</li>
-<li>重要、复杂的算法，可以把核心算法设计为模板方法，周边的相关细节功能则由各个子类实现。</li>
-<li>重构时，模板方法模式是一个经常使用的模式，把相同的代码抽取到父类中，然后通过钩子函数（见“模板方法模式的扩展”）约束其行为。</li>
-</ul>
-<h4 id="jdk中的模板方法模式">JDK中的模板方法模式</h4>
-<ul>
-<li>java.util.Collections#sort()</li>
-<li>java.io.InputStream#skip()</li>
-<li>java.io.InputStream#read()</li>
-<li>java.util.AbstractList#indexOf()</li>
+<li>职责清晰
+真实的角色就是实现实际的业务逻辑，不用关心其他非本职责的事务，通过后期的代理完成一件事务，附带的结果就是编程简洁清晰。</li>
+<li>职责清晰
+真实的角色就是实现实际的业务逻辑，不用关心其他非本职责的事务，通过后期的代理完成一件事务，附带的结果就是编程简洁清晰。</li>
+<li>智能化</li>
 </ul>
 
             </div>
@@ -184,9 +160,9 @@ public class Client {
               <div class="next">
                 下一篇
               </div>
-              <a href="https://caijh.github.io//post/she-ji-mo-shi-chou-xiang-gong-han-mo-shi">
+              <a href="https://caijh.github.io//post/she-ji-mo-shi-jian-zao-zhe-mo-shi">
                 <h3 class="post-title">
-                  设计模式-抽象工厂模式
+                  设计模式-建造者模式
                 </h3>
               </a>
             </div>
@@ -291,15 +267,15 @@ public class Client {
     </div>
     <div class="row">
       
-        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge secondary">
+        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge ">
           设计模式
         </a>
       
-        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge ">
+        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge secondary">
           MySQL
         </a>
       
-        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge ">
+        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge warning">
           Java
         </a>
       

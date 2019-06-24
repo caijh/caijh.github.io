@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://caijh.github.io/</id>
     <title>John&apos;s Blog</title>
-    <updated>2019-06-24T14:59:30.199Z</updated>
+    <updated>2019-06-24T15:05:14.295Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://caijh.github.io/"/>
     <link rel="self" href="https://caijh.github.io//atom.xml"/>
@@ -10,6 +10,73 @@
     <logo>https://caijh.github.io//images/avatar.png</logo>
     <icon>https://caijh.github.io//favicon.ico</icon>
     <rights>All rights reserved 2019, John&apos;s Blog</rights>
+    <entry>
+        <title type="html"><![CDATA[设计模式-代理模式]]></title>
+        <id>https://caijh.github.io//post/she-ji-mo-shi-dai-li-mo-shi</id>
+        <link href="https://caijh.github.io//post/she-ji-mo-shi-dai-li-mo-shi">
+        </link>
+        <updated>2019-06-24T15:03:20.000Z</updated>
+        <summary type="html"><![CDATA[<h4 id="定义">定义</h4>
+<blockquote>
+<p>Provide a surrogate or placeholder for another object to control access to it.（为其他对象提供一种代理以控制对这个对象的访问。）</p>
+</blockquote>
+<h4 id="uml">UML</h4>
+<p><img src="https://caijh.github.io//post-images/1561388635995.png" alt=""></p>
+]]></summary>
+        <content type="html"><![CDATA[<h4 id="定义">定义</h4>
+<blockquote>
+<p>Provide a surrogate or placeholder for another object to control access to it.（为其他对象提供一种代理以控制对这个对象的访问。）</p>
+</blockquote>
+<h4 id="uml">UML</h4>
+<p><img src="https://caijh.github.io//post-images/1561388635995.png" alt=""></p>
+<!-- more -->
+<h4 id="代码实现">代码实现</h4>
+<pre><code>public interface Subject {
+     //定义一个方法
+     public void request();
+}
+public class RealSubject implements Subject {
+     //实现方法
+     public void request() {
+             //业务逻辑处理
+     }
+}
+public class Proxy implements Subject {
+     //要代理哪个实现类
+     private Subject subject = null;    
+     //默认被代理者
+     public Proxy(){
+             this.subject = new RealSubject();
+     }
+     //通过构造函数传递代理者
+     public Proxy(Object...objects ){
+     }
+     //实现接口中定义的方法
+     public void request() {
+             this.before();
+             this.subject.request();
+             this.after();
+     }
+     //预处理
+     private void before(){
+             //do something
+     }
+     //善后处理
+     private void after(){
+             //do something
+     }
+}
+</code></pre>
+<h4 id="代理模式的优点">代理模式的优点</h4>
+<ul>
+<li>职责清晰
+真实的角色就是实现实际的业务逻辑，不用关心其他非本职责的事务，通过后期的代理完成一件事务，附带的结果就是编程简洁清晰。</li>
+<li>职责清晰
+真实的角色就是实现实际的业务逻辑，不用关心其他非本职责的事务，通过后期的代理完成一件事务，附带的结果就是编程简洁清晰。</li>
+<li>智能化</li>
+</ul>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[设计模式-建造者模式]]></title>
         <id>https://caijh.github.io//post/she-ji-mo-shi-jian-zao-zhe-mo-shi</id>
