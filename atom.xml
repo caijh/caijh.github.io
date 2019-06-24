@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://caijh.github.io/</id>
     <title>John&apos;s Blog</title>
-    <updated>2019-06-24T02:39:18.976Z</updated>
+    <updated>2019-06-24T02:43:29.334Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://caijh.github.io/"/>
     <link rel="self" href="https://caijh.github.io//atom.xml"/>
@@ -16,10 +16,7 @@
         <link href="https://caijh.github.io//post/graphql-xue-xi-bi-ji">
         </link>
         <updated>2019-06-24T02:35:07.000Z</updated>
-        <summary type="html"><![CDATA[<hr>
-<p>title: GraphQL学习笔记</p>
-<hr>
-<h2 id="graphql是什么">GraphQL是什么？</h2>
+        <summary type="html"><![CDATA[<h2 id="graphql是什么">GraphQL是什么？</h2>
 <p>GraphQl官方的定义是：</p>
 <p>GraphQL是一种API的查询语言。 它用于运行时完成数据查询。 GraphQL服务与传输无关，但通常通过HTTP提供。</p>
 <p>GraphQl特性</p>
@@ -34,10 +31,7 @@
 <li>endpoints过多，管理endpoints是个问题。Endpoints修改，客户端也需要修改。</li>
 </ul>
 ]]></summary>
-        <content type="html"><![CDATA[<hr>
-<p>title: GraphQL学习笔记</p>
-<hr>
-<h2 id="graphql是什么">GraphQL是什么？</h2>
+        <content type="html"><![CDATA[<h2 id="graphql是什么">GraphQL是什么？</h2>
 <p>GraphQl官方的定义是：</p>
 <p>GraphQL是一种API的查询语言。 它用于运行时完成数据查询。 GraphQL服务与传输无关，但通常通过HTTP提供。</p>
 <p>GraphQl特性</p>
