@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://caijh.github.io/</id>
     <title>John&apos;s Blog</title>
-    <updated>2019-06-24T15:05:14.295Z</updated>
+    <updated>2019-06-24T15:08:23.835Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://caijh.github.io/"/>
     <link rel="self" href="https://caijh.github.io//atom.xml"/>
@@ -10,6 +10,64 @@
     <logo>https://caijh.github.io//images/avatar.png</logo>
     <icon>https://caijh.github.io//favicon.ico</icon>
     <rights>All rights reserved 2019, John&apos;s Blog</rights>
+    <entry>
+        <title type="html"><![CDATA[设计模式-原型模式]]></title>
+        <id>https://caijh.github.io//post/she-ji-mo-shi-yuan-xing-mo-shi</id>
+        <link href="https://caijh.github.io//post/she-ji-mo-shi-yuan-xing-mo-shi">
+        </link>
+        <updated>2019-06-24T15:06:00.000Z</updated>
+        <summary type="html"><![CDATA[<h4 id="定义">定义</h4>
+<blockquote>
+<p>Specify the kinds of objects to create using a prototypical instance,and create new objects by copying this prototype.（用原型实例指定创建对象的种类，并且通过拷贝这些原型创建新的对象。）</p>
+</blockquote>
+<h4 id="uml">UML</h4>
+<p><img src="https://caijh.github.io//post-images/1561388832916.png" alt=""></p>
+]]></summary>
+        <content type="html"><![CDATA[<h4 id="定义">定义</h4>
+<blockquote>
+<p>Specify the kinds of objects to create using a prototypical instance,and create new objects by copying this prototype.（用原型实例指定创建对象的种类，并且通过拷贝这些原型创建新的对象。）</p>
+</blockquote>
+<h4 id="uml">UML</h4>
+<p><img src="https://caijh.github.io//post-images/1561388832916.png" alt=""></p>
+<!-- more -->
+<h4 id="代码实现">代码实现</h4>
+<pre><code>public class PrototypeClass  implements Cloneable{
+     //覆写父类Object方法
+     @Override
+     public PrototypeClass clone(){
+             PrototypeClass prototypeClass = null;
+             try {
+                    prototypeClass = (PrototypeClass)super.clone();
+             } catch (CloneNotSupportedException e) {
+                    //异常处理
+             }
+             return prototypeClass;
+     }
+}
+</code></pre>
+<h4 id="原型模式的优点">原型模式的优点：</h4>
+<ul>
+<li>性能优良
+原型模式是在内存二进制流的拷贝，要比直接new一个对象性能好很多，特别是要在一个循环体内产生大量的对象时，原型模式可以更好地体现其优点。</li>
+<li>逃避构造函数的约束
+这既是它的优点也是缺点，直接在内存中拷贝，构造函数是不会执行的。优点就是减少了约束，缺点也是减少了约束，需要大家在实际应用时考虑。</li>
+</ul>
+<h4 id="原型模式的使用场景">原型模式的使用场景</h4>
+<ul>
+<li>资源优化场景
+类初始化需要消化非常多的资源，这个资源包括数据、硬件资源等。</li>
+<li>性能和安全要求的场景
+通过new产生一个对象需要非常繁琐的数据准备或访问权限，则可以使用原型模式。</li>
+<li>一个对象多个修改者的场景
+一个对象需要提供给其他对象访问，而且各个调用者可能都需要修改其值时，可以考虑使用原型模式拷贝多个对象供调用者使用。</li>
+</ul>
+<h4 id="jdk中的原型模式">JDK中的原型模式</h4>
+<ul>
+<li>java.lang.Object#clone()</li>
+<li>java.lang.Cloneable</li>
+</ul>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[设计模式-代理模式]]></title>
         <id>https://caijh.github.io//post/she-ji-mo-shi-dai-li-mo-shi</id>
