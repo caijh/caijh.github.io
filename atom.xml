@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://caijh.github.io/</id>
     <title>John&apos;s Blog</title>
-    <updated>2019-06-24T14:52:57.893Z</updated>
+    <updated>2019-06-24T14:54:14.789Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://caijh.github.io/"/>
     <link rel="self" href="https://caijh.github.io//atom.xml"/>
@@ -16,12 +16,20 @@
         <link href="https://caijh.github.io//post/she-ji-mo-shi-mo-ban-fang-fa-mo-shi">
         </link>
         <updated>2019-06-24T14:48:26.000Z</updated>
+        <summary type="html"><![CDATA[<h4 id="定义">定义</h4>
+<blockquote>
+<p>Define the skeleton of an algorithm in an operation,deferring some steps to subclasses.Template Method lets subclasses redefine certain steps of an algorithm without changing the algorithm's structure.（定义一个操作中的算法的框架，而将一些步骤延迟到子类中。使得子类可以不改变一个算法的结构即可重定义该算法的某些特定步骤。）</p>
+</blockquote>
+<h4 id="uml">UML</h4>
+<p><img src="https://caijh.github.io//post-images/1561387763499.png" alt=""></p>
+]]></summary>
         <content type="html"><![CDATA[<h4 id="定义">定义</h4>
 <blockquote>
 <p>Define the skeleton of an algorithm in an operation,deferring some steps to subclasses.Template Method lets subclasses redefine certain steps of an algorithm without changing the algorithm's structure.（定义一个操作中的算法的框架，而将一些步骤延迟到子类中。使得子类可以不改变一个算法的结构即可重定义该算法的某些特定步骤。）</p>
 </blockquote>
 <h4 id="uml">UML</h4>
 <p><img src="https://caijh.github.io//post-images/1561387763499.png" alt=""></p>
+<!-- more -->
 <h4 id="代码实现">代码实现</h4>
 <pre><code>public abstract class AbstractClass {
      //基本方法
