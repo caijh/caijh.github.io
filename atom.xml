@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://caijh.github.io/</id>
     <title>John&apos;s Blog</title>
-    <updated>2019-06-24T14:54:14.789Z</updated>
+    <updated>2019-06-24T14:59:30.199Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://caijh.github.io/"/>
     <link rel="self" href="https://caijh.github.io//atom.xml"/>
@@ -10,6 +10,88 @@
     <logo>https://caijh.github.io//images/avatar.png</logo>
     <icon>https://caijh.github.io//favicon.ico</icon>
     <rights>All rights reserved 2019, John&apos;s Blog</rights>
+    <entry>
+        <title type="html"><![CDATA[设计模式-建造者模式]]></title>
+        <id>https://caijh.github.io//post/she-ji-mo-shi-jian-zao-zhe-mo-shi</id>
+        <link href="https://caijh.github.io//post/she-ji-mo-shi-jian-zao-zhe-mo-shi">
+        </link>
+        <updated>2019-06-24T14:57:23.000Z</updated>
+        <summary type="html"><![CDATA[<h4 id="定义">定义</h4>
+<blockquote>
+<p>Separate the construction of a complex object from its representation so that the same construction process can create different representations.（将一个复杂对象的构建与它的表示分离，使得同样的构建过程可以创建不同的表示。）</p>
+</blockquote>
+<h4 id="uml">UML</h4>
+<p><img src="https://caijh.github.io//post-images/1561388283844.png" alt=""></p>
+]]></summary>
+        <content type="html"><![CDATA[<h4 id="定义">定义</h4>
+<blockquote>
+<p>Separate the construction of a complex object from its representation so that the same construction process can create different representations.（将一个复杂对象的构建与它的表示分离，使得同样的构建过程可以创建不同的表示。）</p>
+</blockquote>
+<h4 id="uml">UML</h4>
+<p><img src="https://caijh.github.io//post-images/1561388283844.png" alt=""></p>
+<!-- more -->
+<h4 id="建造者模式的优点">建造者模式的优点</h4>
+<ul>
+<li>封装性
+使用建造者模式可以使客户端不必知道产品内部组成的细节</li>
+<li>建造者独立，容易扩展</li>
+<li>便于控制细节风险
+由于具体的建造者是独立的，因此可以对建造过程逐步细化，而不对其他的模块产生任何影响。</li>
+</ul>
+<h4 id="建造者模式使用场景">建造者模式使用场景</h4>
+<ul>
+<li>相同的方法，不同的执行顺序，产生不同的事件结果时，可以采用建造者模式。</li>
+<li>多个部件或零件，都可以装配到一个对象中，但是产生的运行结果又不相同时，则可以使用该模式。</li>
+<li>产品类非常复杂，或者产品类中的调用顺序不同产生了不同的效能，这个时候使用建造者模式非常合适。</li>
+<li>在对象创建过程中会使用到系统中的一些其他对象，这些对象在产品对象的创建过程中不易得到时，也可以采用建造者模式封装该对象的创建过程。该种场景只能是一个补偿方法，因为一个对象不容易获得，而在设计阶段竟然没有发觉，而要通过创建者模式柔化创建过程，本身已经违反设计的最初目标。</li>
+</ul>
+<h4 id="代码实现">代码实现</h4>
+<pre><code>public class Product {
+     public void doSomething(){
+             //独立业务处理
+     }
+}
+public abstract class Builder {    
+     //设置产品的不同部分，以获得不同的产品
+     public abstract void setPart();
+     //建造产品
+     public abstract Product buildProduct();
+}
+public class ConcreteBuilder extends Builder {
+     private Product product = new Product();
+     //设置产品零件
+     public void setPart(){
+             /*
+              * 产品类内的逻辑处理
+              */
+     }  
+     //组建一个产品
+     public Product buildProduct() {
+             return product;
+     }
+}
+public class Director {
+     private Builder builder = new ConcreteBuilder();
+     //构建不同的产品
+     public Product getAProduct(){
+             builder.setPart();
+             /*
+              * 设置不同的零件，产生不同的产品
+              */
+             return builder.buildProduct();
+     }
+}
+</code></pre>
+<h4 id="jdk中的建造者模式">JDK中的建造者模式</h4>
+<ul>
+<li>java.lang.StringBuilder#append() (unsynchronized)</li>
+<li>java.lang.StringBuilder#append() (unsynchronized)</li>
+<li>java.nio.ByteBuffer#put()(alsoonCharBuffer,ShortBuffer,IntBuffer,LongBuffer,FloatBufferandDoubleBuffer)</li>
+<li>javax.swing.GroupLayout.Group#addComponent()</li>
+<li>All implementations of java.lang.Appendable</li>
+</ul>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[设计模式-模板方法模式]]></title>
         <id>https://caijh.github.io//post/she-ji-mo-shi-mo-ban-fang-fa-mo-shi</id>
