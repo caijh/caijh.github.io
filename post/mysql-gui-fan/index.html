@@ -1,31 +1,106 @@
-<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
-    <id>https://caijh.github.io/</id>
-    <title>John&apos;s Blog</title>
-    <updated>2019-06-24T02:56:13.847Z</updated>
-    <generator>https://github.com/jpmonette/feed</generator>
-    <link rel="alternate" href="https://caijh.github.io/"/>
-    <link rel="self" href="https://caijh.github.io//atom.xml"/>
-    <subtitle>搬砖大佬</subtitle>
-    <logo>https://caijh.github.io//images/avatar.png</logo>
-    <icon>https://caijh.github.io//favicon.ico</icon>
-    <rights>All rights reserved 2019, John&apos;s Blog</rights>
-    <entry>
-        <title type="html"><![CDATA[MySQL规范]]></title>
-        <id>https://caijh.github.io//post/mysql-gui-fan</id>
-        <link href="https://caijh.github.io//post/mysql-gui-fan">
-        </link>
-        <updated>2019-06-24T02:54:06.000Z</updated>
-        <summary type="html"><![CDATA[<h1 id="数据库命名规范">数据库命名规范</h1>
-<ul>
-<li>所有数据库对象名称必须使用小写字母并用下划线分割</li>
-<li>所有数据库对象名称禁止使用mysql保留关键字（如果表名中包含关键字查询时，需要将其用单引号括起来）</li>
-<li>数据库对象的命名要能做到见名识意，并且最后不要超过32个字符</li>
-<li>临时库表必须以tmp_为前缀并以日期为后缀，备份表必须以bak_为前缀并以日期(时间戳)为后缀</li>
-<li>所有存储相同数据的列名和列类型必须一致（一般作为关联列，如果查询时关联列类型不一致会自动进行数据类型隐式转换，会造成列上的索引失效，导致查询效率降低）</li>
-</ul>
-]]></summary>
-        <content type="html"><![CDATA[<h1 id="数据库命名规范">数据库命名规范</h1>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>MySQL规范 | John&#39;s Blog</title>
+<meta name="description" content="搬砖大佬">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="shortcut icon" href="https://caijh.github.io//favicon.ico?v=1561344969872">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://caijh.github.io//styles/main.css">
+
+
+  
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/disqusjs@1.1/dist/disqusjs.css" />
+  
+
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
+  </head>
+  <body>
+  
+    <nav class="navbar border fixed split-nav">
+  <div class="nav-brand">
+    <h3><a href="https://caijh.github.io/">John&#39;s Blog</a></h3>
+  </div>
+  <div class="collapsible">
+    <input id="collapsible1" type="checkbox" name="collapsible1">
+    <button>
+      <label for="collapsible1">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+      </label>
+    </button>
+    <div class="collapsible-body">
+      <ul class="inline">
+        
+          <li>
+            
+              <a href="/" class="menu">
+                首页
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/archives" class="menu">
+                归档
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/tags" class="menu">
+                标签
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/post/about" class="menu">
+                关于
+              </a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div id="top" class="row site">
+      <div class="sm-12 md-8 col">
+        <div class="paper">
+          <article class="article">
+            <h1>MySQL规范</h1>
+            <p class="article-meta">
+              2019-06-24
+              
+                <a href="https://caijh.github.io//tag/o82yUqML0" class="badge secondary">
+                  MySQL
+                </a>
+              
+            </p>
+            
+              <img src="https://cdn.worldvectorlogo.com/logos/mysql.svg" alt="MySQL规范">
+            
+            <div class="post-content">
+              <h1 id="数据库命名规范">数据库命名规范</h1>
 <ul>
 <li>所有数据库对象名称必须使用小写字母并用下划线分割</li>
 <li>所有数据库对象名称禁止使用mysql保留关键字（如果表名中包含关键字查询时，需要将其用单引号括起来）</li>
@@ -199,320 +274,131 @@ Innodb是一种索引组织表：数据的存储的逻辑顺序和索引的顺�
 <li>对于程序连接数据库账号，遵循权限最小原则
 程序使用数据库账号只能在一个DB下使用，不准跨库 程序使用的账号原则上不准有drop权限。</li>
 </ol>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[GraphQL学习笔记]]></title>
-        <id>https://caijh.github.io//post/graphql-xue-xi-bi-ji</id>
-        <link href="https://caijh.github.io//post/graphql-xue-xi-bi-ji">
-        </link>
-        <updated>2019-06-24T02:35:07.000Z</updated>
-        <summary type="html"><![CDATA[<h2 id="graphql是什么">GraphQL是什么？</h2>
-<p>GraphQl官方的定义是：</p>
-<p>GraphQL是一种API的查询语言。 它用于运行时完成数据查询。 GraphQL服务与传输无关，但通常通过HTTP提供。</p>
-<p>GraphQl特性</p>
-<ul>
-<li>GraphQL query， 只请求需要的数据</li>
-<li>GraphQL schema， 在服务器端定义了api的数据结构</li>
-<li>可以在一个请求中获取多个数据，如果是rest的话， 需要访问多个接口</li>
-</ul>
-<p>与REST对比，REST的缺点的主要有以下:</p>
-<ul>
-<li>Overfetching 往往会给客户端返回过多的数据</li>
-<li>endpoints过多，管理endpoints是个问题。Endpoints修改，客户端也需要修改。</li>
-</ul>
-]]></summary>
-        <content type="html"><![CDATA[<h2 id="graphql是什么">GraphQL是什么？</h2>
-<p>GraphQl官方的定义是：</p>
-<p>GraphQL是一种API的查询语言。 它用于运行时完成数据查询。 GraphQL服务与传输无关，但通常通过HTTP提供。</p>
-<p>GraphQl特性</p>
-<ul>
-<li>GraphQL query， 只请求需要的数据</li>
-<li>GraphQL schema， 在服务器端定义了api的数据结构</li>
-<li>可以在一个请求中获取多个数据，如果是rest的话， 需要访问多个接口</li>
-</ul>
-<p>与REST对比，REST的缺点的主要有以下:</p>
-<ul>
-<li>Overfetching 往往会给客户端返回过多的数据</li>
-<li>endpoints过多，管理endpoints是个问题。Endpoints修改，客户端也需要修改。</li>
-</ul>
-<!-- more -->
-<p>GraphQL只是一种协议， 官方提供了多种实现。如java, javascript.</p>
-<p>GraphQL中的类型</p>
-<ul>
-<li>
-<p>scalar type</p>
-<p>GraphQL的Scalar Type有Int, String, Float, Boolean, ID</p>
-</li>
-<li>
-<p>object type</p>
-</li>
-<li>
-<p>Fragments</p>
-<pre><code class="language-java">fragment liftInfo on Lift {
-  name
-  status
-  capacity
-  night
-  elevationGain
-}
-</code></pre>
-<pre><code class="language-java">query {
-    Lift(id: &quot;jazz-cat&quot;) {
-      ...liftInfo
-      trailAccess {
-        name
-        difficulty
-      }
+
+            </div>
+          </article>
+        </div>
+        <div class="paper" data-aos="fade-in">
+          
+            <div class="next-post">
+              <div class="next">
+                下一篇
+              </div>
+              <a href="https://caijh.github.io//post/graphql-xue-xi-bi-ji">
+                <h3 class="post-title">
+                  GraphQL学习笔记
+                </h3>
+              </a>
+            </div>
+          
+        </div>
+        
+          
+
+          
+            <div class="paper" data-aos="fade-in">
+              <div id="disqus_thread"></div>
+            </div>
+          
+        
+      </div>
+
+      <div class="sm-12 md-4 col sidebar">
+  <div class="paper info-container">
+    <img src="https://caijh.github.io//images/avatar.png?v=1561344969872" class="no-responsive avatar">
+    <div class="text-muted">搬砖大佬</div>
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      最新文章
+    </div>
+    <div class="row">
+      <ul>
+        
+          
+            <li>
+              <a href="https://caijh.github.io//post/mysql-gui-fan">MySQL规范</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://caijh.github.io//post/graphql-xue-xi-bi-ji">GraphQL学习笔记</a>
+            </li>
+          
+        
+      </ul>
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      标签列表
+    </div>
+    <div class="row">
+      
+        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge secondary">
+          MySQL
+        </a>
+      
+        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge success">
+          Java
+        </a>
+      
+    </div>
+  </div>
+  <div class="paper">
+    Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://caijh.github.io//atom.xml" target="_blank">RSS</a>
+  </div>
+</div>
+
+
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<script type="application/javascript">
+
+AOS.init();
+
+hljs.initHighlightingOnLoad()
+
+</script>
+
+
+
+  
+
+  
+    <script src="https://unpkg.com/disqusjs@1.1/dist/disqus.js"></script>
+    <script>
+
+    var options = {
+      shortname: 'disqus_2iTh58mKZo',
+      apikey: 'lO2xchFAyPIP4VOKbgm796D9jIvqLVziAqLHOPnOZySwUlyWXAhgwrIbPQ16AyUX',
     }
-    Trail(id: &quot;river-run&quot;) {
-      name
-      difficulty
-      accessedByLifts {
-        ...liftInfo
-      }
+    if ('') {
+      options.api = ''
     }
-}
-</code></pre>
-<p>The fragment in this example is named <code>liftInfo</code>, and it is a selection set on the <code>Lift</code> type.</p>
-</li>
-<li>
-<p>union type</p>
-<pre><code class="language-java">union AgendaItem = StudyGroup | Workout
+    var dsqjs = new DisqusJS(options)
 
-type StudyGroup {
-    name: String!
-    subject: String
-    students: [User!]!
-}
+    </script>
+  
 
-type Workout {
-    name: String!
-    reps: Int!
-}
 
-type Query {
-    agenda: [AgendaItem!]!
-}
 
-</code></pre>
-</li>
-<li>
-<p>interface</p>
-<p><em>Interfaces</em> are another option when dealing with multiple object types that could be returned by a single field. An interface is an abstract type that establishes a list of fields that should be implemented in similar object types. When another type implements the interface, it includes all of the fields from the interface and usually some of its own fields.</p>
-<pre><code class="language-java">interface AgendaItem {
-    name: String!
-    start: DateTime!
-    end: DateTime!
-}
 
-type StudyGroup implements AgendaItem {
-    name: String!
-    start: DateTime!
-    end: DateTime!
-    participants: [User!]!
-    topic: String!
-}
-
-type Workout implements AgendaItem {
-    name: String!
-    start: DateTime!
-    end: DateTime!
-    reps: Int!
-}
-
-type Query {
-    agenda: [AgendaItem!]!
-}
-</code></pre>
-</li>
-<li>
-<p>enums</p>
-<pre><code class="language-java">enum PhotoCategory {
-    SELFIE
-    PORTRAIT
-    ACTION
-    LANDSCAPE
-    GRAPHIC
-}
-</code></pre>
-<pre><code class="language-java">type Photo {
-    id: ID!
-    name: String!
-    url: String!
-    description: String
-    created: DateTime!
-    category: PhotoCategory!
-}
-</code></pre>
-</li>
-</ul>
-<h2 id="graphql的java使用">GraphQL的Java使用</h2>
-<p>源码地址：<a href="https://github.com/caijh/samples/tree/master/sample-graphql">https://github.com/caijh/samples/tree/master/sample-graphql</a></p>
-<ol>
-<li>
-<p>引入maven依赖</p>
-<pre><code class="language-java">&lt;dependency&gt;
-    &lt;groupId&gt;com.graphql-java&lt;/groupId&gt;
-    &lt;artifactId&gt;graphql-java&lt;/artifactId&gt;
-    &lt;version&gt;11.0&lt;/version&gt;
-&lt;/dependency&gt;
-&lt;dependency&gt;
-&lt;dependency&gt;
-            &lt;groupId&gt;com.graphql-java&lt;/groupId&gt;
-            &lt;artifactId&gt;graphql-spring-boot-starter&lt;/artifactId&gt;
-            &lt;version&gt;5.0.2&lt;/version&gt;
- &lt;/dependency&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;com.graphql-java&lt;/groupId&gt;
-            &lt;artifactId&gt;graphql-java-tools&lt;/artifactId&gt;
-            &lt;version&gt;5.2.4&lt;/version&gt;
-        &lt;/dependency&gt;
-&lt;dependency&gt;
-    &lt;groupId&gt;com.graphql-java&lt;/groupId&gt;
-    &lt;artifactId&gt;graphiql-spring-boot-starter&lt;/artifactId&gt;
-    &lt;version&gt;5.0.2&lt;/version&gt;
-&lt;/dependency&gt;
-</code></pre>
-</li>
-<li>
-<p>建立表</p>
-<pre><code class="language-mysql">create table `author` (
-	id bigint primary key auto_increment,
-    name varchar(45) not null,
-    birthday datetime default null
-) engine = InnoDB default charset=utf8 comment '作者';
-
-create table `article` (
-	id bigint primary key auto_increment,
-    title varchar(100) not null,
-    author_id bigint not null,
-    content text not null
-) engine = InnoDB default charset = utf8 comment '文章';
-
-</code></pre>
-</li>
-<li>
-<p>创建graphqls</p>
-<p>schema.graphql</p>
-<pre><code class="language-java">scalar Date
-
-type Query {
-
-}
-
-type Mutation {
-
-}
-</code></pre>
-<p>author.graphqls</p>
-<pre><code class="language-java">extend type  Query {
-    findAuthorById(id: Int): Author
-}
-
-extend type Mutation {
-    newAuthor(name: String, birthday: Date): Boolean
-}
-
-type Author {
-    id: ID
-    name: String
-    birthday: Date
-}
-
-</code></pre>
-<p>article.graphqls</p>
-<pre><code class="language-java">extend type Query {
-    findArticleById(id: Int) : Article
-}
-
-extend type Mutation {
-    newArticle(title: String, content: String, authorId: Int): Boolean
-}
-
-type Article {
-    id: ID
-    title: String
-    content: String
-    authorId: Int
-}
-</code></pre>
-</li>
-<li>
-<p>创建Query和Mutation</p>
-<pre><code class="language-java">package com.coding.sample.graphql.component;
-
-import com.coding.sample.graphql.entity.Article;
-import com.coding.sample.graphql.entity.Author;
-import com.coding.sample.graphql.mapper.ArticleMapper;
-import com.coding.sample.graphql.mapper.AuthorMapper;
-import com.coxautodev.graphql.tools.GraphQLQueryResolver;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-@Component
-public class Query implements GraphQLQueryResolver {
-
-    @Autowired
-    private AuthorMapper authorMapper;
-    @Autowired
-    private ArticleMapper articleMapper;
-
-    public Author findAuthorById(Long id) {
-        return authorMapper.selectByPrimaryKey(id);
-    }
-
-    public Article findArticleById(Long id) {
-        return articleMapper.selectByPrimaryKey(id);
-    }
-
-}
-</code></pre>
-<pre><code class="language-java">package com.coding.sample.graphql.component;
-
-import java.util.Date;
-
-import com.coding.sample.graphql.entity.Article;
-import com.coding.sample.graphql.entity.Author;
-import com.coding.sample.graphql.mapper.ArticleMapper;
-import com.coding.sample.graphql.mapper.AuthorMapper;
-import com.coxautodev.graphql.tools.GraphQLMutationResolver;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-@Component
-public class Mutation implements GraphQLMutationResolver {
-
-    @Autowired
-    private AuthorMapper authorMapper;
-    @Autowired
-    private ArticleMapper articleMapper;
-
-    public boolean newAuthor(String name, Date birthday) {
-        Author author = new Author();
-        author.setName(name);
-        author.setBirthday(birthday);
-        return authorMapper.insert(author) &gt; 0;
-    }
-
-    public boolean newArticle(String title, String content, Long authorId) {
-        Article article = new Article();
-        article.setTitle(title);
-        article.setContent(content);
-        article.setAuthorId(authorId);
-        articleMapper.insert(article);
-        return true;
-    }
-
-}
-</code></pre>
-</li>
-<li>
-<p>测试</p>
-</li>
-</ol>
-<p><img src="https://caijh.github.io//post-images/1561343905414.png" alt="">
-<img src="https://caijh.github.io//post-images/1561343911617.png" alt=""></p>
-]]></content>
-    </entry>
-</feed>
+  </body>
+</html>
