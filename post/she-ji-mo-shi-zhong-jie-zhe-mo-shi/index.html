@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>设计模式-SOLID原则 | John&#39;s Blog</title>
+<title>设计模式-中介者模式 | John&#39;s Blog</title>
 <meta name="description" content="搬砖大佬">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -87,80 +87,104 @@
       <div class="sm-12 md-8 col">
         <div class="paper">
           <article class="article">
-            <h1>设计模式-SOLID原则</h1>
+            <h1>设计模式-中介者模式</h1>
             <p class="article-meta">
               2019-06-24
               
-                <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge success">
+                <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge secondary">
                   设计模式
                 </a>
               
             </p>
             
-              <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxjCdfGgTWAzqhGpx0HrUuhH17jWSfKSIXlQ504ms1BaoUndtiLQ" alt="设计模式-SOLID原则">
-            
             <div class="post-content">
-              <p>运用设计模式，需要记住六大设计原则：</p>
-<ul>
-<li>Single Responsibility Principle：单一职责原则</li>
-<li>Open Closed Principle：开闭原则</li>
-<li>Liskov Substitution Principle：里氏替换原则</li>
-<li>Law of Demeter：迪米特法则</li>
-<li>Interface Segregation Principle：接口隔离原则</li>
-<li>Dependence Inversion Principle：依赖倒置原则</li>
-</ul>
+              <h4 id="定义">定义</h4>
+<blockquote>
+<p>中介者模式的定义为：Define an object that encapsulates how a set of objects interact.Mediator promotes loose coupling by keeping objects from referring to each other explicitly,and it lets you vary their interaction independently.（用一个中介对象封装一系列的对象交互，中介者使各对象不需要显示地相互作用，从而使其耦合松散，而且可以独立地改变它们之间的交互。）</p>
+</blockquote>
+<h4 id="uml">UML</h4>
+<p><img src="https://caijh.github.io//post-images/1561389056024.png" alt=""></p>
 <!-- more -->
-<h3 id="单一职责原则">单一职责原则</h3>
-<blockquote>
-<p>There should never be more than one reason for a class to change.
-引起类的变更原因只有一个，类或接口只负责做一件事。
-单一职责原则的好处：</p>
-</blockquote>
-<ul>
-<li>类的复杂性降低，实现什么职责都有清晰明确的定义；</li>
-<li>可读性提高，复杂性降低，那当然可读性提高了；</li>
-<li>可维护性提高，可读性提高，那当然更容易维护了；
-变更引起的风险降低，变更是必不可少的，如果接口的单一职责做得好，一个接口修改只对相应的实现类有影响，对其他的接口无影响，这对系统的扩展性、维护性都有非常大的帮助。
-对于接口，我们在设计的时候一定要做到单一，但是对于实现类就需要多方面考虑了。生搬硬套单一职责原则会引起类的剧增，给维护带来非常多的麻烦，而且过分细分类的职责也会人为地增加系统的复杂性。本来一个类可以实现的行为硬要拆成两个类，然后再使用聚合或组合的方式耦合在一起，人为制造了系统的复杂性。</li>
-</ul>
-<h3 id="开闭原则">开闭原则</h3>
-<blockquote>
-<p>Software entities like classes,modules and functions should be open for extension but closed for modifications.（一个软件实体如类、模块和函数应该对扩展开放，对修改关闭。）
-开闭原则对扩展开放，对修改关闭，并不意味着不做任何修改，低层模块的变更，必然要有高层模块进行耦合，否则就是一个孤立无意义的代码片段。</p>
-</blockquote>
-<h4 id="为什么要使用开闭原则">为什么要使用开闭原则？</h4>
-<p>开闭原则对测试的影响
-开闭原则可以提高复用性
-开闭原则可以提高可维护性
-开闭原则可以提高可维护性</p>
-<h4 id="如何使用开闭原则">如何使用开闭原则？</h4>
-<ul>
-<li>抽象约束</li>
-<li>元数据控制模块行为</li>
-<li>制定项目章程，约定优于配置</li>
-<li>封装变化，将相同的变化封装到一个接口或抽象类中</li>
-</ul>
-<h3 id="里氏替换原则">里氏替换原则</h3>
-<blockquote>
-<p>Functions that use pointers or references to base classes must be able to use objects of derived classes without knowing it.（所有引用基类的地方必须能透明地使用其子类的对象。）</p>
-</blockquote>
-<h3 id="迪米特法则">迪米特法则</h3>
-<blockquote>
-<p>一个对象应该对其他对象有最少的了解。</p>
-</blockquote>
-<h3 id="接口隔离原则">接口隔离原则</h3>
-<blockquote>
-<p>Clients should not be forced to depend upon interfaces that they don't use.（客户端不应该依赖它不需要的接口。）
-The dependency of one class to another one should depend on the smallest possible interface.（类间的依赖关系应该建立在最小的接口上。）</p>
-</blockquote>
-<h3 id="依赖倒置原则">依赖倒置原则</h3>
-<p>High level modules should not depend upon low level modules.Both should depend upon abstractions.Abstractions should not depend upon details.Details should depend upon abstractions.
-翻译过来，包含三层含义：</p>
-<ul>
-<li>高层模块不应该依赖低层模块，两者都应该依赖其抽象；</li>
-<li>抽象不应该依赖细节；</li>
-<li>细节应该依赖抽象。</li>
-</ul>
+<h4 id="代码实现">代码实现</h4>
+<pre><code>public abstract class Mediator {
+     //定义同事类
+     protected ConcreteColleague1 c1;
+     protected ConcreteColleague2 c2;
+     //通过getter/setter方法把同事类注入进来
+     public ConcreteColleague1 getC1() {
+             return c1;
+     }
+     public void setC1(ConcreteColleague1 c1) {
+             this.c1 = c1;
+     }
+     public ConcreteColleague2 getC2() {
+             return c2;
+     }
+     public void setC2(ConcreteColleague2 c2) {
+             this.c2 = c2;
+     }
+     //中介者模式的业务逻辑
+     public abstract void doSomething1();
+     public abstract void doSomething2();
+}
+
+public class ConcreteMediator extends Mediator {
+     @Override
+     public void doSomething1() {
+             //调用同事类的方法，只要是public方法都可以调用
+             super.c1.selfMethod1();
+             super.c2.selfMethod2();
+     }
+     public void doSomething2() {
+             super.c1.selfMethod1();
+             super.c2.selfMethod2();
+     }
+}
+
+public abstract class Colleague {
+     protected Mediator mediator;
+     public Colleague(Mediator _mediator){
+             this.mediator = _mediator;
+     }
+}
+public class ConcreteColleague1 extends Colleague {
+     //通过构造函数传递中介者
+     public ConcreteColleague1(Mediator _mediator){
+             super(_mediator);
+     }
+     //自有方法 self-method
+     public void selfMethod1(){
+             //处理自己的业务逻辑
+     }
+     //依赖方法 dep-method
+     public void depMethod1(){
+             //处理自己的业务逻辑
+             //自己不能处理的业务逻辑，委托给中介者处理
+             super.mediator.doSomething1();
+     }
+}
+public class ConcreteColleague2 extends Colleague {
+     //通过构造函数传递中介者
+     public ConcreteColleague2(Mediator _mediator){
+             super(_mediator);
+     }
+     //自有方法 self-method
+     public void selfMethod2(){
+             //处理自己的业务逻辑
+     }
+     //依赖方法 dep-method
+     public void depMethod2(){
+             //处理自己的业务逻辑
+             //自己不能处理的业务逻辑，委托给中介者处理
+             super.mediator.doSomething2();
+     }
+}
+
+</code></pre>
+<h4 id="中介者模式的优点">中介者模式的优点</h4>
+<p>中介者模式的优点就是减少类间的依赖，把原有的一对多的依赖变成了一对一的依赖，同事类只依赖中介者，减少了依赖，当然同时也降低了类间的耦合。</p>
+<h4 id="中介者模式的缺点">中介者模式的缺点</h4>
+<p>中介者模式的缺点就是中介者会膨胀得很大，而且逻辑复杂，原本N个对象直接的相互依赖关系转换为中介者和同事类的依赖关系，同事类越多，中介者的逻辑就越复杂。</p>
 
             </div>
           </article>
@@ -171,9 +195,9 @@ The dependency of one class to another one should depend on the smallest possibl
               <div class="next">
                 下一篇
               </div>
-              <a href="https://caijh.github.io//post/mysql-gui-fan">
+              <a href="https://caijh.github.io//post/she-ji-mo-shi-yuan-xing-mo-shi">
                 <h3 class="post-title">
-                  MySQL规范
+                  设计模式-原型模式
                 </h3>
               </a>
             </div>
@@ -286,7 +310,7 @@ The dependency of one class to another one should depend on the smallest possibl
     </div>
     <div class="row">
       
-        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge secondary">
+        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge ">
           设计模式
         </a>
       
