@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>设计模式-中介者模式 | John&#39;s Blog</title>
+<title>设计模式-命令模式 | John&#39;s Blog</title>
 <meta name="description" content="搬砖大佬">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -87,106 +87,110 @@
       <div class="sm-12 md-8 col">
         <div class="paper">
           <article class="article">
-            <h1>设计模式-中介者模式</h1>
+            <h1>设计模式-命令模式</h1>
             <p class="article-meta">
-              2019-06-24
+              2019-06-30
               
-                <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge warning">
+                <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge ">
                   设计模式
                 </a>
               
             </p>
             
-              <img src="http://static.oschina.net/uploads/space/2015/1126/013902_vQvD_2003960.png" alt="设计模式-中介者模式">
-            
             <div class="post-content">
               <h4 id="定义">定义</h4>
 <blockquote>
-<p>中介者模式的定义为：Define an object that encapsulates how a set of objects interact.Mediator promotes loose coupling by keeping objects from referring to each other explicitly,and it lets you vary their interaction independently.（用一个中介对象封装一系列的对象交互，中介者使各对象不需要显示地相互作用，从而使其耦合松散，而且可以独立地改变它们之间的交互。）</p>
+<p>命令模式是一个高内聚的模式，其定义为：Encapsulate a request as an object,thereby letting you parameterize clients with different requests,queue or log requests,and support undoable operations.（将一个请求封装成一个对象，从而让你使用不同的请求把客户端参数化，对请求排队或者记录请求日志，可以提供命令的撤销和恢复功能。）</p>
 </blockquote>
 <h4 id="uml">UML</h4>
-<p><img src="https://caijh.github.io//post-images/1561389056024.png" alt=""></p>
+<p><img src="https://caijh.github.io//post-images/1561875177967.png" alt=""></p>
 <!-- more -->
 <h4 id="代码实现">代码实现</h4>
-<pre><code>public abstract class Mediator {
-     //定义同事类
-     protected ConcreteColleague1 c1;
-     protected ConcreteColleague2 c2;
-     //通过getter/setter方法把同事类注入进来
-     public ConcreteColleague1 getC1() {
-             return c1;
-     }
-     public void setC1(ConcreteColleague1 c1) {
-             this.c1 = c1;
-     }
-     public ConcreteColleague2 getC2() {
-             return c2;
-     }
-     public void setC2(ConcreteColleague2 c2) {
-             this.c2 = c2;
-     }
-     //中介者模式的业务逻辑
-     public abstract void doSomething1();
-     public abstract void doSomething2();
+<pre><code>public abstract class Receiver {
+     //抽象接收者，定义每个接收者都必须完成的业务
+     public abstract void doSomething();
 }
-
-public class ConcreteMediator extends Mediator {
-     @Override
-     public void doSomething1() {
-             //调用同事类的方法，只要是public方法都可以调用
-             super.c1.selfMethod1();
-             super.c2.selfMethod2();
-     }
-     public void doSomething2() {
-             super.c1.selfMethod1();
-             super.c2.selfMethod2();
+public class ConcreteReciver1 extends Receiver{    
+     //每个接收者都必须处理一定的业务逻辑
+     public void doSomething(){
      }
 }
-
-public abstract class Colleague {
-     protected Mediator mediator;
-     public Colleague(Mediator _mediator){
-             this.mediator = _mediator;
+public class ConcreteReciver2 extends Receiver{ 
+     //每个接收者都必须处理一定的业务逻辑
+     public void doSomething(){
      }
 }
-public class ConcreteColleague1 extends Colleague {
-     //通过构造函数传递中介者
-     public ConcreteColleague1(Mediator _mediator){
-             super(_mediator);
+public abstract class Command {
+     //每个命令类都必须有一个执行命令的方法
+     public abstract void execute();
+}
+public class ConcreteCommand1 extends Command {
+     //对哪个Receiver类进行命令处理
+     private Receiver receiver; 
+     //构造函数传递接收者
+     public ConcreteCommand1(Receiver _receiver){
+             this.receiver = _receiver;
      }
-     //自有方法 self-method
-     public void selfMethod1(){
-             //处理自己的业务逻辑
-     }
-     //依赖方法 dep-method
-     public void depMethod1(){
-             //处理自己的业务逻辑
-             //自己不能处理的业务逻辑，委托给中介者处理
-             super.mediator.doSomething1();
+     //必须实现一个命令
+     public void execute() {
+             //业务处理
+             this.receiver.doSomething();
      }
 }
-public class ConcreteColleague2 extends Colleague {
-     //通过构造函数传递中介者
-     public ConcreteColleague2(Mediator _mediator){
-             super(_mediator);
+public class ConcreteCommand2 extends Command {
+     //哪个Receiver类进行命令处理
+     private Receiver receiver;
+     //构造函数传递接收者
+     public ConcreteCommand2(Receiver _receiver){
+             this.receiver = _receiver;
      }
-     //自有方法 self-method
-     public void selfMethod2(){
-             //处理自己的业务逻辑
-     }
-     //依赖方法 dep-method
-     public void depMethod2(){
-             //处理自己的业务逻辑
-             //自己不能处理的业务逻辑，委托给中介者处理
-             super.mediator.doSomething2();
+     //必须实现一个命令
+     public void execute() {
+             //业务处理
+             this.receiver.doSomething();
      }
 }
-
+public class Invoker {
+     private Command command;
+     //受气包，接受命令
+     public void setCommand(Command _command){
+             this.command = _command;
+     }
+     //执行命令
+     public void action(){
+             this.command.execute();
+     }
+}
+public class Client {
+     public static void main(String[] args) {
+             //首先声明调用者Invoker
+             Invoker invoker = new Invoker();
+             //定义接收者
+             Receiver receiver = new ConcreteReciver1();
+             //定义一个发送给接收者的命令
+             Command command = new ConcreteCommand1(receiver);
+             //把命令交给调用者去执行
+             invoker.setCommand(command);
+             invoker.action();
+     }
+}
 </code></pre>
-<h4 id="中介者模式的优点">中介者模式的优点</h4>
-<p>中介者模式的优点就是减少类间的依赖，把原有的一对多的依赖变成了一对一的依赖，同事类只依赖中介者，减少了依赖，当然同时也降低了类间的耦合。</p>
-<h4 id="中介者模式的缺点">中介者模式的缺点</h4>
-<p>中介者模式的缺点就是中介者会膨胀得很大，而且逻辑复杂，原本N个对象直接的相互依赖关系转换为中介者和同事类的依赖关系，同事类越多，中介者的逻辑就越复杂。</p>
+<h4 id="命令模式的优点">命令模式的优点</h4>
+<ul>
+<li>类间解耦
+调用者角色与接收者角色之间没有任何依赖关系，调用者实现功能时只需调用Command抽象类的execute方法就可以，不需要了解到底是哪个接收者执行。</li>
+<li>可扩展性
+Command的子类可以非常容易地扩展，而调用者Invoker和高层次的模块Client不产生严重的代码耦合。</li>
+<li>命令模式结合其他模式会更优秀
+命令模式可以结合责任链模式，实现命令族解析任务；结合模板方法模式，则可以减少Command子类的膨胀问题。</li>
+</ul>
+<h4 id="命令模式的缺点">命令模式的缺点</h4>
+<p>命令模式也是有缺点的，请看Command的子类：如果有N个命令，问题就出来了，Command的子类就可不是几个，而是N个，这个类膨胀得非常大，这个就需要读者在项目中慎重考虑使用。</p>
+<h4 id="jdk中的命令模式">JDK中的命令模式</h4>
+<ul>
+<li>java.lang.Runnable</li>
+<li>javax.swing.Action</li>
+</ul>
 
             </div>
           </article>
@@ -197,9 +201,9 @@ public class ConcreteColleague2 extends Colleague {
               <div class="next">
                 下一篇
               </div>
-              <a href="https://caijh.github.io//post/she-ji-mo-shi-yuan-xing-mo-shi">
+              <a href="https://caijh.github.io//post/she-ji-mo-shi-zhong-jie-zhe-mo-shi">
                 <h3 class="post-title">
-                  设计模式-原型模式
+                  设计模式-中介者模式
                 </h3>
               </a>
             </div>
@@ -314,11 +318,11 @@ public class ConcreteColleague2 extends Colleague {
     </div>
     <div class="row">
       
-        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge secondary">
+        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge success">
           设计模式
         </a>
       
-        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge secondary">
+        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge success">
           MySQL
         </a>
       
