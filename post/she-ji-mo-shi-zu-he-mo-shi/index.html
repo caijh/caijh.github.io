@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>设计模式-装饰模式 | John&#39;s Blog</title>
+<title>设计模式-组合模式 | John&#39;s Blog</title>
 <meta name="description" content="搬砖大佬">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -87,7 +87,7 @@
       <div class="sm-12 md-8 col">
         <div class="paper">
           <article class="article">
-            <h1>设计模式-装饰模式</h1>
+            <h1>设计模式-组合模式</h1>
             <p class="article-meta">
               2019-06-30
               
@@ -100,101 +100,79 @@
             <div class="post-content">
               <h4 id="定义">定义</h4>
 <blockquote>
-<p>Attach additional responsibilities to an object dynamically keeping the same interface.Decorators provide a flexible alternative to subclassing for extending functionality.（动态地给一个对象添加一些额外的职责。就增加功能来说，装饰模式相比生成子类更为灵活。）</p>
+<p>Compose objects into tree structures to represent part-whole hierarchies.Composite lets clients treat individual objects and compositions of objects uniformly.（将对象组合成树形结构以表示“部分-整体”的层次结构，使得用户对单个对象和组合对象的使用具有一致性。）</p>
 </blockquote>
 <h4 id="uml">UML</h4>
-<p><img src="https://caijh.github.io//post-images/1561877503426.png" alt=""></p>
-<!-- more -->
+<p><img src="https://caijh.github.io//post-images/1561889214924.png" alt=""></p>
 <h4 id="代码实现">代码实现</h4>
-<pre><code>/**
-* Component是一个接口或者是抽象类，就是定义我们最核心的对象，也就是最原始的对象
-*/
-public abstract class Component {
-     //抽象的方法
-     public abstract void operate();
-}
-public class ConcreteComponent extends Component {
-     //具体实现
-     @Override
-     public void operate() {
-             System.out.println(&quot;do Something&quot;);
+<pre><code>public abstract class Component {
+     //个体和整体都具有的共享
+     public void doSomething(){
+             //编写业务逻辑
      }
 }
-public abstract class Decorator extends Component {
-     private Component component = null;        
-     //通过构造函数传递被修饰者
-     public Decorator(Component _component){
-             this.component = _component;
+public class Composite extends Component {
+     //构件容器
+     private ArrayList&lt;Component&gt; componentArrayList = new ArrayList&lt;Component&gt;();
+     //增加一个叶子构件或树枝构件
+     public void add(Component component){
+             this.componentArrayList.add(component);
      }
-     //委托给被修饰者执行
-     @Override
-     public void operate() {
-             this.component.operate();
+     //删除一个叶子构件或树枝构件
+     public void remove(Component component){
+             this.componentArrayList.remove(component);
      }
-}
-public class ConcreteDecorator1 extends Decorator {
-     //定义被修饰者
-     public ConcreteDecorator1(Component _component){
-             super(_component);
-     }
-     //定义自己的修饰方法
-     private void method1(){
-             System.out.println(&quot;method1 修饰&quot;);
-     }
-     //重写父类的Operation方法
-     public void operate(){
-             this.method1();
-             super.operate();
+     //获得分支下的所有叶子构件和树枝构件
+     public ArrayList&lt;Component&gt; getChildren(){
+             return this.componentArrayList;
      }
 }
-public class ConcreteDecorator2 extends Decorator {
-     //定义被修饰者
-     public ConcreteDecorator2(Component _component){
-             super(_component);
-     }
-     //定义自己的修饰方法
-     private void method2(){
-             System.out.println(&quot;method2修饰&quot;);
-     }
-     //重写父类的Operation方法
-     public void operate(){
-             super.operate();
-             this.method2();
-     }
+public class Leaf extends Component {
+     /*
+      * 可以覆写父类方法
+      * public void doSomething(){
+      * 
+      * }
+      */
 }
 public class Client {
      public static void main(String[] args) {
-             Component component = new ConcreteComponent();
-             //第一次修饰
-             component = new ConcreteDecorator1(component);
-             //第二次修饰
-             component = new ConcreteDecorator2(component);
-             //修饰后运行
-             component.operate();
+            //创建一个根节点
+             Composite root = new Composite();
+             root.doSomething();
+             //创建一个树枝构件
+             Composite branch = new Composite();
+             //创建一个叶子节点
+             Leaf leaf = new Leaf();
+             //建立整体
+             root.add(branch);
+             branch.add(leaf);          
+     }
+     //通过递归遍历树
+     public static void display(Composite root){
+             for(Component c:root.getChildren()){
+                  if(c instanceof Leaf){ //叶子节点
+                          c.doSomething();
+                  }else{ //树枝节点
+                          display((Composite)c);
+                  }
+             }
      }
 }
 </code></pre>
-<h4 id="装饰者模式的优点">装饰者模式的优点</h4>
+<h4 id="组合模式的优点">组合模式的优点</h4>
 <ul>
-<li>装饰类和被装饰类可以独立发展，而不会相互耦合。换句话说，Component类无须知道Decorator类，Decorator类是从外部来扩展Component类的功能，而Decorator也不用知道具体的构件。</li>
-<li>装饰模式是继承关系的一个替代方案。我们看装饰类Decorator，不管装饰多少层，返回的对象还是Component，实现的还是is-a的关系。</li>
-<li>装饰模式可以动态地扩展一个实现类的功能，这不需要多说，装饰模式的定义就是如此。</li>
+<li>高层模块调用简单
+一棵树形机构中的所有节点都是Component，局部和整体对调用者来说没有任何区别，也就是说，高层模块不必关心自己处理的是单个对象还是整个组合结构，简化了高层模块的代码。</li>
+<li>节点自由增加
+使用了组合模式后，我们可以看看，如果想增加一个树枝节点、树叶节点是不是都很容易，只要找到它的父节点就成，非常容易扩展，符合开闭原则，对以后的维护非常有利。</li>
 </ul>
-<h4 id="装饰者模式的缺点">装饰者模式的缺点</h4>
-<p>对于装饰模式记住一点就足够了：多层的装饰是比较复杂的。为什么会复杂呢？你想想看，就像剥洋葱一样，你剥到了最后才发现是最里层的装饰出现了问题，想象一下工作量吧，因此，尽量减少装饰类的数量，以便降低系统的复杂度。</p>
-<h4 id="装饰者模式的使用场景">装饰者模式的使用场景</h4>
+<h4 id="组合模式的缺点">组合模式的缺点</h4>
+<p>组合模式有一个非常明显的缺点，看到我们在场景类中的定义，提到树叶和树枝使用时的定义了吗？直接使用了实现类！这在面向接口编程上是很不恰当的，与依赖倒置原则冲突，读者在使用的时候要考虑清楚，它限制了你接口的影响范围。</p>
+<h4 id="组合模式使用场景">组合模式使用场景</h4>
 <ul>
-<li>需要扩展一个类的功能，或给一个类增加附加功能。</li>
-<li>需要动态地给一个对象增加功能，这些功能可以再动态地撤销。</li>
-<li>需要为一批的兄弟类进行改装或加装功能，当然是首选装饰模式。</li>
-</ul>
-<h4 id="jdk中的装饰器模式">JDK中的装饰器模式</h4>
-<ul>
-<li>java.io.BufferedInputStream(InputStream)</li>
-<li>java.io.DataInputStream(InputStream)</li>
-<li>java.io.BufferedOutputStream(OutputStream)</li>
-<li>java.util.zip.ZipOutputStream(OutputStream)</li>
-<li>java.util.Collections#checked<a href="">List|Map|Set|SortedSet|SortedMap</a></li>
+<li>想要表示对象间部分-整体的层次关系</li>
+<li>想让客户端略过组合与个体的差异</li>
 </ul>
 
             </div>
@@ -206,9 +184,9 @@ public class Client {
               <div class="next">
                 下一篇
               </div>
-              <a href="https://caijh.github.io//post/she-ji-mo-shi-ze-ren-lian-mo-shi">
+              <a href="https://caijh.github.io//post/she-ji-mo-shi-die-dai-qi-mo-shi">
                 <h3 class="post-title">
-                  设计模式-责任链模式
+                  设计模式-迭代器模式
                 </h3>
               </a>
             </div>
@@ -335,15 +313,15 @@ public class Client {
     </div>
     <div class="row">
       
-        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge ">
+        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge secondary">
           设计模式
         </a>
       
-        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge secondary">
+        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge success">
           MySQL
         </a>
       
-        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge ">
+        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge success">
           Java
         </a>
       

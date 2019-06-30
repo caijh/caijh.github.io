@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://caijh.github.io/</id>
     <title>John&apos;s Blog</title>
-    <updated>2019-06-30T07:32:23.140Z</updated>
+    <updated>2019-06-30T10:28:03.046Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://caijh.github.io/"/>
     <link rel="self" href="https://caijh.github.io//atom.xml"/>
@@ -10,6 +10,90 @@
     <logo>https://caijh.github.io//images/avatar.png</logo>
     <icon>https://caijh.github.io//favicon.ico</icon>
     <rights>All rights reserved 2019, John&apos;s Blog</rights>
+    <entry>
+        <title type="html"><![CDATA[设计模式-组合模式]]></title>
+        <id>https://caijh.github.io//post/she-ji-mo-shi-zu-he-mo-shi</id>
+        <link href="https://caijh.github.io//post/she-ji-mo-shi-zu-he-mo-shi">
+        </link>
+        <updated>2019-06-30T10:05:20.000Z</updated>
+        <content type="html"><![CDATA[<h4 id="定义">定义</h4>
+<blockquote>
+<p>Compose objects into tree structures to represent part-whole hierarchies.Composite lets clients treat individual objects and compositions of objects uniformly.（将对象组合成树形结构以表示“部分-整体”的层次结构，使得用户对单个对象和组合对象的使用具有一致性。）</p>
+</blockquote>
+<h4 id="uml">UML</h4>
+<p><img src="https://caijh.github.io//post-images/1561889214924.png" alt=""></p>
+<h4 id="代码实现">代码实现</h4>
+<pre><code>public abstract class Component {
+     //个体和整体都具有的共享
+     public void doSomething(){
+             //编写业务逻辑
+     }
+}
+public class Composite extends Component {
+     //构件容器
+     private ArrayList&lt;Component&gt; componentArrayList = new ArrayList&lt;Component&gt;();
+     //增加一个叶子构件或树枝构件
+     public void add(Component component){
+             this.componentArrayList.add(component);
+     }
+     //删除一个叶子构件或树枝构件
+     public void remove(Component component){
+             this.componentArrayList.remove(component);
+     }
+     //获得分支下的所有叶子构件和树枝构件
+     public ArrayList&lt;Component&gt; getChildren(){
+             return this.componentArrayList;
+     }
+}
+public class Leaf extends Component {
+     /*
+      * 可以覆写父类方法
+      * public void doSomething(){
+      * 
+      * }
+      */
+}
+public class Client {
+     public static void main(String[] args) {
+            //创建一个根节点
+             Composite root = new Composite();
+             root.doSomething();
+             //创建一个树枝构件
+             Composite branch = new Composite();
+             //创建一个叶子节点
+             Leaf leaf = new Leaf();
+             //建立整体
+             root.add(branch);
+             branch.add(leaf);          
+     }
+     //通过递归遍历树
+     public static void display(Composite root){
+             for(Component c:root.getChildren()){
+                  if(c instanceof Leaf){ //叶子节点
+                          c.doSomething();
+                  }else{ //树枝节点
+                          display((Composite)c);
+                  }
+             }
+     }
+}
+</code></pre>
+<h4 id="组合模式的优点">组合模式的优点</h4>
+<ul>
+<li>高层模块调用简单
+一棵树形机构中的所有节点都是Component，局部和整体对调用者来说没有任何区别，也就是说，高层模块不必关心自己处理的是单个对象还是整个组合结构，简化了高层模块的代码。</li>
+<li>节点自由增加
+使用了组合模式后，我们可以看看，如果想增加一个树枝节点、树叶节点是不是都很容易，只要找到它的父节点就成，非常容易扩展，符合开闭原则，对以后的维护非常有利。</li>
+</ul>
+<h4 id="组合模式的缺点">组合模式的缺点</h4>
+<p>组合模式有一个非常明显的缺点，看到我们在场景类中的定义，提到树叶和树枝使用时的定义了吗？直接使用了实现类！这在面向接口编程上是很不恰当的，与依赖倒置原则冲突，读者在使用的时候要考虑清楚，它限制了你接口的影响范围。</p>
+<h4 id="组合模式使用场景">组合模式使用场景</h4>
+<ul>
+<li>想要表示对象间部分-整体的层次关系</li>
+<li>想让客户端略过组合与个体的差异</li>
+</ul>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[设计模式-迭代器模式]]></title>
         <id>https://caijh.github.io//post/she-ji-mo-shi-die-dai-qi-mo-shi</id>
@@ -845,88 +929,6 @@ public class Proxy implements Subject {
 <li>职责清晰
 真实的角色就是实现实际的业务逻辑，不用关心其他非本职责的事务，通过后期的代理完成一件事务，附带的结果就是编程简洁清晰。</li>
 <li>智能化</li>
-</ul>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[设计模式-建造者模式]]></title>
-        <id>https://caijh.github.io//post/she-ji-mo-shi-jian-zao-zhe-mo-shi</id>
-        <link href="https://caijh.github.io//post/she-ji-mo-shi-jian-zao-zhe-mo-shi">
-        </link>
-        <updated>2019-06-24T14:57:23.000Z</updated>
-        <summary type="html"><![CDATA[<h4 id="定义">定义</h4>
-<blockquote>
-<p>Separate the construction of a complex object from its representation so that the same construction process can create different representations.（将一个复杂对象的构建与它的表示分离，使得同样的构建过程可以创建不同的表示。）</p>
-</blockquote>
-<h4 id="uml">UML</h4>
-<p><img src="https://caijh.github.io//post-images/1561388283844.png" alt=""></p>
-]]></summary>
-        <content type="html"><![CDATA[<h4 id="定义">定义</h4>
-<blockquote>
-<p>Separate the construction of a complex object from its representation so that the same construction process can create different representations.（将一个复杂对象的构建与它的表示分离，使得同样的构建过程可以创建不同的表示。）</p>
-</blockquote>
-<h4 id="uml">UML</h4>
-<p><img src="https://caijh.github.io//post-images/1561388283844.png" alt=""></p>
-<!-- more -->
-<h4 id="建造者模式的优点">建造者模式的优点</h4>
-<ul>
-<li>封装性
-使用建造者模式可以使客户端不必知道产品内部组成的细节</li>
-<li>建造者独立，容易扩展</li>
-<li>便于控制细节风险
-由于具体的建造者是独立的，因此可以对建造过程逐步细化，而不对其他的模块产生任何影响。</li>
-</ul>
-<h4 id="建造者模式使用场景">建造者模式使用场景</h4>
-<ul>
-<li>相同的方法，不同的执行顺序，产生不同的事件结果时，可以采用建造者模式。</li>
-<li>多个部件或零件，都可以装配到一个对象中，但是产生的运行结果又不相同时，则可以使用该模式。</li>
-<li>产品类非常复杂，或者产品类中的调用顺序不同产生了不同的效能，这个时候使用建造者模式非常合适。</li>
-<li>在对象创建过程中会使用到系统中的一些其他对象，这些对象在产品对象的创建过程中不易得到时，也可以采用建造者模式封装该对象的创建过程。该种场景只能是一个补偿方法，因为一个对象不容易获得，而在设计阶段竟然没有发觉，而要通过创建者模式柔化创建过程，本身已经违反设计的最初目标。</li>
-</ul>
-<h4 id="代码实现">代码实现</h4>
-<pre><code>public class Product {
-     public void doSomething(){
-             //独立业务处理
-     }
-}
-public abstract class Builder {    
-     //设置产品的不同部分，以获得不同的产品
-     public abstract void setPart();
-     //建造产品
-     public abstract Product buildProduct();
-}
-public class ConcreteBuilder extends Builder {
-     private Product product = new Product();
-     //设置产品零件
-     public void setPart(){
-             /*
-              * 产品类内的逻辑处理
-              */
-     }  
-     //组建一个产品
-     public Product buildProduct() {
-             return product;
-     }
-}
-public class Director {
-     private Builder builder = new ConcreteBuilder();
-     //构建不同的产品
-     public Product getAProduct(){
-             builder.setPart();
-             /*
-              * 设置不同的零件，产生不同的产品
-              */
-             return builder.buildProduct();
-     }
-}
-</code></pre>
-<h4 id="jdk中的建造者模式">JDK中的建造者模式</h4>
-<ul>
-<li>java.lang.StringBuilder#append() (unsynchronized)</li>
-<li>java.lang.StringBuilder#append() (unsynchronized)</li>
-<li>java.nio.ByteBuffer#put()(alsoonCharBuffer,ShortBuffer,IntBuffer,LongBuffer,FloatBufferandDoubleBuffer)</li>
-<li>javax.swing.GroupLayout.Group#addComponent()</li>
-<li>All implementations of java.lang.Appendable</li>
 </ul>
 ]]></content>
     </entry>
