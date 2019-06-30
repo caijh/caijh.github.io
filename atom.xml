@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://caijh.github.io/</id>
     <title>John&apos;s Blog</title>
-    <updated>2019-06-30T06:57:08.383Z</updated>
+    <updated>2019-06-30T07:27:21.658Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://caijh.github.io/"/>
     <link rel="self" href="https://caijh.github.io//atom.xml"/>
@@ -10,6 +10,71 @@
     <logo>https://caijh.github.io//images/avatar.png</logo>
     <icon>https://caijh.github.io//favicon.ico</icon>
     <rights>All rights reserved 2019, John&apos;s Blog</rights>
+    <entry>
+        <title type="html"><![CDATA[设计模式-适配器模式]]></title>
+        <id>https://caijh.github.io//post/she-ji-mo-shi-gua-pei-qi-mo-shi</id>
+        <link href="https://caijh.github.io//post/she-ji-mo-shi-gua-pei-qi-mo-shi">
+        </link>
+        <updated>2019-06-30T06:59:48.000Z</updated>
+        <summary type="html"><![CDATA[<h4 id="定义">定义</h4>
+<blockquote>
+<p>Convert the interface of a class into another interface clients expect.Adapter lets classes work together that couldn't otherwise because of incompatible interfaces.（将一个类的接口变换成客户端所期待的另一种接口，从而使原本因接口不匹配而无法在一起工作的两个类能够在一起工作。）</p>
+</blockquote>
+<h4 id="uml图">UML图</h4>
+<p><img src="https://caijh.github.io//post-images/1561879601059.png" alt=""></p>
+]]></summary>
+        <content type="html"><![CDATA[<h4 id="定义">定义</h4>
+<blockquote>
+<p>Convert the interface of a class into another interface clients expect.Adapter lets classes work together that couldn't otherwise because of incompatible interfaces.（将一个类的接口变换成客户端所期待的另一种接口，从而使原本因接口不匹配而无法在一起工作的两个类能够在一起工作。）</p>
+</blockquote>
+<h4 id="uml图">UML图</h4>
+<p><img src="https://caijh.github.io//post-images/1561879601059.png" alt=""></p>
+<!-- more -->
+<h4 id="代码实现">代码实现</h4>
+<pre><code>public interface Target {
+     //目标角色有自己的方法
+     public void request();
+}
+public class ConcreteTarget implements Target {
+     public void request() {
+             System.out.println(&quot;if you need any help,pls call me!&quot;);   }
+}
+public class Adaptee {
+     //原有的业务逻辑
+     public void doSomething(){
+             System.out.println(&quot;I'm kind of busy,leave me alone,pls!&quot;);
+     }
+}
+public class Adapter extends Adaptee implements Target {
+     public void request() {
+             super.doSomething();
+     }
+}
+public class Client {
+     public static void main(String[] args) {
+             //原有的业务逻辑
+             Target target = new ConcreteTarget();
+             target.request();
+             //现在增加了适配器角色后的业务逻辑
+             Target target2 = new Adapter();
+             target2.request();
+     }
+}
+</code></pre>
+<h4 id="适配器模式的优点">适配器模式的优点</h4>
+<ul>
+<li>适配器模式可以让两个没有任何关系的类在一起运行，只要适配器这个角色能够搞定他们就成。</li>
+<li>增加了类的透明性
+想想看，我们访问的Target目标角色，但是具体的实现都委托给了源角色，而这些对高层次模块是透明的，也是它不需要关心的。</li>
+<li>提高了类的复用度
+当然了，源角色在原有的系统中还是可以正常使用，而在目标角色中也可以充当新的演员。</li>
+<li>灵活性非常好
+某一天，突然不想要适配器，没问题，删除掉这个适配器就可以了，其他的代码都不用修改，基本上就类似一个灵活的构件，想用就用，不想就卸载。</li>
+</ul>
+<h4 id="适配器模式的使用场景">适配器模式的使用场景</h4>
+<p>适配器应用的场景只要记住一点就足够了：你有动机修改一个已经投产中的接口时，适配器模式可能是最适合你的模式。比如系统扩展了，需要使用一个已有或新建立的类，但这个类又不符合系统的接口，怎么办？使用适配器模式，这也是我们例子中提到的。</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[设计模式-策略模式]]></title>
         <id>https://caijh.github.io//post/she-ji-mo-shi-ce-lue-mo-shi</id>
@@ -838,94 +903,6 @@ public class Client {
 <li>java.io.InputStream#read()</li>
 <li>java.util.AbstractList#indexOf()</li>
 </ul>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[设计模式-抽象工厂模式]]></title>
-        <id>https://caijh.github.io//post/she-ji-mo-shi-chou-xiang-gong-han-mo-shi</id>
-        <link href="https://caijh.github.io//post/she-ji-mo-shi-chou-xiang-gong-han-mo-shi">
-        </link>
-        <updated>2019-06-24T14:42:05.000Z</updated>
-        <summary type="html"><![CDATA[<h4 id="定义">定义</h4>
-<blockquote>
-<p>Provide an interface for creating families of related or dependent objects without specifying their concrete classes.（为创建一组相关或相互依赖的对象提供一个接口，而且无须指定它们的具体类。）</p>
-</blockquote>
-<h4 id="uml类图">UML类图</h4>
-<p><img src="https://caijh.github.io//post-images/1561387400624.png" alt=""></p>
-]]></summary>
-        <content type="html"><![CDATA[<h4 id="定义">定义</h4>
-<blockquote>
-<p>Provide an interface for creating families of related or dependent objects without specifying their concrete classes.（为创建一组相关或相互依赖的对象提供一个接口，而且无须指定它们的具体类。）</p>
-</blockquote>
-<h4 id="uml类图">UML类图</h4>
-<p><img src="https://caijh.github.io//post-images/1561387400624.png" alt=""></p>
-<!-- more -->
-<h4 id="抽象工厂模式的优点">抽象工厂模式的优点：</h4>
-<ul>
-<li>封装性，每个产品的实现类不是高层模块要关心的，它要关心的是什么？是接口，是抽象，它不关心对象是如何创建出来，这由谁负责呢？工厂类，只要知道工厂类是谁，我就能创建出一个需要的对象，省时省力，优秀设计就应该如此。</li>
-<li>产品族内的约束为非公开状态。</li>
-</ul>
-<h4 id="抽象工厂模式的缺点">抽象工厂模式的缺点：</h4>
-<p>抽象工厂模式的最大缺点就是产品族扩展非常困难，为什么这么说呢？我们以通用代码为例，如果要增加一个产品C，也就是说产品家族由原来的2个增加到3个，看看我们的程序有多大改动吧！抽象类AbstractCreator要增加一个方法createProductC()，然后两个实现类都要修改，想想看，这严重违反了开闭原则，而且我们一直说明抽象类和接口是一个契约。改变契约，所有与契约有关系的代码都要修改，那么这段代码叫什么？叫“有毒代码”，——只要与这段代码有关系，就可能产生侵害的危险！</p>
-<h4 id="jdk中的抽象工厂模式">JDK中的抽象工厂模式</h4>
-<ul>
-<li>java.util.Calendar#getInstance()</li>
-<li>java.util.Arrays#asList()</li>
-<li>java.util.ResourceBundle#getBundle()</li>
-<li>java.sql.DriverManager#getConnection()</li>
-<li>java.sql.Connection#createStatement()</li>
-<li>java.sql.Statement#executeQuery()</li>
-<li>java.text.NumberFormat#getInstance()</li>
-<li>javax.xml.transform.TransformerFactory#newInstance()</li>
-</ul>
-<h4 id="代码实现">代码实现</h4>
-<pre><code>public abstract class AbstractCreator {
-     //创建A产品家族
-     public abstract AbstractProductA createProductA(); 
-     //创建B产品家族
-     public abstract AbstractProductB createProductB();
-}
-
-public class Creator1 extends AbstractCreator {    
-     //只生产产品等级为1的A产品
-     public AbstractProductA createProductA() { 
-             return new ProductA1();
-     }
-     //只生产产品等级为1的B产品
-     public AbstractProductB createProductB() {
-             return new ProductB1();
-     }
-}
-public class Creator2 extends AbstractCreator {    
-     //只生产产品等级为2的A产品
-     public AbstractProductA createProductA() { 
-             return new ProductA2();
-     }
-     //只生产产品等级为2的B产品
-     public AbstractProductB createProductB() {
-             return new ProductB2();
-     }
-}
-
-public class Client {
-     public static void main(String[] args) {
-             //定义出两个工厂
-             AbstractCreator creator1 = new Creator1();
-             AbstractCreator creator2 = new Creator2();
-             //产生A1对象
-             AbstractProductA a1 =  creator1.createProductA();
-             //产生A2对象
-             AbstractProductA a2 = creator2.createProductA();
-             //产生B1对象
-             AbstractProductB b1 = creator1.createProductB();
-             //产生B2对象
-             AbstractProductB b2 = creator2.createProductB();
-             /*
-              * 然后在这里就可以为所欲为了...
-              */
-     }
-}
-</code></pre>
 ]]></content>
     </entry>
 </feed>
