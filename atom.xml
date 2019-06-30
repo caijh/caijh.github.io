@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://caijh.github.io/</id>
     <title>John&apos;s Blog</title>
-    <updated>2019-06-30T06:53:40.416Z</updated>
+    <updated>2019-06-30T06:57:08.383Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://caijh.github.io/"/>
     <link rel="self" href="https://caijh.github.io//atom.xml"/>
@@ -10,6 +10,88 @@
     <logo>https://caijh.github.io//images/avatar.png</logo>
     <icon>https://caijh.github.io//favicon.ico</icon>
     <rights>All rights reserved 2019, John&apos;s Blog</rights>
+    <entry>
+        <title type="html"><![CDATA[设计模式-策略模式]]></title>
+        <id>https://caijh.github.io//post/she-ji-mo-shi-ce-lue-mo-shi</id>
+        <link href="https://caijh.github.io//post/she-ji-mo-shi-ce-lue-mo-shi">
+        </link>
+        <updated>2019-06-30T06:55:08.000Z</updated>
+        <summary type="html"><![CDATA[<h4 id="定义">定义</h4>
+<blockquote>
+<p>Define a family of algorithms,encapsulate each one,and make them interchangeable.（定义一组算法，将每个算法都封装起来，并且使它们之间可以互换。）</p>
+</blockquote>
+<h4 id="uml">UML</h4>
+<p><img src="https://caijh.github.io//post-images/1561877754788.png" alt=""></p>
+]]></summary>
+        <content type="html"><![CDATA[<h4 id="定义">定义</h4>
+<blockquote>
+<p>Define a family of algorithms,encapsulate each one,and make them interchangeable.（定义一组算法，将每个算法都封装起来，并且使它们之间可以互换。）</p>
+</blockquote>
+<h4 id="uml">UML</h4>
+<p><img src="https://caijh.github.io//post-images/1561877754788.png" alt=""></p>
+<!-- more -->
+<h4 id="代码实现">代码实现</h4>
+<pre><code>public interface Strategy {
+     //策略模式的运算法则
+     public void doSomething();
+}
+public class ConcreteStrategy1 implements Strategy {
+     public void doSomething() {
+             System.out.println(&quot;具体策略1的运算法则&quot;);
+     }
+}
+public class ConcreteStrategy2 implements Strategy {
+     public void doSomething() {
+             System.out.println(&quot;具体策略2的运算法则&quot;);
+     }
+}
+public class Context {
+     //抽象策略
+     private Strategy strategy = null;  
+     //构造函数设置具体策略
+     public Context(Strategy _strategy){
+             this.strategy = _strategy;
+     }
+     //封装后的策略方法
+     public void doAnythinig(){
+             this.strategy.doSomething();
+     }
+}
+public class Client {
+     public static void main(String[] args) {
+             //声明一个具体的策略
+             Strategy strategy = new ConcreteStrategy1();
+             //声明上下文对象
+             Context context = new Context(strategy);
+             //执行封装后的方法
+             context.doAnythinig();
+     }
+}
+</code></pre>
+<h4 id="策略模式的优点">策略模式的优点</h4>
+<ul>
+<li>算法可以自由切换
+这是策略模式本身定义的，只要实现抽象策略，它就成为策略家族的一个成员，通过封装角色对其进行封装，保证对外提供“可自由切换”的策略。</li>
+<li>避免使用多重条件判断
+如果没有策略模式，我们想想看会是什么样子？一个策略家族有5个策略算法，一会要使用A策略，一会要使用B策略，怎么设计呢？使用多重的条件语句？多重条件语句不易维护，而且出错的概率大大增强。使用策略模式后，可以由其他模块决定采用何种策略，策略家族对外提供的访问接口就是封装类，简化了操作，同时避免了条件语句判断。</li>
+<li>扩展性良好
+这甚至都不用说是它的优点，因为它太明显了。在现有的系统中增加一个策略太容易了，只要实现接口就可以了，其他都不用修改，类似于一个可反复拆卸的插件，这大大地符合了OCP原则。</li>
+</ul>
+<h4 id="策略模式的缺点">策略模式的缺点</h4>
+<ul>
+<li>策略类数量增多
+每一个策略都是一个类，复用的可能性很小，类数量增多。</li>
+<li>所有的策略类都需要对外暴露
+上层模块必须知道有哪些策略，然后才能决定使用哪一个策略，这与迪米特法则是相违背的，我只是想使用了一个策略，我凭什么就要了解这个策略呢？那要你的封装类还有什么意义？这是原装策略模式的一个缺点，幸运的是，我们可以使用其他模式来修正这个缺陷，如工厂方法模式、代理模式或享元模式。</li>
+</ul>
+<h4 id="jdk中的策略模式">JDK中的策略模式</h4>
+<ul>
+<li>java.util.Comparator#compare()</li>
+<li>javax.servlet.http.HttpServlet</li>
+<li>javax.servlet.Filter#doFilter()</li>
+</ul>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[设计模式-装饰模式]]></title>
         <id>https://caijh.github.io//post/she-ji-mo-shi-zhuang-shi-mo-shi</id>
@@ -841,102 +923,6 @@ public class Client {
              /*
               * 然后在这里就可以为所欲为了...
               */
-     }
-}
-</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[设计模式-工厂方法模式]]></title>
-        <id>https://caijh.github.io//post/she-ji-mo-shi-gong-han-fang-fa-mo-shi</id>
-        <link href="https://caijh.github.io//post/she-ji-mo-shi-gong-han-fang-fa-mo-shi">
-        </link>
-        <updated>2019-06-24T10:38:35.000Z</updated>
-        <summary type="html"><![CDATA[<h4 id="定义">定义</h4>
-<blockquote>
-<p>Define an interface for creating an object,but let subclasses decide which class to instantiate.Factory Method lets a class defer instantiation to subclasses.（定义一个用于创建对象的接口，让子类决定实例化哪一个类。工厂方法使一个类的实例化延迟到其子类。）</p>
-</blockquote>
-<h4 id="uml">UML</h4>
-<p><img src="https://design-patterns.readthedocs.io/zh_CN/latest/_images/FactoryMethod.jpg" alt="IMAGE"></p>
-]]></summary>
-        <content type="html"><![CDATA[<h4 id="定义">定义</h4>
-<blockquote>
-<p>Define an interface for creating an object,but let subclasses decide which class to instantiate.Factory Method lets a class defer instantiation to subclasses.（定义一个用于创建对象的接口，让子类决定实例化哪一个类。工厂方法使一个类的实例化延迟到其子类。）</p>
-</blockquote>
-<h4 id="uml">UML</h4>
-<p><img src="https://design-patterns.readthedocs.io/zh_CN/latest/_images/FactoryMethod.jpg" alt="IMAGE"></p>
-<!-- more -->
-<h4 id="工厂方法模式的优点">工厂方法模式的优点</h4>
-<ul>
-<li>首先，良好的封装性，代码结构清晰。一个对象创建是有条件约束的，如一个调用者需要一个具体的产品对象，只要知道这个产品的类名（或约束字符串）就可以了，不用知道创建对象的艰辛过程，降低模块间的耦合。</li>
-<li>再次，屏蔽产品类。这一特点非常重要，产品类的实现如何变化，调用者都不需要关心，它只需要关心产品的接口，只要接口保持不变，系统中的上层模块就不要发生变化。</li>
-<li>最后，工厂方法模式是典型的解耦框架。高层模块值需要知道产品的抽象类，其他的实现类都不用关心，符合迪米特法则，我不需要的就不要去交流；也符合依赖倒置原则，只依赖产品类的抽象；当然也符合里氏替换原则，使用产品子类替换产品父类，没问题！</li>
-</ul>
-<h4 id="工厂方法模式的使用场景">工厂方法模式的使用场景</h4>
-<ul>
-<li>工厂方法模式是new一个对象的替代品，所以在所有需要生成对象的地方都可以使用，但是需要慎重地考虑是否要增加一个工厂类进行管理，增加代码的复杂度。</li>
-<li>需要灵活的、可扩展的框架时，可以考虑采用工厂方法模式。</li>
-<li>工厂方法模式可以用在异构项目中</li>
-<li>可以使用在测试驱动开发的框架下</li>
-</ul>
-<h4 id="jdk中的工厂方法模式">JDK中的工厂方法模式</h4>
-<ul>
-<li>java.util.Calendar#getInstance()</li>
-<li>java.util.ResourceBundle#getBundle()</li>
-<li>java.text.NumberFormat#getInstance()</li>
-<li>java.nio.charset.Charset#forName()</li>
-<li>java.net.URLStreamHandlerFactory#createURLStreamHandler(String) (Returns singleton object per protocol)</li>
-</ul>
-<h4 id="工厂方法模式代码">工厂方法模式代码</h4>
-<pre><code>public abstract class Product {    
-     //产品类的公共方法
-     public void method1(){
-             //业务逻辑处理
-     }  
-     //抽象方法
-     public abstract void method2();    
-}
-
-public class ConcreteProduct1 extends Product {
-     public void method2() {
-             //业务逻辑处理
-     }
-}
-public class ConcreteProduct2 extends Product {
-     public void method2() {
-             //业务逻辑处理
-     }
-}
-
-public abstract class Creator {    
-     /*
-      * 创建一个产品对象，其输入参数类型可以自行设置
-      * 通常为String、Enum、Class等，当然也可以为空
-      */        
-     public abstract &lt;T extends Product&gt; T createProduct(Class&lt;T&gt; c);
-}
-
-public class ConcreteCreator extends Creator {     
-     public &lt;T extends Product&gt; T createProduct(Class&lt;T&gt; c){
-             Product product=null;
-             try {
-                    product = (Product)Class.forName(c.getName()).newInstance();
-             } catch (Exception e) {
-                    //异常处理
-             }
-             return (T)product;         
-     }
-}
-
-public class ConcreteCreator extends Creator {     
-     public &lt;T extends Product&gt; T createProduct(Class&lt;T&gt; c){
-             Product product=null;
-             try {
-                    product = (Product)Class.forName(c.getName()).newInstance();
-             } catch (Exception e) {
-                    //异常处理
-             }
-             return (T)product;         
      }
 }
 </code></pre>
