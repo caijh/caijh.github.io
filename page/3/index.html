@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>设计模式-中介者模式 | John&#39;s Blog</title>
+<title>John&#39;s Blog</title>
 <meta name="description" content="搬砖大佬">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -15,12 +15,6 @@
 <link rel="stylesheet" href="https://caijh.github.io//styles/main.css">
 
 
-  
-
-  
-    <link rel="stylesheet" href="https://unpkg.com/disqusjs@1.1/dist/disqusjs.css" />
-  
-
 <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
 
 
@@ -29,7 +23,6 @@
 
   </head>
   <body>
-  
     <nav class="navbar border fixed split-nav">
   <div class="nav-brand">
     <h3><a href="https://caijh.github.io/">John&#39;s Blog</a></h3>
@@ -83,139 +76,63 @@
   </div>
 </nav>
 
+
     <div id="top" class="row site">
       <div class="sm-12 md-8 col">
         <div class="paper">
-          <article class="article">
-            <h1>设计模式-中介者模式</h1>
-            <p class="article-meta">
-              2019-06-24
-              
-                <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge warning">
-                  设计模式
-                </a>
-              
-            </p>
-            
-              <img src="http://static.oschina.net/uploads/space/2015/1126/013902_vQvD_2003960.png" alt="设计模式-中介者模式">
-            
-            <div class="post-content">
-              <h4 id="定义">定义</h4>
-<blockquote>
-<p>中介者模式的定义为：Define an object that encapsulates how a set of objects interact.Mediator promotes loose coupling by keeping objects from referring to each other explicitly,and it lets you vary their interaction independently.（用一个中介对象封装一系列的对象交互，中介者使各对象不需要显示地相互作用，从而使其耦合松散，而且可以独立地改变它们之间的交互。）</p>
-</blockquote>
-<h4 id="uml">UML</h4>
-<p><img src="https://caijh.github.io//post-images/1561389056024.png" alt=""></p>
-<!-- more -->
-<h4 id="代码实现">代码实现</h4>
-<pre><code>public abstract class Mediator {
-     //定义同事类
-     protected ConcreteColleague1 c1;
-     protected ConcreteColleague2 c2;
-     //通过getter/setter方法把同事类注入进来
-     public ConcreteColleague1 getC1() {
-             return c1;
-     }
-     public void setC1(ConcreteColleague1 c1) {
-             this.c1 = c1;
-     }
-     public ConcreteColleague2 getC2() {
-             return c2;
-     }
-     public void setC2(ConcreteColleague2 c2) {
-             this.c2 = c2;
-     }
-     //中介者模式的业务逻辑
-     public abstract void doSomething1();
-     public abstract void doSomething2();
-}
-
-public class ConcreteMediator extends Mediator {
-     @Override
-     public void doSomething1() {
-             //调用同事类的方法，只要是public方法都可以调用
-             super.c1.selfMethod1();
-             super.c2.selfMethod2();
-     }
-     public void doSomething2() {
-             super.c1.selfMethod1();
-             super.c2.selfMethod2();
-     }
-}
-
-public abstract class Colleague {
-     protected Mediator mediator;
-     public Colleague(Mediator _mediator){
-             this.mediator = _mediator;
-     }
-}
-public class ConcreteColleague1 extends Colleague {
-     //通过构造函数传递中介者
-     public ConcreteColleague1(Mediator _mediator){
-             super(_mediator);
-     }
-     //自有方法 self-method
-     public void selfMethod1(){
-             //处理自己的业务逻辑
-     }
-     //依赖方法 dep-method
-     public void depMethod1(){
-             //处理自己的业务逻辑
-             //自己不能处理的业务逻辑，委托给中介者处理
-             super.mediator.doSomething1();
-     }
-}
-public class ConcreteColleague2 extends Colleague {
-     //通过构造函数传递中介者
-     public ConcreteColleague2(Mediator _mediator){
-             super(_mediator);
-     }
-     //自有方法 self-method
-     public void selfMethod2(){
-             //处理自己的业务逻辑
-     }
-     //依赖方法 dep-method
-     public void depMethod2(){
-             //处理自己的业务逻辑
-             //自己不能处理的业务逻辑，委托给中介者处理
-             super.mediator.doSomething2();
-     }
-}
-
-</code></pre>
-<h4 id="中介者模式的优点">中介者模式的优点</h4>
-<p>中介者模式的优点就是减少类间的依赖，把原有的一对多的依赖变成了一对一的依赖，同事类只依赖中介者，减少了依赖，当然同时也降低了类间的耦合。</p>
-<h4 id="中介者模式的缺点">中介者模式的缺点</h4>
-<p>中介者模式的缺点就是中介者会膨胀得很大，而且逻辑复杂，原本N个对象直接的相互依赖关系转换为中介者和同事类的依赖关系，同事类越多，中介者的逻辑就越复杂。</p>
-
-            </div>
-          </article>
-        </div>
-        <div class="paper" data-aos="fade-in">
           
-            <div class="next-post">
-              <div class="next">
-                下一篇
-              </div>
-              <a href="https://caijh.github.io//post/she-ji-mo-shi-yuan-xing-mo-shi">
-                <h3 class="post-title">
-                  设计模式-原型模式
-                </h3>
-              </a>
-            </div>
-          
+  <article class="article">
+    <h2 class="article-title">
+      <a href="https://caijh.github.io//post/graphql-xue-xi-bi-ji">GraphQL学习笔记</a>
+    </h2>
+    <p class="article-meta">
+      2019-06-24
+      
+        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge ">
+          Java
+        </a>
+      
+    </p>
+    <p class="text-lead">
+      <h2 id="graphql是什么">GraphQL是什么？</h2>
+<p>GraphQl官方的定义是：</p>
+<p>GraphQL是一种API的查询语言。 它用于运行时完成数据查询。 GraphQL服务与传输无关，但通常通过HTTP提供。</p>
+<p>GraphQl特性</p>
+<ul>
+<li>GraphQL query， 只请求需要的数据</li>
+<li>GraphQL schema， 在服务器端定义了api的数据结构</li>
+<li>可以在一个请求中获取多个数据，如果是rest的话， 需要访问多个接口</li>
+</ul>
+<p>与REST对比，REST的缺点的主要有以下:</p>
+<ul>
+<li>Overfetching 往往会给客户端返回过多的数据</li>
+<li>endpoints过多，管理endpoints是个问题。Endpoints修改，客户端也需要修改。</li>
+</ul>
+
+    </p>
+    <div class="row">
+      <a href="https://caijh.github.io//post/graphql-xue-xi-bi-ji" class="readmore-link">
+        <button>
+          Read More
+        </button>
+      </a>
+    </div>
+  </article>
+
+
         </div>
         
-          
+        <div class="row flex-edges">
+  
+    <a href="https://caijh.github.io//page/2/" class="paper-btn">
+      上一页
+    </a>
+  
+  
+</div>
 
-          
-            <div class="paper" data-aos="fade-in">
-              <div id="disqus_thread"></div>
-            </div>
-          
-        
       </div>
-
+      
       <div class="sm-12 md-4 col sidebar">
   <div class="paper info-container">
     <img src="https://caijh.github.io//images/avatar.png?v=1561892685096" class="no-responsive avatar">
@@ -332,15 +249,15 @@ public class ConcreteColleague2 extends Colleague {
     </div>
     <div class="row">
       
-        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge ">
+        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge secondary">
           设计模式
         </a>
       
-        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge ">
+        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge success">
           MySQL
         </a>
       
-        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge secondary">
+        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge success">
           Java
         </a>
       
@@ -351,9 +268,7 @@ public class ConcreteColleague2 extends Colleague {
   </div>
 </div>
 
-
     </div>
-
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
 
 <script type="application/javascript">
@@ -363,26 +278,6 @@ AOS.init();
 hljs.initHighlightingOnLoad()
 
 </script>
-
-
-
-  
-
-  
-    <script src="https://unpkg.com/disqusjs@1.1/dist/disqus.js"></script>
-    <script>
-
-    var options = {
-      shortname: 'caijh',
-      apikey: 'lO2xchFAyPIP4VOKbgm796D9jIvqLVziAqLHOPnOZySwUlyWXAhgwrIbPQ16AyUX',
-    }
-    if ('https://disqus.skk.moe/disqus/') {
-      options.api = 'https://disqus.skk.moe/disqus/'
-    }
-    var dsqjs = new DisqusJS(options)
-
-    </script>
-  
 
 
 

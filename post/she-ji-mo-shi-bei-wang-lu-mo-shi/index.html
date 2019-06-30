@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>设计模式-中介者模式 | John&#39;s Blog</title>
+<title>设计模式-备忘录模式 | John&#39;s Blog</title>
 <meta name="description" content="搬砖大佬">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -87,9 +87,9 @@
       <div class="sm-12 md-8 col">
         <div class="paper">
           <article class="article">
-            <h1>设计模式-中介者模式</h1>
+            <h1>设计模式-备忘录模式</h1>
             <p class="article-meta">
-              2019-06-24
+              2019-06-30
               
                 <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge warning">
                   设计模式
@@ -97,96 +97,94 @@
               
             </p>
             
-              <img src="http://static.oschina.net/uploads/space/2015/1126/013902_vQvD_2003960.png" alt="设计模式-中介者模式">
-            
             <div class="post-content">
               <h4 id="定义">定义</h4>
 <blockquote>
-<p>中介者模式的定义为：Define an object that encapsulates how a set of objects interact.Mediator promotes loose coupling by keeping objects from referring to each other explicitly,and it lets you vary their interaction independently.（用一个中介对象封装一系列的对象交互，中介者使各对象不需要显示地相互作用，从而使其耦合松散，而且可以独立地改变它们之间的交互。）</p>
+<p>Without violating encapsulation,capture and externalize an object's internal state so that the object can be restored to this state later.（在不破坏封装性的前提下，捕获一个对象的内部状态，并在该对象之外保存这个状态。这样以后就可将该对象恢复到原先保存的状态。）</p>
 </blockquote>
 <h4 id="uml">UML</h4>
-<p><img src="https://caijh.github.io//post-images/1561389056024.png" alt=""></p>
-<!-- more -->
+<p><img src="https://caijh.github.io//post-images/1561891474684.png" alt=""></p>
 <h4 id="代码实现">代码实现</h4>
-<pre><code>public abstract class Mediator {
-     //定义同事类
-     protected ConcreteColleague1 c1;
-     protected ConcreteColleague2 c2;
-     //通过getter/setter方法把同事类注入进来
-     public ConcreteColleague1 getC1() {
-             return c1;
+<pre><code>/**
+* Originator发起人角色
+* 记录当前时刻的内部状态，负责定义哪些属于备份范围的状态，负责创建和恢复备忘录数据。
+*/
+public class Originator {
+     //内部状态
+     private String state = &quot;&quot;;
+     
+     public String getState() {
+             return state;
      }
-     public void setC1(ConcreteColleague1 c1) {
-             this.c1 = c1;
+     public void setState(String state) {
+             this.state = state;
      }
-     public ConcreteColleague2 getC2() {
-             return c2;
+     //创建一个备忘录
+     public Memento createMemento(){
+             return new Memento(this.state);
      }
-     public void setC2(ConcreteColleague2 c2) {
-             this.c2 = c2;
-     }
-     //中介者模式的业务逻辑
-     public abstract void doSomething1();
-     public abstract void doSomething2();
-}
-
-public class ConcreteMediator extends Mediator {
-     @Override
-     public void doSomething1() {
-             //调用同事类的方法，只要是public方法都可以调用
-             super.c1.selfMethod1();
-             super.c2.selfMethod2();
-     }
-     public void doSomething2() {
-             super.c1.selfMethod1();
-             super.c2.selfMethod2();
+     //恢复一个备忘录
+     public void restoreMemento(Memento _memento){
+             this.setState(_memento.getState());
      }
 }
-
-public abstract class Colleague {
-     protected Mediator mediator;
-     public Colleague(Mediator _mediator){
-             this.mediator = _mediator;
+/**
+* Memento备忘录角色
+* 负责存储Originator发起人对象的内部状态，在需要的时候提供发起人需要的内部状态。
+*/
+public class Memento {
+     //发起人的内部状态
+     private String state = &quot;&quot;;
+     //构造函数传递参数
+     public Memento(String _state){
+             this.state = _state;
+     }
+     public String getState() {
+             return state;
+     }
+     public void setState(String state) {
+             this.state = state;
      }
 }
-public class ConcreteColleague1 extends Colleague {
-     //通过构造函数传递中介者
-     public ConcreteColleague1(Mediator _mediator){
-             super(_mediator);
+/**
+* Caretaker备忘录管理员角色
+* 对备忘录进行管理、保存和提供备忘录。
+*/
+public class Caretaker {
+     //备忘录对象
+     private Memento memento;
+     public Memento getMemento() {
+             return memento;
      }
-     //自有方法 self-method
-     public void selfMethod1(){
-             //处理自己的业务逻辑
-     }
-     //依赖方法 dep-method
-     public void depMethod1(){
-             //处理自己的业务逻辑
-             //自己不能处理的业务逻辑，委托给中介者处理
-             super.mediator.doSomething1();
+     public void setMemento(Memento memento) {
+             this.memento = memento;
      }
 }
-public class ConcreteColleague2 extends Colleague {
-     //通过构造函数传递中介者
-     public ConcreteColleague2(Mediator _mediator){
-             super(_mediator);
-     }
-     //自有方法 self-method
-     public void selfMethod2(){
-             //处理自己的业务逻辑
-     }
-     //依赖方法 dep-method
-     public void depMethod2(){
-             //处理自己的业务逻辑
-             //自己不能处理的业务逻辑，委托给中介者处理
-             super.mediator.doSomething2();
+public class Client {
+     public static void main(String[] args) {
+             //定义发起人
+             Originator originator = new Originator();
+             //定义出备忘录管理员
+             Caretaker caretaker = new Caretaker();
+             //创建一个备忘录
+             caretaker.setMemento(originator.createMemento());
+             //恢复一个备忘录
+             originator.restoreMemento(caretaker.getMemento());
      }
 }
-
 </code></pre>
-<h4 id="中介者模式的优点">中介者模式的优点</h4>
-<p>中介者模式的优点就是减少类间的依赖，把原有的一对多的依赖变成了一对一的依赖，同事类只依赖中介者，减少了依赖，当然同时也降低了类间的耦合。</p>
-<h4 id="中介者模式的缺点">中介者模式的缺点</h4>
-<p>中介者模式的缺点就是中介者会膨胀得很大，而且逻辑复杂，原本N个对象直接的相互依赖关系转换为中介者和同事类的依赖关系，同事类越多，中介者的逻辑就越复杂。</p>
+<h4 id="备忘录模式的使用场景">备忘录模式的使用场景</h4>
+<ul>
+<li>需要保存和恢复数据的相关状态场景。</li>
+<li>提供一个可回滚（rollback）的操作；比如Word中的CTRL+Z组合键，IE浏览器中的后退按钮，文件管理器上的backspace键等。</li>
+<li>需要监控的副本场景中。例如要监控一个对象的属性，但是监控又不应该作为系统的主业务来调用，它只是边缘应用，即使出现监控不准、错误报警也影响不大，因此一般的做法是备份一个主线程中的对象，然后由分析程序来分析。</li>
+<li>数据库连接的事务管理就是用的备忘录模式，想想看，如果你要实现一个JDBC驱动，你怎么来实现事务？还不是用备忘录模式嘛！</li>
+</ul>
+<h4 id="jdk中的备忘录模式">JDK中的备忘录模式</h4>
+<ul>
+<li>java.util.Date</li>
+<li>java.io.Serializable</li>
+</ul>
 
             </div>
           </article>
@@ -197,9 +195,9 @@ public class ConcreteColleague2 extends Colleague {
               <div class="next">
                 下一篇
               </div>
-              <a href="https://caijh.github.io//post/she-ji-mo-shi-yuan-xing-mo-shi">
+              <a href="https://caijh.github.io//post/she-ji-mo-shi-men-mian-mo-shi">
                 <h3 class="post-title">
-                  设计模式-原型模式
+                  设计模式-门面模式
                 </h3>
               </a>
             </div>
@@ -332,7 +330,7 @@ public class ConcreteColleague2 extends Colleague {
     </div>
     <div class="row">
       
-        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge ">
+        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge success">
           设计模式
         </a>
       
