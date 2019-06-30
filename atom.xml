@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://caijh.github.io/</id>
     <title>John&apos;s Blog</title>
-    <updated>2019-06-30T07:27:21.658Z</updated>
+    <updated>2019-06-30T07:32:23.140Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://caijh.github.io/"/>
     <link rel="self" href="https://caijh.github.io//atom.xml"/>
@@ -10,6 +10,120 @@
     <logo>https://caijh.github.io//images/avatar.png</logo>
     <icon>https://caijh.github.io//favicon.ico</icon>
     <rights>All rights reserved 2019, John&apos;s Blog</rights>
+    <entry>
+        <title type="html"><![CDATA[设计模式-迭代器模式]]></title>
+        <id>https://caijh.github.io//post/she-ji-mo-shi-die-dai-qi-mo-shi</id>
+        <link href="https://caijh.github.io//post/she-ji-mo-shi-die-dai-qi-mo-shi">
+        </link>
+        <updated>2019-06-30T07:29:38.000Z</updated>
+        <summary type="html"><![CDATA[<h4 id="定义">定义</h4>
+<blockquote>
+<p>Provide a way to access the elements of an aggregate object sequentially without exposing its underlying representation.（它提供一种方法访问一个容器对象中各个元素，而又不需暴露该对象的内部细节。）</p>
+</blockquote>
+<h4 id="uml">UML</h4>
+<p><img src="https://caijh.github.io//post-images/1561879827619.png" alt=""></p>
+]]></summary>
+        <content type="html"><![CDATA[<h4 id="定义">定义</h4>
+<blockquote>
+<p>Provide a way to access the elements of an aggregate object sequentially without exposing its underlying representation.（它提供一种方法访问一个容器对象中各个元素，而又不需暴露该对象的内部细节。）</p>
+</blockquote>
+<h4 id="uml">UML</h4>
+<p><img src="https://caijh.github.io//post-images/1561879827619.png" alt=""></p>
+<!-- more -->
+<h4 id="代码实现">代码实现</h4>
+<pre><code>public interface Iterator {
+     //遍历到下一个元素
+     public Object next();
+     //是否已经遍历到尾部
+     public boolean hasNext();
+     //删除当前指向的元素
+     public boolean remove();
+}
+public class ConcreteIterator implements Iterator {
+     private Vector vector = new Vector();
+     //定义当前游标
+     public int cursor = 0;
+     @SuppressWarnings(&quot;unchecked&quot;)
+     public ConcreteIterator(Vector _vector){
+             this.vector = _vector;
+     }
+     //判断是否到达尾部
+     public boolean hasNext() {
+             if(this.cursor == this.vector.size()){
+                    return false;
+             }else{
+                    return true;
+             }
+     }
+     //返回下一个元素
+     public Object next() {
+             Object result = null;
+             if(this.hasNext()){
+                    result = this.vector.get(this.cursor++);
+             }else{
+                    result = null;
+             }
+             return result;
+     }
+     //删除当前元素
+     public boolean remove() {
+             this.vector.remove(this.cursor);
+             return true;
+     }
+}
+public interface Aggregate {
+     //是容器必然有元素的增加
+     public void add(Object object);
+     //减少元素
+     public void remove(Object object);
+     //由迭代器来遍历所有的元素
+     public Iterator iterator();
+}
+public class ConcreteAggregate implements Aggregate {
+     //容纳对象的容器
+     private Vector vector = new Vector();
+     //增加一个元素
+     public void add(Object object) {
+             this.vector.add(object);
+     }
+     //返回迭代器对象
+     public Iterator iterator() {
+             return new ConcreteIterator(this.vector);
+     }
+     //删除一个元素
+     public void remove(Object object) {
+             this.remove(object);
+     }
+}
+public class Client {
+     public static void main(String[] args) {
+             //声明出容器
+             Aggregate agg = new ConcreteAggregate();
+             //产生对象数据放进去
+             agg.add(&quot;abc&quot;);
+             agg.add(&quot;aaa&quot;);
+             agg.add(&quot;1234&quot;);     
+             //遍历一下
+             Iterator iterator = agg.iterator();
+             while(iterator.hasNext()){
+                     System.out.println(iterator.next());
+             }
+     }
+}
+</code></pre>
+<h4 id="使用迭代器模式的场景">使用迭代器模式的场景</h4>
+<ul>
+<li>访问聚合对象的内容，但不想暴露它的表现</li>
+<li>要支持多次访问聚合对象</li>
+<li>要提供统一方式访问不同聚合对象数据结构</li>
+</ul>
+<h4 id="jdk中的迭代器模式">JDK中的迭代器模式</h4>
+<ul>
+<li>java.util.Iterator</li>
+<li>java.util.Enumeration</li>
+</ul>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[设计模式-适配器模式]]></title>
         <id>https://caijh.github.io//post/she-ji-mo-shi-gua-pei-qi-mo-shi</id>
@@ -813,95 +927,6 @@ public class Director {
 <li>java.nio.ByteBuffer#put()(alsoonCharBuffer,ShortBuffer,IntBuffer,LongBuffer,FloatBufferandDoubleBuffer)</li>
 <li>javax.swing.GroupLayout.Group#addComponent()</li>
 <li>All implementations of java.lang.Appendable</li>
-</ul>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[设计模式-模板方法模式]]></title>
-        <id>https://caijh.github.io//post/she-ji-mo-shi-mo-ban-fang-fa-mo-shi</id>
-        <link href="https://caijh.github.io//post/she-ji-mo-shi-mo-ban-fang-fa-mo-shi">
-        </link>
-        <updated>2019-06-24T14:48:26.000Z</updated>
-        <summary type="html"><![CDATA[<h4 id="定义">定义</h4>
-<blockquote>
-<p>Define the skeleton of an algorithm in an operation,deferring some steps to subclasses.Template Method lets subclasses redefine certain steps of an algorithm without changing the algorithm's structure.（定义一个操作中的算法的框架，而将一些步骤延迟到子类中。使得子类可以不改变一个算法的结构即可重定义该算法的某些特定步骤。）</p>
-</blockquote>
-<h4 id="uml">UML</h4>
-<p><img src="https://caijh.github.io//post-images/1561387763499.png" alt=""></p>
-]]></summary>
-        <content type="html"><![CDATA[<h4 id="定义">定义</h4>
-<blockquote>
-<p>Define the skeleton of an algorithm in an operation,deferring some steps to subclasses.Template Method lets subclasses redefine certain steps of an algorithm without changing the algorithm's structure.（定义一个操作中的算法的框架，而将一些步骤延迟到子类中。使得子类可以不改变一个算法的结构即可重定义该算法的某些特定步骤。）</p>
-</blockquote>
-<h4 id="uml">UML</h4>
-<p><img src="https://caijh.github.io//post-images/1561387763499.png" alt=""></p>
-<!-- more -->
-<h4 id="代码实现">代码实现</h4>
-<pre><code>public abstract class AbstractClass {
-     //基本方法
-     protected abstract void doSomething();
-     //基本方法
-     protected abstract void doAnything();
-     //模板方法
-     public void templateMethod(){
-             /*
-              * 调用基本方法，完成相关的逻辑
-              */
-             this.doAnything();
-             this.doSomething();
-     }
-}
-public class ConcreteClass1 extends AbstractClass {
-     //实现基本方法
-     protected void doAnything() {
-             //业务逻辑处理
-     }
-     protected void doSomething() {
-             //业务逻辑处理
-     }
-}
-public class ConcreteClass2 extends AbstractClass {
-     //实现基本方法
-     protected void doAnything() {
-             //业务逻辑处理
-     }
-     protected void doSomething() {
-             //业务逻辑处理
-     }
-}
-public class Client {
-     public static void main(String[] args) {
-             AbstractClass class1 = new ConcreteClass1();
-             AbstractClass class2 = new ConcreteClass2();               
-             //调用模板方法
-             class1.templateMethod();
-             class2.templateMethod();
-     }
-}
-</code></pre>
-<h4 id="模板方法模式的优点">模板方法模式的优点</h4>
-<ul>
-<li>封装不变部分，扩展可变部分
-把认为是不变部分的算法封装到父类实现，而可变部分的则可以通过继承来继续扩展。</li>
-<li>提取公共部分代码，便于维护
-我们例子中刚刚走过的弯路就是最好的证明，如果我们不抽取到父类中，任由这种散乱的代码发生，想想后果是什么样子？维护人员为了修正一个缺陷，需要到处查找类似的代码！</li>
-<li>行为由父类控制，子类实现
-基本方法是由子类实现的，因此子类可以通过扩展的方式增加相应的功能，符合开闭原则。</li>
-</ul>
-<h4 id="模板方法模式的缺点">模板方法模式的缺点</h4>
-<p>按照我们的设计习惯，抽象类负责声明最抽象、最一般的事物属性和方法，实现类完成具体的事物属性和方法。但是模板方法模式却颠倒了，抽象类定义了部分抽象方法，由子类实现，子类执行的结果影响了父类的结果，也就是子类对父类产生了影响，这在复杂的项目中，会带来代码阅读的难度，而且也会让新手产生不适感。</p>
-<h4 id="模板方法的使用场景">模板方法的使用场景</h4>
-<ul>
-<li>多个子类有公有的方法，并且逻辑基本相同时。</li>
-<li>重要、复杂的算法，可以把核心算法设计为模板方法，周边的相关细节功能则由各个子类实现。</li>
-<li>重构时，模板方法模式是一个经常使用的模式，把相同的代码抽取到父类中，然后通过钩子函数（见“模板方法模式的扩展”）约束其行为。</li>
-</ul>
-<h4 id="jdk中的模板方法模式">JDK中的模板方法模式</h4>
-<ul>
-<li>java.util.Collections#sort()</li>
-<li>java.io.InputStream#skip()</li>
-<li>java.io.InputStream#read()</li>
-<li>java.util.AbstractList#indexOf()</li>
 </ul>
 ]]></content>
     </entry>
