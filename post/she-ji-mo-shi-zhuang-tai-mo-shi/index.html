@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>设计模式-组合模式 | John&#39;s Blog</title>
+<title>设计模式-状态模式 | John&#39;s Blog</title>
 <meta name="description" content="搬砖大佬">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -87,11 +87,11 @@
       <div class="sm-12 md-8 col">
         <div class="paper">
           <article class="article">
-            <h1>设计模式-组合模式</h1>
+            <h1>设计模式-状态模式</h1>
             <p class="article-meta">
               2019-06-30
               
-                <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge secondary">
+                <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge warning">
                   设计模式
                 </a>
               
@@ -100,79 +100,107 @@
             <div class="post-content">
               <h4 id="定义">定义</h4>
 <blockquote>
-<p>Compose objects into tree structures to represent part-whole hierarchies.Composite lets clients treat individual objects and compositions of objects uniformly.（将对象组合成树形结构以表示“部分-整体”的层次结构，使得用户对单个对象和组合对象的使用具有一致性。）</p>
+<p>Allow an object to alter its behavior when its internal state changes.The object will appear to change its class.（当一个对象内在状态改变时允许其改变行为，这个对象看起来像改变了其类。）</p>
 </blockquote>
 <h4 id="uml">UML</h4>
-<p><img src="https://caijh.github.io//post-images/1561889214924.png" alt=""></p>
+<p><img src="https://caijh.github.io//post-images/1561893392766.png" alt=""></p>
+<!-- more -->
 <h4 id="代码实现">代码实现</h4>
-<pre><code>public abstract class Component {
-     //个体和整体都具有的共享
-     public void doSomething(){
-             //编写业务逻辑
+<pre><code>public abstract class State {
+     //定义一个环境角色，提供子类访问
+     protected Context context;
+     //设置环境角色
+     public void setContext(Context _context){
+             this.context = _context;
+     }
+     //行为1
+     public abstract void handle1();
+     //行为2
+     public abstract void handle2();
+}
+public class ConcreteState1 extends State {
+     @Override
+     public void handle1() {
+             //本状态下必须处理的逻辑
+     }
+     @Override
+     public void handle2() {
+             //设置当前状态为stat2
+             super.context.setCurrentState(Context.STATE2);
+             //过渡到state2状态，由Context实现
+             super.context.handle2();
      }
 }
-public class Composite extends Component {
-     //构件容器
-     private ArrayList&lt;Component&gt; componentArrayList = new ArrayList&lt;Component&gt;();
-     //增加一个叶子构件或树枝构件
-     public void add(Component component){
-             this.componentArrayList.add(component);
+public class ConcreteState2 extends State {
+     @Override
+     public void handle1() {          
+             //设置当前状态为state1
+             super.context.setCurrentState(Context.STATE1);
+             //过渡到state1状态，由Context实现
+             super.context.handle1();
      }
-     //删除一个叶子构件或树枝构件
-     public void remove(Component component){
-             this.componentArrayList.remove(component);
-     }
-     //获得分支下的所有叶子构件和树枝构件
-     public ArrayList&lt;Component&gt; getChildren(){
-             return this.componentArrayList;
+     @Override
+     public void handle2() {
+             //本状态下必须处理的逻辑
      }
 }
-public class Leaf extends Component {
-     /*
-      * 可以覆写父类方法
-      * public void doSomething(){
-      * 
-      * }
-      */
+public class Context {
+     //定义状态
+     public final static State STATE1 = new ConcreteState1();
+     public final static State STATE2 = new ConcreteState2();
+     //当前状态
+     private State CurrentState;
+     //获得当前状态
+     public State getCurrentState() {
+             return CurrentState;
+     }
+     //设置当前状态
+     public void setCurrentState(State currentState) {
+             this.CurrentState = currentState;
+             //切换状态
+             this.CurrentState.setContext(this);
+     }
+     //行为委托
+     public void handle1(){
+             this.CurrentState.handle1();
+     }
+     public void handle2(){
+             this.CurrentState.handle2();
+     }
 }
 public class Client {
      public static void main(String[] args) {
-            //创建一个根节点
-             Composite root = new Composite();
-             root.doSomething();
-             //创建一个树枝构件
-             Composite branch = new Composite();
-             //创建一个叶子节点
-             Leaf leaf = new Leaf();
-             //建立整体
-             root.add(branch);
-             branch.add(leaf);          
-     }
-     //通过递归遍历树
-     public static void display(Composite root){
-             for(Component c:root.getChildren()){
-                  if(c instanceof Leaf){ //叶子节点
-                          c.doSomething();
-                  }else{ //树枝节点
-                          display((Composite)c);
-                  }
-             }
+             //定义环境角色
+             Context context = new Context();
+             //初始化状态
+             context.setCurrentState(new ConcreteState1());
+             //行为执行
+             context.handle1();
+             context.handle2();
      }
 }
 </code></pre>
-<h4 id="组合模式的优点">组合模式的优点</h4>
+<h4 id="状态模式的优点">状态模式的优点</h4>
 <ul>
-<li>高层模块调用简单
-一棵树形机构中的所有节点都是Component，局部和整体对调用者来说没有任何区别，也就是说，高层模块不必关心自己处理的是单个对象还是整个组合结构，简化了高层模块的代码。</li>
-<li>节点自由增加
-使用了组合模式后，我们可以看看，如果想增加一个树枝节点、树叶节点是不是都很容易，只要找到它的父节点就成，非常容易扩展，符合开闭原则，对以后的维护非常有利。</li>
+<li>结构清晰
+避免了过多的switch...case或者if...else语句的使用，避免了程序的复杂性,提高系统的可维护性。</li>
+<li>遵循设计原则
+很好地体现了开闭原则和单一职责原则，每个状态都是一个子类，你要增加状态就要增加子类，你要修改状态，你只修改一个子类就可以了。</li>
+<li>封装性非常好
+这也是状态模式的基本要求，状态变换放置到类的内部来实现，外部的调用不用知道类内部如何实现状态和行为的变换。</li>
 </ul>
-<h4 id="组合模式的缺点">组合模式的缺点</h4>
-<p>组合模式有一个非常明显的缺点，看到我们在场景类中的定义，提到树叶和树枝使用时的定义了吗？直接使用了实现类！这在面向接口编程上是很不恰当的，与依赖倒置原则冲突，读者在使用的时候要考虑清楚，它限制了你接口的影响范围。</p>
-<h4 id="组合模式使用场景">组合模式使用场景</h4>
+<h4 id="状态模式的缺点">状态模式的缺点</h4>
+<p>状态模式既然有优点，那当然有缺点了。但只有一个缺点，子类会太多，也就是类膨胀。如果一个事物有很多个状态也不稀奇，如果完全使用状态模式就会有太多的子类，不好管理，这个需要大家在项目中自己衡量。其实有很多方式可以解决这个状态问题，如在数据库中建立一个状态表，然后根据状态执行相应的操作，这个也不复杂，看大家的习惯和嗜好了。</p>
+<h4 id="状态模式的使用场景">状态模式的使用场景</h4>
 <ul>
-<li>想要表示对象间部分-整体的层次关系</li>
-<li>想让客户端略过组合与个体的差异</li>
+<li>行为随状态改变而改变的场景
+这也是状态模式的根本出发点，例如权限设计，人员的状态不同即使执行相同的行为结果也会不同，在这种情况下需要考虑使用状态模式。</li>
+<li>条件、分支判断语句的替代者
+在程序中大量使用switch语句或者if判断语句会导致程序结构不清晰，逻辑混乱，使用状态模式可以很好地避免这一问题，它通过扩展子类实现了条件的判断处理。</li>
+</ul>
+<h4 id="jdk中的状态模式">JDK中的状态模式</h4>
+<ul>
+<li>javax.faces.lifecycle.LifeCycle#execute()</li>
 </ul>
 
             </div>
@@ -184,9 +212,9 @@ public class Client {
               <div class="next">
                 下一篇
               </div>
-              <a href="https://caijh.github.io//post/she-ji-mo-shi-die-dai-qi-mo-shi">
+              <a href="https://caijh.github.io//post/she-ji-mo-shi-fang-wen-zhe-mo-shi">
                 <h3 class="post-title">
-                  设计模式-迭代器模式
+                  设计模式-访问者模式
                 </h3>
               </a>
             </div>
@@ -329,15 +357,15 @@ public class Client {
     </div>
     <div class="row">
       
-        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge success">
+        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge secondary">
           设计模式
         </a>
       
-        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge secondary">
+        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge ">
           MySQL
         </a>
       
-        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge warning">
+        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge secondary">
           Java
         </a>
       

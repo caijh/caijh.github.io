@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>标签列表 | John&#39;s Blog</title>
+<title>设计模式-享元模式 | John&#39;s Blog</title>
 <meta name="description" content="搬砖大佬">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -15,6 +15,12 @@
 <link rel="stylesheet" href="https://caijh.github.io//styles/main.css">
 
 
+  
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/disqusjs@1.1/dist/disqusjs.css" />
+  
+
 <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
 
 
@@ -23,6 +29,7 @@
 
   </head>
   <body>
+  
     <nav class="navbar border fixed split-nav">
   <div class="nav-brand">
     <h3><a href="https://caijh.github.io/">John&#39;s Blog</a></h3>
@@ -79,24 +86,127 @@
     <div id="top" class="row site">
       <div class="sm-12 md-8 col">
         <div class="paper">
-          <h2 class="tag-list-title">标签列表</h2>
-          <div class="row tags-container">
+          <article class="article">
+            <h1>设计模式-享元模式</h1>
+            <p class="article-meta">
+              2019-06-30
+              
+                <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge ">
+                  设计模式
+                </a>
+              
+            </p>
             
-              <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge secondary">
-                设计模式
-              </a>
-            
-              <a href="https://caijh.github.io//tag/o82yUqML0" class="badge ">
-                MySQL
-              </a>
-            
-              <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge success">
-                Java
-              </a>
-            
-          </div>
+            <div class="post-content">
+              <h4 id="定义">定义</h4>
+<blockquote>
+<p>Use sharing to support large numbers of fine-grained objects efficiently.（使用共享对象可有效地支持大量的细粒度的对象。）</p>
+</blockquote>
+<h3 id="uml">UML</h3>
+<p><img src="https://caijh.github.io//post-images/1561899783648.png" alt=""></p>
+<!-- more -->
+<h4 id="代码实现">代码实现</h4>
+<pre><code>public abstract class Flyweight {
+     //内部状态
+     private String intrinsic;
+     //外部状态
+     protected final String Extrinsic;
+     //要求享元角色必须接受外部状态
+     public Flyweight(String _Extrinsic){
+             this.Extrinsic = _Extrinsic;
+     }
+     //定义业务操作
+     public abstract void operate();
+     //内部状态的getter/setter
+     public String getIntrinsic() {
+             return intrinsic;
+     }
+     public void setIntrinsic(String intrinsic) {
+             this.intrinsic = intrinsic;
+     }
+}
+public class ConcreteFlyweight1 extends Flyweight{
+     //接受外部状态
+     public ConcreteFlyweight1(String _Extrinsic){
+             super(_Extrinsic);
+     }
+     //根据外部状态进行逻辑处理
+     public void operate(){
+             //业务逻辑
+     }
+}
+public class ConcreteFlyweight2 extends Flyweight{
+     //接受外部状态
+     public ConcreteFlyweight2(String _Extrinsic){
+             super(_Extrinsic);
+     }
+     //根据外部状态进行逻辑处理
+     public void operate(){
+             //业务逻辑
+     }
+}
+public class FlyweightFactory {
+     //定义一个池容器
+     private static  HashMap&lt;String,Flyweight&gt; pool= new HashMap&lt;String,Flyweight&gt;();
+     //享元工厂
+     public static Flyweight getFlyweight(String Extrinsic){
+             //需要返回的对象
+             Flyweight flyweight = null;
+             //在池中没有该对象
+             if(pool.containsKey(Extrinsic)){
+                     flyweight = pool.get(Extrinsic);
+             }else{
+                     //根据外部状态创建享元对象
+                     flyweight = new ConcreteFlyweight1(Extrinsic);
+                     //放置到池中
+                     pool.put(Extrinsic, flyweight);
+             }
+             return flyweight;
+     }
+}
+</code></pre>
+<h4 id="享元模式的优点与缺点">享元模式的优点与缺点</h4>
+<p>享元模式是一个非常简单的模式，它可以大大减少应用程序创建的对象，降低程序内存的占用，增强程序的性能，但它同时也提高了系统复杂性，需要分离出外部状态和内部状态，而且外部状态具有固化特性，不应该随内部状态改变而改变，否则导致系统的逻辑混乱。</p>
+<h4 id="享元模式的使用场景">享元模式的使用场景</h4>
+<ul>
+<li>系统中存在大量的相似对象。</li>
+<li>细粒度的对象都具备较接近的外部状态，而且内部状态与环境无关，也就是说对象没有特定身份。</li>
+<li>需要缓冲池的场景。</li>
+<li>应用不根据对象的identity</li>
+</ul>
+<h4 id="jdk中flyweight模式">JDK中Flyweight模式</h4>
+<ul>
+<li>java.lang.Integer#valueOf(int) (also on Boolean, Byte, Character, Short and Long)</li>
+</ul>
+
+            </div>
+          </article>
         </div>
+        <div class="paper" data-aos="fade-in">
+          
+            <div class="next-post">
+              <div class="next">
+                下一篇
+              </div>
+              <a href="https://caijh.github.io//post/she-ji-mo-shi-jie-shi-qi-mo-shi">
+                <h3 class="post-title">
+                  设计模式-解释器模式
+                </h3>
+              </a>
+            </div>
+          
+        </div>
+        
+          
+
+          
+            <div class="paper" data-aos="fade-in">
+              <div id="disqus_thread"></div>
+            </div>
+          
+        
       </div>
+
       <div class="sm-12 md-4 col sidebar">
   <div class="paper info-container">
     <img src="https://caijh.github.io//images/avatar.png?v=1561900447384" class="no-responsive avatar">
@@ -227,7 +337,7 @@
           设计模式
         </a>
       
-        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge ">
+        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge success">
           MySQL
         </a>
       
@@ -241,7 +351,8 @@
     Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://caijh.github.io//atom.xml" target="_blank">RSS</a>
   </div>
 </div>
-  
+
+
     </div>
 
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
@@ -253,6 +364,26 @@ AOS.init();
 hljs.initHighlightingOnLoad()
 
 </script>
+
+
+
+  
+
+  
+    <script src="https://unpkg.com/disqusjs@1.1/dist/disqus.js"></script>
+    <script>
+
+    var options = {
+      shortname: 'caijh',
+      apikey: 'lO2xchFAyPIP4VOKbgm796D9jIvqLVziAqLHOPnOZySwUlyWXAhgwrIbPQ16AyUX',
+    }
+    if ('https://disqus.skk.moe/disqus/') {
+      options.api = 'https://disqus.skk.moe/disqus/'
+    }
+    var dsqjs = new DisqusJS(options)
+
+    </script>
+  
 
 
 

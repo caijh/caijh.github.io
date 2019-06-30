@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>标签列表 | John&#39;s Blog</title>
+<title>设计模式-解释器模式 | John&#39;s Blog</title>
 <meta name="description" content="搬砖大佬">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -15,6 +15,12 @@
 <link rel="stylesheet" href="https://caijh.github.io//styles/main.css">
 
 
+  
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/disqusjs@1.1/dist/disqusjs.css" />
+  
+
 <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
 
 
@@ -23,6 +29,7 @@
 
   </head>
   <body>
+  
     <nav class="navbar border fixed split-nav">
   <div class="nav-brand">
     <h3><a href="https://caijh.github.io/">John&#39;s Blog</a></h3>
@@ -79,24 +86,96 @@
     <div id="top" class="row site">
       <div class="sm-12 md-8 col">
         <div class="paper">
-          <h2 class="tag-list-title">标签列表</h2>
-          <div class="row tags-container">
+          <article class="article">
+            <h1>设计模式-解释器模式</h1>
+            <p class="article-meta">
+              2019-06-30
+              
+                <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge secondary">
+                  设计模式
+                </a>
+              
+            </p>
             
-              <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge secondary">
-                设计模式
-              </a>
-            
-              <a href="https://caijh.github.io//tag/o82yUqML0" class="badge ">
-                MySQL
-              </a>
-            
-              <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge success">
-                Java
-              </a>
-            
-          </div>
+            <div class="post-content">
+              <h4 id="定义">定义</h4>
+<blockquote>
+<p>Given a language, define a representation for its grammar along with an interpreter that uses the representation to interpret sentences in the language.（给定一门语言，定义它的文法的一种表示，并定义一个解释器，该解释器使用该表示来解释语言中的句子。）</p>
+</blockquote>
+<h4 id="uml">UML</h4>
+<p><img src="https://caijh.github.io//post-images/1561899675724.png" alt=""></p>
+<!-- more -->
+<h4 id="代码实现">代码实现</h4>
+<pre><code>public abstract class Expression {
+     //每个表达式必须有一个解析任务
+     public abstract Object interpreter(Context  ctx);
+}
+public class TerminalExpression extends Expression {
+     //通常终结符表达式只有一个，但是有多个对象
+     public Object interpreter(Context ctx) {
+             return null;
+     }
+}
+public class NonterminalExpression extends Expression {
+     //每个非终结符表达式都会对其他表达式产生依赖
+     public NonterminalExpression(Expression... expression){
+     }
+     
+     public Object interpreter(Context ctx) {
+             //进行文法处理
+             return null;
+     }
+}
+public class Client {
+     public static void main(String[] args) {
+          Context ctx = new Context();
+          //通常定一个语法容器，容纳一个具体的表达式，通常为ListArray、LinkedList、Stack等类型
+          Stack&lt;Expression&gt; stack = null; 
+          for(;;){
+               //进行语法判断，并产生递归调用
+          }          
+          //产生一个完整的语法树，由各个具体的语法分析进行解析
+          Expression exp = stack.pop();
+          //具体元素进入场景
+          exp.interpreter(ctx);
+     }
+}
+</code></pre>
+<h4 id="jdk中解释模式">JDK中解释模式</h4>
+<ul>
+<li>java.util.Pattern</li>
+<li>java.text.Normalizer</li>
+<li>java.text.Format</li>
+</ul>
+
+            </div>
+          </article>
         </div>
+        <div class="paper" data-aos="fade-in">
+          
+            <div class="next-post">
+              <div class="next">
+                下一篇
+              </div>
+              <a href="https://caijh.github.io//post/she-ji-mo-shi-zhuang-tai-mo-shi">
+                <h3 class="post-title">
+                  设计模式-状态模式
+                </h3>
+              </a>
+            </div>
+          
+        </div>
+        
+          
+
+          
+            <div class="paper" data-aos="fade-in">
+              <div id="disqus_thread"></div>
+            </div>
+          
+        
       </div>
+
       <div class="sm-12 md-4 col sidebar">
   <div class="paper info-container">
     <img src="https://caijh.github.io//images/avatar.png?v=1561900447384" class="no-responsive avatar">
@@ -223,11 +302,11 @@
     </div>
     <div class="row">
       
-        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge warning">
+        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge ">
           设计模式
         </a>
       
-        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge ">
+        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge warning">
           MySQL
         </a>
       
@@ -241,7 +320,8 @@
     Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://caijh.github.io//atom.xml" target="_blank">RSS</a>
   </div>
 </div>
-  
+
+
     </div>
 
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
@@ -253,6 +333,26 @@ AOS.init();
 hljs.initHighlightingOnLoad()
 
 </script>
+
+
+
+  
+
+  
+    <script src="https://unpkg.com/disqusjs@1.1/dist/disqus.js"></script>
+    <script>
+
+    var options = {
+      shortname: 'caijh',
+      apikey: 'lO2xchFAyPIP4VOKbgm796D9jIvqLVziAqLHOPnOZySwUlyWXAhgwrIbPQ16AyUX',
+    }
+    if ('https://disqus.skk.moe/disqus/') {
+      options.api = 'https://disqus.skk.moe/disqus/'
+    }
+    var dsqjs = new DisqusJS(options)
+
+    </script>
+  
 
 
 
