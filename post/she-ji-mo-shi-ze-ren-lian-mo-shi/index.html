@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>设计模式-SOLID原则 | John&#39;s Blog</title>
+<title>设计模式-责任链模式 | John&#39;s Blog</title>
 <meta name="description" content="搬砖大佬">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -87,79 +87,130 @@
       <div class="sm-12 md-8 col">
         <div class="paper">
           <article class="article">
-            <h1>设计模式-SOLID原则</h1>
+            <h1>设计模式-责任链模式</h1>
             <p class="article-meta">
-              2019-06-24
+              2019-06-30
               
-                <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge warning">
+                <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge ">
                   设计模式
                 </a>
               
             </p>
             
-              <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxjCdfGgTWAzqhGpx0HrUuhH17jWSfKSIXlQ504ms1BaoUndtiLQ" alt="设计模式-SOLID原则">
-            
             <div class="post-content">
-              <p>运用设计模式，需要记住六大设计原则：</p>
-<ul>
-<li>Single Responsibility Principle：单一职责原则</li>
-<li>Open Closed Principle：开闭原则</li>
-<li>Liskov Substitution Principle：里氏替换原则</li>
-<li>Law of Demeter：迪米特法则</li>
-<li>Interface Segregation Principle：接口隔离原则</li>
-<li>Dependence Inversion Principle：依赖倒置原则</li>
-</ul>
+              <h4 id="定义">定义</h4>
+<blockquote>
+<p>Avoid coupling the sender of a request to its receiver by giving more than one object a chance to handle the request.Chain the receiving objects and pass the request along the chain until an object handles it.（使多个对象都有机会处理请求，从而避免了请求的发送者和接受者之间的耦合关系。将这些对象连成一条链，并沿着这条链传递该请求，直到有对象处理它为止。）</p>
+</blockquote>
+<h4 id="uml">UML</h4>
+<p><img src="https://caijh.github.io//post-images/1561876377460.png" alt=""></p>
 <!-- more -->
-<h3 id="单一职责原则">单一职责原则</h3>
-<blockquote>
-<p>There should never be more than one reason for a class to change.
-引起类的变更原因只有一个，类或接口只负责做一件事。
-单一职责原则的好处：</p>
-</blockquote>
+<h4 id="代码实现">代码实现</h4>
+<pre><code>public abstract class Handler {
+     private Handler nextHandler;
+     //每个处理者都必须对请求做出处理
+     public final Response handleMessage(Request request){
+             Response response = null;  
+             //判断是否是自己的处理级别
+             if(this.getHandlerLevel().equals(request.getRequestLevel())){
+                    response = this.echo(request);
+             }else{  //不属于自己的处理级别
+                    //判断是否有下一个处理者
+                    if(this.nextHandler != null){
+                            response = this.nextHandler.handleMessage(request);
+                    }else{
+                            //没有适当的处理者，业务自行处理
+                    }
+             }
+             return response;
+     }
+     //设置下一个处理者是谁
+     public void setNext(Handler _handler){
+             this.nextHandler = _handler;
+     }
+     //每个处理者都有一个处理级别
+     protected abstract Level getHandlerLevel();
+     //每个处理者都必须实现处理任务
+     protected abstract Response echo(Request request);
+}
+
+public class ConcreteHandler1 extends Handler {
+     //定义自己的处理逻辑
+     protected Response echo(Request request) {
+             //完成处理逻辑
+             return null;
+     }
+     //设置自己的处理级别
+     protected Level getHandlerLevel() {
+             //设置自己的处理级别
+             return null;
+     }
+}
+public class ConcreteHandler2 extends Handler {
+     //定义自己的处理逻辑
+     protected Response echo(Request request) {
+             //完成处理逻辑
+             return null;
+     }
+     //设置自己的处理级别
+     protected Level getHandlerLevel() {
+             //设置自己的处理级别
+             return null;
+     }
+}
+public class ConcreteHandler3 extends Handler {
+     //定义自己的处理逻辑
+     protected Response echo(Request request) {
+             //完成处理逻辑
+             return null;
+     }
+     //设置自己的处理级别
+     protected Level getHandlerLevel() {
+             //设置自己的处理级别
+             return null;
+     }
+}
+
+public class Level {
+     //定义一个请求和处理等级
+}
+public class Request {
+     //请求的等级
+     public Level getRequestLevel(){
+             return null;
+     }
+}
+public class Response {
+     //处理者返回的数据
+}
+
+public class Client {
+     public static void main(String[] args) {
+             //声明所有的处理节点
+             Handler handler1 = new ConcreteHandler1();
+             Handler handler2 = new ConcreteHandler2();
+             Handler handler3 = new ConcreteHandler3();
+             //设置链中的阶段顺序1--&gt;2--&gt;3
+             handler1.setNext(handler2);
+             handler2.setNext(handler3);
+             //提交请求，返回结果
+             Response response = handler1.handlerMessage(new Request());
+     }
+}
+</code></pre>
+<h4 id="责任链模式的优点">责任链模式的优点：</h4>
+<p>责任链模式非常显著的优点是将请求和处理分开。请求者可以不用知道是谁处理的，处理者可以不用知道请求的全貌（例如在J2EE项目开发中，可以剥离出无状态Bean由责任链处理），两者解耦，提高系统的灵活性。</p>
+<h4 id="责任链模式的缺点">责任链模式的缺点：</h4>
+<p>责任链有两个非常显著的缺点：一是性能问题，每个请求都是从链头遍历到链尾，特别是在链比较长的时候，性能是一个非常大的问题。二是调试不很方便，特别是链条比较长，环节比较多的时候，由于采用了类似递归的方式，调试的时候逻辑可能比较复杂。</p>
+<h3 id="jdk中的责任链模式">JDK中的责任链模式：</h3>
 <ul>
-<li>类的复杂性降低，实现什么职责都有清晰明确的定义；</li>
-<li>可读性提高，复杂性降低，那当然可读性提高了；</li>
-<li>可维护性提高，可读性提高，那当然更容易维护了；
-变更引起的风险降低，变更是必不可少的，如果接口的单一职责做得好，一个接口修改只对相应的实现类有影响，对其他的接口无影响，这对系统的扩展性、维护性都有非常大的帮助。
-对于接口，我们在设计的时候一定要做到单一，但是对于实现类就需要多方面考虑了。生搬硬套单一职责原则会引起类的剧增，给维护带来非常多的麻烦，而且过分细分类的职责也会人为地增加系统的复杂性。本来一个类可以实现的行为硬要拆成两个类，然后再使用聚合或组合的方式耦合在一起，人为制造了系统的复杂性。</li>
+<li>java.util.logging.Logger#log()</li>
+<li>avax.servlet.Filter#doFilter()</li>
 </ul>
-<h3 id="开闭原则">开闭原则</h3>
-<blockquote>
-<p>Software entities like classes,modules and functions should be open for extension but closed for modifications.（一个软件实体如类、模块和函数应该对扩展开放，对修改关闭。）
-开闭原则对扩展开放，对修改关闭，并不意味着不做任何修改，低层模块的变更，必然要有高层模块进行耦合，否则就是一个孤立无意义的代码片段。</p>
-</blockquote>
-<h4 id="为什么要使用开闭原则">为什么要使用开闭原则？</h4>
-<p>开闭原则对测试的影响
-开闭原则可以提高复用性
-开闭原则可以提高可维护性
-开闭原则可以提高可维护性</p>
-<h4 id="如何使用开闭原则">如何使用开闭原则？</h4>
+<h4 id="何时使用刚责任链模式">何时使用刚责任链模式</h4>
 <ul>
-<li>抽象约束</li>
-<li>元数据控制模块行为</li>
-<li>制定项目章程，约定优于配置</li>
-<li>封装变化，将相同的变化封装到一个接口或抽象类中</li>
-</ul>
-<h3 id="里氏替换原则">里氏替换原则</h3>
-<blockquote>
-<p>Functions that use pointers or references to base classes must be able to use objects of derived classes without knowing it.（所有引用基类的地方必须能透明地使用其子类的对象。）</p>
-</blockquote>
-<h3 id="迪米特法则">迪米特法则</h3>
-<blockquote>
-<p>一个对象应该对其他对象有最少的了解。</p>
-</blockquote>
-<h3 id="接口隔离原则">接口隔离原则</h3>
-<blockquote>
-<p>Clients should not be forced to depend upon interfaces that they don't use.（客户端不应该依赖它不需要的接口。）
-The dependency of one class to another one should depend on the smallest possible interface.（类间的依赖关系应该建立在最小的接口上。）</p>
-</blockquote>
-<h3 id="依赖倒置原则">依赖倒置原则</h3>
-<p>High level modules should not depend upon low level modules.Both should depend upon abstractions.Abstractions should not depend upon details.Details should depend upon abstractions.
-翻译过来，包含三层含义：</p>
-<ul>
-<li>高层模块不应该依赖低层模块，两者都应该依赖其抽象；</li>
-<li>抽象不应该依赖细节；</li>
-<li>细节应该依赖抽象。</li>
+<li>一个请求可以被超过一个对象处理，请求处理器之间没有优先级</li>
+<li>一组对象可以动态地处理一个请求。</li>
 </ul>
 
             </div>
@@ -171,9 +222,9 @@ The dependency of one class to another one should depend on the smallest possibl
               <div class="next">
                 下一篇
               </div>
-              <a href="https://caijh.github.io//post/mysql-gui-fan">
+              <a href="https://caijh.github.io//post/she-ji-mo-shi-ming-ling-mo-shi">
                 <h3 class="post-title">
-                  MySQL规范
+                  设计模式-命令模式
                 </h3>
               </a>
             </div>
@@ -290,15 +341,15 @@ The dependency of one class to another one should depend on the smallest possibl
     </div>
     <div class="row">
       
-        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge ">
+        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge warning">
           设计模式
         </a>
       
-        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge ">
+        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge warning">
           MySQL
         </a>
       
-        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge success">
+        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge secondary">
           Java
         </a>
       
