@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>设计模式-命令模式 | John&#39;s Blog</title>
+<title>设计模式-门面模式 | John&#39;s Blog</title>
 <meta name="description" content="搬砖大佬">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -87,7 +87,7 @@
       <div class="sm-12 md-8 col">
         <div class="paper">
           <article class="article">
-            <h1>设计模式-命令模式</h1>
+            <h1>设计模式-门面模式</h1>
             <p class="article-meta">
               2019-06-30
               
@@ -100,96 +100,63 @@
             <div class="post-content">
               <h4 id="定义">定义</h4>
 <blockquote>
-<p>命令模式是一个高内聚的模式，其定义为：Encapsulate a request as an object,thereby letting you parameterize clients with different requests,queue or log requests,and support undoable operations.（将一个请求封装成一个对象，从而让你使用不同的请求把客户端参数化，对请求排队或者记录请求日志，可以提供命令的撤销和恢复功能。）</p>
+<p>Provide a unified interface to a set of interfaces in a subsystem.Facade defines a higher-level interface that makes the subsystem easier to use.（要求一个子系统的外部与其内部的通信必须通过一个统一的对象进行。门面模式提供一个高层次的接口，使得子系统更易于使用。）</p>
 </blockquote>
-<h4 id="uml">UML</h4>
-<p><img src="https://caijh.github.io//post-images/1561875177967.png" alt=""></p>
-<!-- more -->
+<h4 id="uml图">UML图</h4>
+<p><img src="https://caijh.github.io//post-images/1561890905550.png" alt=""></p>
 <h4 id="代码实现">代码实现</h4>
-<pre><code>public abstract class Receiver {
-     //抽象接收者，定义每个接收者都必须完成的业务
-     public abstract void doSomething();
-}
-public class ConcreteReciver1 extends Receiver{    
-     //每个接收者都必须处理一定的业务逻辑
-     public void doSomething(){
+<pre><code>public class ClassA {
+     public void doSomethingA(){
+             //业务逻辑
      }
 }
-public class ConcreteReciver2 extends Receiver{ 
-     //每个接收者都必须处理一定的业务逻辑
-     public void doSomething(){
+public class ClassB {
+     
+     public void doSomethingB(){
+             //业务逻辑
      }
 }
-public abstract class Command {
-     //每个命令类都必须有一个执行命令的方法
-     public abstract void execute();
-}
-public class ConcreteCommand1 extends Command {
-     //对哪个Receiver类进行命令处理
-     private Receiver receiver; 
-     //构造函数传递接收者
-     public ConcreteCommand1(Receiver _receiver){
-             this.receiver = _receiver;
-     }
-     //必须实现一个命令
-     public void execute() {
-             //业务处理
-             this.receiver.doSomething();
+public class ClassC {
+     
+     public void doSomethingC(){
+             //业务逻辑
      }
 }
-public class ConcreteCommand2 extends Command {
-     //哪个Receiver类进行命令处理
-     private Receiver receiver;
-     //构造函数传递接收者
-     public ConcreteCommand2(Receiver _receiver){
-             this.receiver = _receiver;
+public class Facade {
+     //被委托的对象
+     private ClassA a = new ClassA();
+     private ClassB b = new ClassB();
+     private ClassC c = new ClassC();
+     //提供给外部访问的方法
+     public void methodA(){
+             this.a.doSomethingA();
      }
-     //必须实现一个命令
-     public void execute() {
-             //业务处理
-             this.receiver.doSomething();
+     
+     public void methodB(){
+             this.b.doSomethingB();
      }
-}
-public class Invoker {
-     private Command command;
-     //受气包，接受命令
-     public void setCommand(Command _command){
-             this.command = _command;
-     }
-     //执行命令
-     public void action(){
-             this.command.execute();
-     }
-}
-public class Client {
-     public static void main(String[] args) {
-             //首先声明调用者Invoker
-             Invoker invoker = new Invoker();
-             //定义接收者
-             Receiver receiver = new ConcreteReciver1();
-             //定义一个发送给接收者的命令
-             Command command = new ConcreteCommand1(receiver);
-             //把命令交给调用者去执行
-             invoker.setCommand(command);
-             invoker.action();
+     
+     public void methodC(){
+             this.c.doSomethingC();
      }
 }
 </code></pre>
-<h4 id="命令模式的优点">命令模式的优点</h4>
+<h4 id="门面模式的优点">门面模式的优点</h4>
 <ul>
-<li>类间解耦
-调用者角色与接收者角色之间没有任何依赖关系，调用者实现功能时只需调用Command抽象类的execute方法就可以，不需要了解到底是哪个接收者执行。</li>
-<li>可扩展性
-Command的子类可以非常容易地扩展，而调用者Invoker和高层次的模块Client不产生严重的代码耦合。</li>
-<li>命令模式结合其他模式会更优秀
-命令模式可以结合责任链模式，实现命令族解析任务；结合模板方法模式，则可以减少Command子类的膨胀问题。</li>
+<li>减少系统的相互依赖
+想想看，如果我们不使用门面模式，外界访问直接深入到子系统内部，相互之间是一种强耦合关系，你死我就死，你活我才能活，这样的强依赖是系统设计所不能接受的，门面模式的出现就很好地解决了该问题，所有的依赖都是对门面对象的依赖，与子系统无关。</li>
+<li>提高了灵活性
+依赖减少了，灵活性自然提高了。不管子系统内部如何变化，只要不影响到门面对象，任你自由活动。</li>
+<li>提高安全性
+想让你访问子系统的哪些业务就开通哪些逻辑，不在门面上开通的方法，你休想访问到。</li>
 </ul>
-<h4 id="命令模式的缺点">命令模式的缺点</h4>
-<p>命令模式也是有缺点的，请看Command的子类：如果有N个命令，问题就出来了，Command的子类就可不是几个，而是N个，这个类膨胀得非常大，这个就需要读者在项目中慎重考虑使用。</p>
-<h4 id="jdk中的命令模式">JDK中的命令模式</h4>
+<h4 id="门面模式的缺点">门面模式的缺点</h4>
+<p>门面模式最大的缺点就是不符合开闭原则，对修改关闭，对扩展开放，看看我们那个门面对象吧，它可是重中之重，一旦在系统投产后发现有一个小错误，你怎么解决？完全遵从开闭原则，根本没办法解决。继承？覆写？都顶不上用，唯一能做的一件事就是修改门面角色的代码，这个风险相当大，这就需要大家在设计的时候慎之又慎，多思考几遍才会有好收获。</p>
+<h4 id="门面模式的使用场景">门面模式的使用场景</h4>
 <ul>
-<li>java.lang.Runnable</li>
-<li>javax.swing.Action</li>
+<li>为一个复杂的模块或子系统提供一个供外界访问的接口</li>
+<li>子系统相对独立——外界对子系统的访问只要黑箱操作即可</li>
+<li>预防低水平人员带来的风险扩散</li>
 </ul>
 
             </div>
@@ -201,9 +168,9 @@ Command的子类可以非常容易地扩展，而调用者Invoker和高层次的
               <div class="next">
                 下一篇
               </div>
-              <a href="https://caijh.github.io//post/she-ji-mo-shi-zhong-jie-zhe-mo-shi">
+              <a href="https://caijh.github.io//post/she-ji-mo-shi-guan-cha-zhe-mo-shi">
                 <h3 class="post-title">
-                  设计模式-中介者模式
+                  设计模式-观察者模式
                 </h3>
               </a>
             </div>
@@ -342,7 +309,7 @@ Command的子类可以非常容易地扩展，而调用者Invoker和高层次的
           MySQL
         </a>
       
-        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge warning">
+        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge secondary">
           Java
         </a>
       
