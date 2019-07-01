@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://caijh.github.io/</id>
     <title>John&apos;s Blog</title>
-    <updated>2019-07-01T10:45:23.821Z</updated>
+    <updated>2019-07-01T10:50:44.589Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://caijh.github.io/"/>
     <link rel="self" href="https://caijh.github.io//atom.xml"/>
@@ -16,12 +16,20 @@
         <link href="https://caijh.github.io//post/yuan-ma-yue-du-hashmap-de-shi-xian-yuan-li">
         </link>
         <updated>2019-07-01T09:38:57.000Z</updated>
+        <summary type="html"><![CDATA[<blockquote>
+<p>原文链接：https://blog.csdn.net/fenglibing/article/details/91565912</p>
+</blockquote>
+<h3 id="hashmap的类图">HashMap的类图</h3>
+<p><img src="https://caijh.github.io//post-images/1561974106214.png" alt=""></p>
+<p>HashMap是Java开发当中使用得非常多的一种数据结构，因为其可以快速的定位到需要查找到数据，其最快的速度可以达到O(1)，最差的时候也可以达到O(n)。本文以Java8中的HashMap做为分析原型，因为不同的JDK版本中的HashMap，可能存在着底层实现上的不一样。</p>
+]]></summary>
         <content type="html"><![CDATA[<blockquote>
 <p>原文链接：https://blog.csdn.net/fenglibing/article/details/91565912</p>
 </blockquote>
 <h3 id="hashmap的类图">HashMap的类图</h3>
 <p><img src="https://caijh.github.io//post-images/1561974106214.png" alt=""></p>
 <p>HashMap是Java开发当中使用得非常多的一种数据结构，因为其可以快速的定位到需要查找到数据，其最快的速度可以达到O(1)，最差的时候也可以达到O(n)。本文以Java8中的HashMap做为分析原型，因为不同的JDK版本中的HashMap，可能存在着底层实现上的不一样。</p>
+<!-- more -->
 <p>HashMap是通过数组存储所有的数据，每个元素所存放数组的下标，是根据该存储元素的key的Hash值与该数组的长度减去1做与运算，如下所示：</p>
 <pre><code>index = (length_of_array - 1) &amp; hash_of_the_key;
 </code></pre>
