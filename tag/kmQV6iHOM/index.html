@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>设计模式-解释器模式 | John&#39;s Blog</title>
+<title>面试 | John&#39;s Blog</title>
 <meta name="description" content="搬砖大佬">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -15,12 +15,6 @@
 <link rel="stylesheet" href="https://caijh.github.io//styles/main.css">
 
 
-  
-
-  
-    <link rel="stylesheet" href="https://unpkg.com/disqusjs@1.1/dist/disqusjs.css" />
-  
-
 <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
 
 
@@ -29,7 +23,6 @@
 
   </head>
   <body>
-  
     <nav class="navbar border fixed split-nav">
   <div class="nav-brand">
     <h3><a href="https://caijh.github.io/">John&#39;s Blog</a></h3>
@@ -86,96 +79,48 @@
     <div id="top" class="row site">
       <div class="sm-12 md-8 col">
         <div class="paper">
-          <article class="article">
-            <h1>设计模式-解释器模式</h1>
-            <p class="article-meta">
-              2019-06-30
-              
-                <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge secondary">
-                  设计模式
-                </a>
-              
-            </p>
-            
-            <div class="post-content">
-              <h4 id="定义">定义</h4>
-<blockquote>
-<p>Given a language, define a representation for its grammar along with an interpreter that uses the representation to interpret sentences in the language.（给定一门语言，定义它的文法的一种表示，并定义一个解释器，该解释器使用该表示来解释语言中的句子。）</p>
-</blockquote>
-<h4 id="uml">UML</h4>
-<p><img src="https://caijh.github.io//post-images/1561899675724.png" alt=""></p>
-<!-- more -->
-<h4 id="代码实现">代码实现</h4>
-<pre><code>public abstract class Expression {
-     //每个表达式必须有一个解析任务
-     public abstract Object interpreter(Context  ctx);
-}
-public class TerminalExpression extends Expression {
-     //通常终结符表达式只有一个，但是有多个对象
-     public Object interpreter(Context ctx) {
-             return null;
-     }
-}
-public class NonterminalExpression extends Expression {
-     //每个非终结符表达式都会对其他表达式产生依赖
-     public NonterminalExpression(Expression... expression){
-     }
-     
-     public Object interpreter(Context ctx) {
-             //进行文法处理
-             return null;
-     }
-}
-public class Client {
-     public static void main(String[] args) {
-          Context ctx = new Context();
-          //通常定一个语法容器，容纳一个具体的表达式，通常为ListArray、LinkedList、Stack等类型
-          Stack&lt;Expression&gt; stack = null; 
-          for(;;){
-               //进行语法判断，并产生递归调用
-          }          
-          //产生一个完整的语法树，由各个具体的语法分析进行解析
-          Expression exp = stack.pop();
-          //具体元素进入场景
-          exp.interpreter(ctx);
-     }
-}
-</code></pre>
-<h4 id="jdk中解释模式">JDK中解释模式</h4>
-<ul>
-<li>java.util.Pattern</li>
-<li>java.text.Normalizer</li>
-<li>java.text.Format</li>
-</ul>
+          <h2 class="current-tag">标签: 面试</h2>
+          
+  <article class="article">
+    <h2 class="article-title">
+      <a href="https://caijh.github.io//post/yuan-ma-yue-du-hashmap-concurrenthashmap">源码阅读-HashMap ConcurrentHashMap</a>
+    </h2>
+    <p class="article-meta">
+      2019-07-03
+      
+        <a href="https://caijh.github.io//tag/kmQV6iHOM" class="badge ">
+          面试
+        </a>
+      
+        <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge ">
+          源代码
+        </a>
+      
+    </p>
+    <p class="text-lead">
+      <p>搬砖自 https://mp.weixin.qq.com/s/DTzd3jdtnnveffL-zcpmyg</p>
+<p>前言
+Map 这样的 Key Value 在软件开发中是非常经典的结构，常用于在内存中存放数据。</p>
+<p>本篇主要想讨论 ConcurrentHashMap 这样一个并发容器，在正式开始之前我觉得有必要谈谈 HashMap，没有它就不会有后面的 ConcurrentHashMap。</p>
 
-            </div>
-          </article>
-        </div>
-        <div class="paper" data-aos="fade-in">
-          
-            <div class="next-post">
-              <div class="next">
-                下一篇
-              </div>
-              <a href="https://caijh.github.io//post/she-ji-mo-shi-zhuang-tai-mo-shi">
-                <h3 class="post-title">
-                  设计模式-状态模式
-                </h3>
-              </a>
-            </div>
-          
-        </div>
-        
-          
+    </p>
+    <div class="row">
+      <a href="https://caijh.github.io//post/yuan-ma-yue-du-hashmap-concurrenthashmap" class="readmore-link">
+        <button>
+          Read More
+        </button>
+      </a>
+    </div>
+  </article>
 
-          
-            <div class="paper" data-aos="fade-in">
-              <div id="disqus_thread"></div>
-            </div>
-          
-        
+
+        </div>
+        <div class="row flex-edges">
+  
+  
+</div>
+
       </div>
-
       <div class="sm-12 md-4 col sidebar">
   <div class="paper info-container">
     <img src="https://caijh.github.io//images/avatar.png?v=1562125888333" class="no-responsive avatar">
@@ -308,23 +253,23 @@ public class Client {
     </div>
     <div class="row">
       
-        <a href="https://caijh.github.io//tag/kmQV6iHOM" class="badge secondary">
+        <a href="https://caijh.github.io//tag/kmQV6iHOM" class="badge success">
           面试
         </a>
       
-        <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge success">
+        <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge secondary">
           源代码
         </a>
       
-        <a href="https://caijh.github.io//tag/hm42pTrhV" class="badge secondary">
+        <a href="https://caijh.github.io//tag/hm42pTrhV" class="badge ">
           Maven
         </a>
       
-        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge secondary">
+        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge ">
           设计模式
         </a>
       
-        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge success">
+        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge secondary">
           MySQL
         </a>
       
@@ -339,7 +284,6 @@ public class Client {
   </div>
 </div>
 
-
     </div>
 
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
@@ -351,26 +295,6 @@ AOS.init();
 hljs.initHighlightingOnLoad()
 
 </script>
-
-
-
-  
-
-  
-    <script src="https://unpkg.com/disqusjs@1.1/dist/disqus.js"></script>
-    <script>
-
-    var options = {
-      shortname: 'caijh',
-      apikey: 'lO2xchFAyPIP4VOKbgm796D9jIvqLVziAqLHOPnOZySwUlyWXAhgwrIbPQ16AyUX',
-    }
-    if ('https://disqus.skk.moe/disqus/') {
-      options.api = 'https://disqus.skk.moe/disqus/'
-    }
-    var dsqjs = new DisqusJS(options)
-
-    </script>
-  
 
 
 
