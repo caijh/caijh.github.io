@@ -1,0 +1,1236 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>源码阅读-tomcat | John&#39;s Blog</title>
+<meta name="description" content="搬砖大佬">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="shortcut icon" href="https://caijh.github.io//favicon.ico?v=1562423052293">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://caijh.github.io//styles/main.css">
+
+
+  
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/disqusjs@1.1/dist/disqusjs.css" />
+  
+
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
+  </head>
+  <body>
+  
+    <nav class="navbar border fixed split-nav">
+  <div class="nav-brand">
+    <h3><a href="https://caijh.github.io/">John&#39;s Blog</a></h3>
+  </div>
+  <div class="collapsible">
+    <input id="collapsible1" type="checkbox" name="collapsible1">
+    <button>
+      <label for="collapsible1">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+      </label>
+    </button>
+    <div class="collapsible-body">
+      <ul class="inline">
+        
+          <li>
+            
+              <a href="/" class="menu">
+                首页
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/archives" class="menu">
+                归档
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/tags" class="menu">
+                标签
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/post/about" class="menu">
+                关于
+              </a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div id="top" class="row site">
+      <div class="sm-12 md-8 col">
+        <div class="paper">
+          <article class="article">
+            <h1>源码阅读-tomcat</h1>
+            <p class="article-meta">
+              2019-07-06
+              
+                <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge secondary">
+                  源代码
+                </a>
+              
+            </p>
+            
+            <div class="post-content">
+              <h1 id="tomcat启动过程">tomcat启动过程</h1>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1g210jigsujj30mw0iqq4q.jpg" alt="image-20190413142837717"></p>
+<!-- more -->
+<ol>
+<li>
+<p>获取Bootstrap的静态代码块获取catalinaBaseFile及catalinaHomeFile</p>
+<pre><code class="language-java">static {
+        // Will always be non-null
+        String userDir = System.getProperty(&quot;user.dir&quot;);
+
+        // Home first
+        String home = System.getProperty(Globals.CATALINA_HOME_PROP);
+        File homeFile = null;
+
+        if (home != null) {
+            File f = new File(home);
+            try {
+                homeFile = f.getCanonicalFile();
+            } catch (IOException ioe) {
+                homeFile = f.getAbsoluteFile();
+            }
+        }
+
+        if (homeFile == null) {
+            // First fall-back. See if current directory is a bin directory
+            // in a normal Tomcat install
+            File bootstrapJar = new File(userDir, &quot;bootstrap.jar&quot;);
+
+            if (bootstrapJar.exists()) {
+                File f = new File(userDir, &quot;..&quot;);
+                try {
+                    homeFile = f.getCanonicalFile();
+                } catch (IOException ioe) {
+                    homeFile = f.getAbsoluteFile();
+                }
+            }
+        }
+
+        if (homeFile == null) {
+            // Second fall-back. Use current directory
+            File f = new File(userDir);
+            try {
+                homeFile = f.getCanonicalFile();
+            } catch (IOException ioe) {
+                homeFile = f.getAbsoluteFile();
+            }
+        }
+
+        catalinaHomeFile = homeFile;
+        System.setProperty(
+                Globals.CATALINA_HOME_PROP, catalinaHomeFile.getPath());
+
+        // Then base
+        String base = System.getProperty(Globals.CATALINA_BASE_PROP);
+        if (base == null) {
+            catalinaBaseFile = catalinaHomeFile;
+        } else {
+            File baseFile = new File(base);
+            try {
+                baseFile = baseFile.getCanonicalFile();
+            } catch (IOException ioe) {
+                baseFile = baseFile.getAbsoluteFile();
+            }
+            catalinaBaseFile = baseFile;
+        }
+        System.setProperty(
+                Globals.CATALINA_BASE_PROP, catalinaBaseFile.getPath());
+    }
+
+</code></pre>
+</li>
+<li>
+<p>Bootstrap的main方法执行init, load,start</p>
+<pre><code class="language-java">public static void main(String args[]) {
+
+        synchronized (daemonLock) {
+            if (daemon == null) {
+                // Don't set daemon until init() has completed
+                Bootstrap bootstrap = new Bootstrap();
+                try {
+                    bootstrap.init();
+                } catch (Throwable t) {
+                    handleThrowable(t);
+                    t.printStackTrace();
+                    return;
+                }
+                daemon = bootstrap;
+            } else {
+                // When running as a service the call to stop will be on a new
+                // thread so make sure the correct class loader is used to
+                // prevent a range of class not found exceptions.
+                Thread.currentThread().setContextClassLoader(daemon.catalinaLoader);
+            }
+        }
+
+        try {
+            String command = &quot;start&quot;;
+            if (args.length &gt; 0) {
+                command = args[args.length - 1];
+            }
+
+            if (command.equals(&quot;startd&quot;)) {
+                args[args.length - 1] = &quot;start&quot;;
+                daemon.load(args);
+                daemon.start();
+            } else if (command.equals(&quot;stopd&quot;)) {
+                args[args.length - 1] = &quot;stop&quot;;
+                daemon.stop();
+            } else if (command.equals(&quot;start&quot;)) {
+                daemon.setAwait(true);
+                daemon.load(args);
+                daemon.start();
+                if (null == daemon.getServer()) {
+                    System.exit(1);
+                }
+            } else if (command.equals(&quot;stop&quot;)) {
+                daemon.stopServer(args);
+            } else if (command.equals(&quot;configtest&quot;)) {
+                daemon.load(args);
+                if (null == daemon.getServer()) {
+                    System.exit(1);
+                }
+                System.exit(0);
+            } else {
+                log.warn(&quot;Bootstrap: command \&quot;&quot; + command + &quot;\&quot; does not exist.&quot;);
+            }
+        } catch (Throwable t) {
+            // Unwrap the Exception for clearer error reporting
+            if (t instanceof InvocationTargetException &amp;&amp;
+                    t.getCause() != null) {
+                t = t.getCause();
+            }
+            handleThrowable(t);
+            t.printStackTrace();
+            System.exit(1);
+        }
+
+    }
+</code></pre>
+</li>
+<li>
+<p>Bootstrap init方法</p>
+<pre><code class="language-java">public void init() throws Exception {
+
+        initClassLoaders();
+
+        Thread.currentThread().setContextClassLoader(catalinaLoader);
+
+        SecurityClassLoad.securityClassLoad(catalinaLoader);
+
+        // Load our startup class and call its process() method
+        if (log.isDebugEnabled())
+            log.debug(&quot;Loading startup class&quot;);
+        Class&lt;?&gt; startupClass = catalinaLoader.loadClass(&quot;org.apache.catalina.startup.Catalina&quot;);
+        Object startupInstance = startupClass.getConstructor().newInstance();
+
+        // Set the shared extensions class loader
+        if (log.isDebugEnabled())
+            log.debug(&quot;Setting startup class properties&quot;);
+        String methodName = &quot;setParentClassLoader&quot;;
+        Class&lt;?&gt; paramTypes[] = new Class[1];
+        paramTypes[0] = Class.forName(&quot;java.lang.ClassLoader&quot;);
+        Object paramValues[] = new Object[1];
+        paramValues[0] = sharedLoader;
+        Method method =
+            startupInstance.getClass().getMethod(methodName, paramTypes);
+        method.invoke(startupInstance, paramValues);
+
+        catalinaDaemon = startupInstance;
+
+    }
+</code></pre>
+</li>
+<li>
+<p>Bootstrap load方法，会调用catalina.load()</p>
+<pre><code class="language-java">    private void load(String[] arguments)
+        throws Exception {
+
+        // Call the load() method
+        String methodName = &quot;load&quot;;
+        Object param[];
+        Class&lt;?&gt; paramTypes[];
+        if (arguments==null || arguments.length==0) {
+            paramTypes = null;
+            param = null;
+        } else {
+            paramTypes = new Class[1];
+            paramTypes[0] = arguments.getClass();
+            param = new Object[1];
+            param[0] = arguments;
+        }
+        Method method =
+            catalinaDaemon.getClass().getMethod(methodName, paramTypes);
+        if (log.isDebugEnabled())
+            log.debug(&quot;Calling startup class &quot; + method);
+        method.invoke(catalinaDaemon, param);
+
+    }
+</code></pre>
+</li>
+<li>
+<p>catalina load</p>
+<pre><code class="language-java">public void load() {
+
+        if (loaded) {
+            return;
+        }
+        loaded = true;
+
+        long t1 = System.nanoTime();
+
+        initDirs();
+
+        // Before digester - it may be needed
+        initNaming();
+
+        // Set configuration source
+        ConfigFileLoader.setSource(new CatalinaBaseConfigurationSource(Bootstrap.getCatalinaBaseFile(), getConfigFile()));
+        File file = configFile();
+
+        // Create and execute our Digester
+        Digester digester = createStartDigester();
+
+        try (ConfigurationSource.Resource resource = ConfigFileLoader.getSource().getServerXml()) {
+            InputStream inputStream = resource.getInputStream();
+            InputSource inputSource = new InputSource(resource.getURI().toURL().toString());
+            inputSource.setByteStream(inputStream);
+            digester.push(this);
+            digester.parse(inputSource);
+        } catch (Exception e) {
+            log.warn(sm.getString(&quot;catalina.configFail&quot;, file.getAbsolutePath()), e);
+            if (file.exists() &amp;&amp; !file.canRead()) {
+                log.warn(sm.getString(&quot;catalina.incorrectPermissions&quot;));
+            }
+            return;
+        }
+
+        getServer().setCatalina(this);
+        getServer().setCatalinaHome(Bootstrap.getCatalinaHomeFile());
+        getServer().setCatalinaBase(Bootstrap.getCatalinaBaseFile());
+
+        // Stream redirection
+        initStreams();
+
+        // Start the new server
+        try {
+            getServer().init();
+        } catch (LifecycleException e) {
+            if (Boolean.getBoolean(&quot;org.apache.catalina.startup.EXIT_ON_INIT_FAILURE&quot;)) {
+                throw new java.lang.Error(e);
+            } else {
+                log.error(sm.getString(&quot;catalina.initError&quot;), e);
+            }
+        }
+
+        long t2 = System.nanoTime();
+        if(log.isInfoEnabled()) {
+            log.info(sm.getString(&quot;catalina.init&quot;, Long.valueOf((t2 - t1) / 1000000)));
+        }
+    }
+</code></pre>
+</li>
+<li>
+<p>Server的初始化init方法，会调用service init方法，在其中又完成了engine, executor, connector的init</p>
+<pre><code class="language-JAVA">protected void initInternal() throws LifecycleException {
+
+        super.initInternal();
+
+        if (engine != null) {
+            engine.init();
+        }
+
+        // Initialize any Executors
+        for (Executor executor : findExecutors()) {
+            if (executor instanceof JmxEnabled) {
+                ((JmxEnabled) executor).setDomain(getDomain());
+            }
+            executor.init();
+        }
+
+        // Initialize mapper listener
+        mapperListener.init();
+
+        // Initialize our defined Connectors
+        synchronized (connectorsLock) {
+            for (Connector connector : connectors) {
+                connector.init();
+            }
+        }
+    }
+</code></pre>
+</li>
+<li>
+<p>Bootstrap调用start方法</p>
+</li>
+</ol>
+<h1 id="connector的初始化过程">Connector的初始化过程</h1>
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79ly1g211hnuoskj30ne0dit9w.jpg" alt="image-20190413153022916"></p>
+<ol>
+<li>
+<p>Connector对象的创建</p>
+<pre><code class="language-java">public Connector(String protocol) {
+        boolean aprConnector = AprLifecycleListener.isAprAvailable() &amp;&amp;
+                AprLifecycleListener.getUseAprConnector();
+
+        if (&quot;HTTP/1.1&quot;.equals(protocol) || protocol == null) {
+            if (aprConnector) {
+                protocolHandlerClassName = &quot;org.apache.coyote.http11.Http11AprProtocol&quot;;
+            } else {
+                protocolHandlerClassName = &quot;org.apache.coyote.http11.Http11NioProtocol&quot;;
+            }
+        } else if (&quot;AJP/1.3&quot;.equals(protocol)) {
+            if (aprConnector) {
+                protocolHandlerClassName = &quot;org.apache.coyote.ajp.AjpAprProtocol&quot;;
+            } else {
+                protocolHandlerClassName = &quot;org.apache.coyote.ajp.AjpNioProtocol&quot;;
+            }
+        } else {
+            protocolHandlerClassName = protocol;
+        }
+
+        // Instantiate protocol handler
+        ProtocolHandler p = null;
+        try {
+            Class&lt;?&gt; clazz = Class.forName(protocolHandlerClassName);
+            p = (ProtocolHandler) clazz.getConstructor().newInstance();
+        } catch (Exception e) {
+            log.error(sm.getString(
+                    &quot;coyoteConnector.protocolHandlerInstantiationFailed&quot;), e);
+        } finally {
+            this.protocolHandler = p;
+        }
+
+        // Default for Connector depends on this system property
+        setThrowOnFailure(Boolean.getBoolean(&quot;org.apache.catalina.startup.EXIT_ON_INIT_FAILURE&quot;));
+    }
+</code></pre>
+</li>
+<li>
+<p>Connector初始化</p>
+<pre><code class="language-java">@Override
+protected void initInternal() throws LifecycleException {
+
+    super.initInternal();
+
+    if (protocolHandler == null) {
+        throw new LifecycleException(
+                sm.getString(&quot;coyoteConnector.protocolHandlerInstantiationFailed&quot;));
+    }
+
+    // Initialize adapter
+    adapter = new CoyoteAdapter(this);
+    protocolHandler.setAdapter(adapter);
+    if (service != null) {
+        protocolHandler.setUtilityExecutor(service.getServer().getUtilityExecutor());
+    }
+
+    // Make sure parseBodyMethodsSet has a default
+    if (null == parseBodyMethodsSet) {
+        setParseBodyMethods(getParseBodyMethods());
+    }
+
+    if (protocolHandler.isAprRequired() &amp;&amp; !AprLifecycleListener.isInstanceCreated()) {
+        throw new LifecycleException(sm.getString(&quot;coyoteConnector.protocolHandlerNoAprListener&quot;,
+                getProtocolHandlerClassName()));
+    }
+    if (protocolHandler.isAprRequired() &amp;&amp; !AprLifecycleListener.isAprAvailable()) {
+        throw new LifecycleException(sm.getString(&quot;coyoteConnector.protocolHandlerNoAprLibrary&quot;,
+                getProtocolHandlerClassName()));
+    }
+    if (AprLifecycleListener.isAprAvailable() &amp;&amp; AprLifecycleListener.getUseOpenSSL() &amp;&amp;
+            protocolHandler instanceof AbstractHttp11JsseProtocol) {
+        AbstractHttp11JsseProtocol&lt;?&gt; jsseProtocolHandler =
+                (AbstractHttp11JsseProtocol&lt;?&gt;) protocolHandler;
+        if (jsseProtocolHandler.isSSLEnabled() &amp;&amp;
+                jsseProtocolHandler.getSslImplementationName() == null) {
+            // OpenSSL is compatible with the JSSE configuration, so use it if APR is available
+            jsseProtocolHandler.setSslImplementationName(OpenSSLImplementation.class.getName());
+        }
+    }
+
+    try {
+        protocolHandler.init();
+    } catch (Exception e) {
+        throw new LifecycleException(
+                sm.getString(&quot;coyoteConnector.protocolHandlerInitializationFailed&quot;), e);
+    }
+}
+</code></pre>
+</li>
+<li>
+<p>protocalHandle的init</p>
+<pre><code class="language-java">@Override
+    public void init() throws Exception {
+        if (getLog().isInfoEnabled()) {
+            getLog().info(sm.getString(&quot;abstractProtocolHandler.init&quot;, getName()));
+            logPortOffset();
+        }
+
+        if (oname == null) {
+            // Component not pre-registered so register it
+            oname = createObjectName();
+            if (oname != null) {
+                Registry.getRegistry(null, null).registerComponent(this, oname, null);
+            }
+        }
+
+        if (this.domain != null) {
+            rgOname = new ObjectName(domain + &quot;:type=GlobalRequestProcessor,name=&quot; + getName());
+            Registry.getRegistry(null, null).registerComponent(
+                    getHandler().getGlobal(), rgOname, null);
+        }
+
+        String endpointName = getName();
+        endpoint.setName(endpointName.substring(1, endpointName.length()-1));
+        endpoint.setDomain(domain);
+
+        endpoint.init();
+    }
+</code></pre>
+</li>
+<li>
+<p>endpoint的init</p>
+<pre><code class="language-java">public final void init() throws Exception {
+    if (bindOnInit) {
+        bindWithCleanup();
+        bindState = BindState.BOUND_ON_INIT;
+    }
+    if (this.domain != null) {
+        // Register endpoint (as ThreadPool - historical name)
+        oname = new ObjectName(domain + &quot;:type=ThreadPool,name=\&quot;&quot; + getName() + &quot;\&quot;&quot;);
+        Registry.getRegistry(null, null).registerComponent(this, oname, null);
+
+        ObjectName socketPropertiesOname = new ObjectName(domain +
+                &quot;:type=ThreadPool,name=\&quot;&quot; + getName() + &quot;\&quot;,subType=SocketProperties&quot;);
+        socketProperties.setObjectName(socketPropertiesOname);
+        Registry.getRegistry(null, null).registerComponent(socketProperties, socketPropertiesOname, null);
+
+        for (SSLHostConfig sslHostConfig : findSslHostConfigs()) {
+            registerJmx(sslHostConfig);
+        }
+    }
+}
+</code></pre>
+</li>
+<li>
+<p>Connector的start方法调用protocalHandle的start方法，protocalHandle再调用endpoint的start方法，AbstractEndpoint中start方法如下</p>
+<pre><code class="language-java">public final void start() throws Exception {
+    if (bindState == BindState.UNBOUND) {
+        bindWithCleanup();
+        bindState = BindState.BOUND_ON_START;
+    }
+    startInternal();
+}
+</code></pre>
+</li>
+<li>
+<p>Endpoint的start</p>
+<pre><code class="language-java">public void startInternal() throws Exception {
+
+    if (!running) {
+        running = true;
+        paused = false;
+
+        processorCache = new SynchronizedStack&lt;&gt;(SynchronizedStack.DEFAULT_SIZE,
+                socketProperties.getProcessorCache());
+        eventCache = new SynchronizedStack&lt;&gt;(SynchronizedStack.DEFAULT_SIZE,
+                        socketProperties.getEventCache());
+        nioChannels = new SynchronizedStack&lt;&gt;(SynchronizedStack.DEFAULT_SIZE,
+                socketProperties.getBufferPool());
+
+        // Create worker collection
+        if ( getExecutor() == null ) {
+            createExecutor();
+        }
+
+        initializeConnectionLatch();
+
+        // Start poller threads
+        pollers = new Poller[getPollerThreadCount()];
+        for (int i=0; i&lt;pollers.length; i++) {
+            pollers[i] = new Poller();
+            Thread pollerThread = new Thread(pollers[i], getName() + &quot;-ClientPoller-&quot;+i);
+            pollerThread.setPriority(threadPriority);
+            pollerThread.setDaemon(true);
+            pollerThread.start();
+        }
+
+        startAcceptorThreads();
+    }
+}
+</code></pre>
+</li>
+</ol>
+<h1 id="tomcat处理用户请求过程">tomcat处理用户请求过程</h1>
+<p>Connector的内部结构</p>
+<p><img src="/Users/caijunhui/Library/Application%20Support/typora-user-images/image-20190405183952839.png" alt="image-20190405183952839"></p>
+<p>Acceptor负责接收用户的请求，设置Socket属性，向poller注册socket；Poller的职责是不断轮询selector, 检查准备就绪的socket(有数据可读或可写)，实现io的多路复用。Worker线程即SocketProcessor是用来处理Socket请求的。</p>
+<ol>
+<li>
+<p>Acceptor的run方法</p>
+<pre><code class="language-java">@Override
+public void run() {
+
+    int errorDelay = 0;
+
+    // Loop until we receive a shutdown command
+    while (endpoint.isRunning()) {
+
+        // Loop if endpoint is paused
+        while (endpoint.isPaused() &amp;&amp; endpoint.isRunning()) {
+            state = AcceptorState.PAUSED;
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException e) {
+                // Ignore
+            }
+        }
+
+        if (!endpoint.isRunning()) {
+            break;
+        }
+        state = AcceptorState.RUNNING;
+
+        try {
+            //if we have reached max connections, wait
+            endpoint.countUpOrAwaitConnection();
+
+            // Endpoint might have been paused while waiting for latch
+            // If that is the case, don't accept new connections
+            if (endpoint.isPaused()) {
+                continue;
+            }
+
+            U socket = null;
+            try {
+                // Accept the next incoming connection from the server
+                // socket
+                socket = endpoint.serverSocketAccept();
+            } catch (Exception ioe) {
+                // We didn't get a socket
+                endpoint.countDownConnection();
+                if (endpoint.isRunning()) {
+                    // Introduce delay if necessary
+                    errorDelay = handleExceptionWithDelay(errorDelay);
+                    // re-throw
+                    throw ioe;
+                } else {
+                    break;
+                }
+            }
+            // Successful accept, reset the error delay
+            errorDelay = 0;
+
+            // Configure the socket
+            if (endpoint.isRunning() &amp;&amp; !endpoint.isPaused()) {
+                // setSocketOptions() will hand the socket off to
+                // an appropriate processor if successful
+                if (!endpoint.setSocketOptions(socket)) {
+                    endpoint.closeSocket(socket);
+                }
+            } else {
+                endpoint.destroySocket(socket);
+            }
+        } catch (Throwable t) {
+            ExceptionUtils.handleThrowable(t);
+            String msg = sm.getString(&quot;endpoint.accept.fail&quot;);
+            // APR specific.
+            // Could push this down but not sure it is worth the trouble.
+            if (t instanceof Error) {
+                Error e = (Error) t;
+                if (e.getError() == 233) {
+                    // Not an error on HP-UX so log as a warning
+                    // so it can be filtered out on that platform
+                    // See bug 50273
+                    log.warn(msg, t);
+                } else {
+                    log.error(msg, t);
+                }
+            } else {
+                    log.error(msg, t);
+            }
+        }
+    }
+    state = AcceptorState.ENDED;
+}
+</code></pre>
+</li>
+<li>
+<p>将socket注册到poller</p>
+<pre><code class="language-java">/**
+ * Process the specified connection.
+ * @param socket The socket channel
+ * @return &lt;code&gt;true&lt;/code&gt; if the socket was correctly configured
+ *  and processing may continue, &lt;code&gt;false&lt;/code&gt; if the socket needs to be
+ *  close immediately
+ */
+@Override
+protected boolean setSocketOptions(SocketChannel socket) {
+    // Process the connection
+    try {
+        // Disable blocking, polling will be used
+        socket.configureBlocking(false);
+        Socket sock = socket.socket();
+        socketProperties.setProperties(sock);
+
+        NioChannel channel = nioChannels.pop();
+        if (channel == null) {
+            SocketBufferHandler bufhandler = new SocketBufferHandler(
+                    socketProperties.getAppReadBufSize(),
+                    socketProperties.getAppWriteBufSize(),
+                    socketProperties.getDirectBuffer());
+            if (isSSLEnabled()) {
+                channel = new SecureNioChannel(socket, bufhandler, selectorPool, this);
+            } else {
+                channel = new NioChannel(socket, bufhandler);
+            }
+        } else {
+            channel.setIOChannel(socket);
+            channel.reset();
+        }
+        getPoller0().register(channel);
+    } catch (Throwable t) {
+        ExceptionUtils.handleThrowable(t);
+        try {
+            log.error(sm.getString(&quot;endpoint.socketOptionsError&quot;), t);
+        } catch (Throwable tt) {
+            ExceptionUtils.handleThrowable(tt);
+        }
+        // Tell to close the socket
+        return false;
+    }
+    return true;
+}
+</code></pre>
+<pre><code class="language-java">/**
+ * Registers a newly created socket with the poller.
+ *
+ * @param socket    The newly created socket
+ */
+public void register(final NioChannel socket) {
+    socket.setPoller(this);
+    NioSocketWrapper socketWrapper = new NioSocketWrapper(socket, NioEndpoint.this);
+    socket.setSocketWrapper(socketWrapper);
+    socketWrapper.setPoller(this);
+    socketWrapper.setReadTimeout(getConnectionTimeout());
+    socketWrapper.setWriteTimeout(getConnectionTimeout());
+    socketWrapper.setKeepAliveLeft(NioEndpoint.this.getMaxKeepAliveRequests());
+    socketWrapper.setSecure(isSSLEnabled());
+    PollerEvent r = eventCache.pop();
+    socketWrapper.interestOps(SelectionKey.OP_READ);//this is what OP_REGISTER turns into.
+    if (r == null) {
+        r = new PollerEvent(socket, socketWrapper, OP_REGISTER);
+    } else {
+        r.reset(socket, socketWrapper, OP_REGISTER);
+    }
+    addEvent(r);
+}
+</code></pre>
+</li>
+<li>
+<p>Poller的run 方法</p>
+<pre><code class="language-java">/**
+ * The background thread that adds sockets to the Poller, checks the
+ * poller for triggered events and hands the associated socket off to an
+ * appropriate processor as events occur.
+ */
+@Override
+public void run() {
+    // Loop until destroy() is called
+    while (true) {
+
+        boolean hasEvents = false;
+
+        try {
+            if (!close) {
+                hasEvents = events();
+                if (wakeupCounter.getAndSet(-1) &gt; 0) {
+                    // If we are here, means we have other stuff to do
+                    // Do a non blocking select
+                    keyCount = selector.selectNow();
+                } else {
+                    keyCount = selector.select(selectorTimeout);
+                }
+                wakeupCounter.set(0);
+            }
+            if (close) {
+                events();
+                timeout(0, false);
+                try {
+                    selector.close();
+                } catch (IOException ioe) {
+                    log.error(sm.getString(&quot;endpoint.nio.selectorCloseFail&quot;), ioe);
+                }
+                break;
+            }
+        } catch (Throwable x) {
+            ExceptionUtils.handleThrowable(x);
+            log.error(sm.getString(&quot;endpoint.nio.selectorLoopError&quot;), x);
+            continue;
+        }
+        // Either we timed out or we woke up, process events first
+        if ( keyCount == 0 ) hasEvents = (hasEvents | events());
+
+        Iterator&lt;SelectionKey&gt; iterator =
+            keyCount &gt; 0 ? selector.selectedKeys().iterator() : null;
+        // Walk through the collection of ready keys and dispatch
+        // any active event.
+        while (iterator != null &amp;&amp; iterator.hasNext()) {
+            SelectionKey sk = iterator.next();
+            NioSocketWrapper attachment = (NioSocketWrapper)sk.attachment();
+            // Attachment may be null if another thread has called
+            // cancelledKey()
+            if (attachment == null) {
+                iterator.remove();
+            } else {
+                iterator.remove();
+                processKey(sk, attachment);
+            }
+        }
+
+        // Process timeouts
+        timeout(keyCount,hasEvents);
+    }
+
+    getStopLatch().countDown();
+}
+</code></pre>
+<pre><code class="language-java">protected void processKey(SelectionKey sk, NioSocketWrapper socketWrapper) {
+    try {
+        if (close) {
+            cancelledKey(sk);
+        } else if (sk.isValid() &amp;&amp; socketWrapper != null) {
+            if (sk.isReadable() || sk.isWritable()) {
+                if ( socketWrapper.getSendfileData() != null ) {
+                    processSendfile(sk, socketWrapper, false);
+                } else {
+                    unreg(sk, socketWrapper, sk.readyOps());
+                    boolean closeSocket = false;
+                    // Read goes before write
+                    if (sk.isReadable()) {
+                        if (socketWrapper.readOperation != null) {
+                            getExecutor().execute(socketWrapper.readOperation);
+                        } else if (!processSocket(socketWrapper, SocketEvent.OPEN_READ, true)) {
+                            closeSocket = true;
+                        }
+                    }
+                    if (!closeSocket &amp;&amp; sk.isWritable()) {
+                        if (socketWrapper.writeOperation != null) {
+                            getExecutor().execute(socketWrapper.writeOperation);
+                        } else if (!processSocket(socketWrapper, SocketEvent.OPEN_WRITE, true)) {
+                            closeSocket = true;
+                        }
+                    }
+                    if (closeSocket) {
+                        cancelledKey(sk);
+                    }
+                }
+            }
+        } else {
+            // Invalid key
+            cancelledKey(sk);
+        }
+    } catch (CancelledKeyException ckx) {
+        cancelledKey(sk);
+    } catch (Throwable t) {
+        ExceptionUtils.handleThrowable(t);
+        log.error(sm.getString(&quot;endpoint.nio.keyProcessingError&quot;), t);
+    }
+}
+</code></pre>
+</li>
+<li>
+<p>Worker进程实际处理用户请求</p>
+<pre><code class="language-java">/**
+ * Process the given SocketWrapper with the given status. Used to trigger
+ * processing as if the Poller (for those endpoints that have one)
+ * selected the socket.
+ *
+ * @param socketWrapper The socket wrapper to process
+ * @param event         The socket event to be processed
+ * @param dispatch      Should the processing be performed on a new
+ *                          container thread
+ *
+ * @return if processing was triggered successfully
+ */
+public boolean processSocket(SocketWrapperBase&lt;S&gt; socketWrapper,
+        SocketEvent event, boolean dispatch) {
+    try {
+        if (socketWrapper == null) {
+            return false;
+        }
+        SocketProcessorBase&lt;S&gt; sc = processorCache.pop();
+        if (sc == null) {
+            sc = createSocketProcessor(socketWrapper, event);
+        } else {
+            sc.reset(socketWrapper, event);
+        }
+        Executor executor = getExecutor();
+        if (dispatch &amp;&amp; executor != null) {
+            executor.execute(sc);
+        } else {
+            sc.run();
+        }
+    } catch (RejectedExecutionException ree) {
+        getLog().warn(sm.getString(&quot;endpoint.executor.fail&quot;, socketWrapper) , ree);
+        return false;
+    } catch (Throwable t) {
+        ExceptionUtils.handleThrowable(t);
+        // This means we got an OOM or similar creating a thread, or that
+        // the pool and its queue are full
+        getLog().error(sm.getString(&quot;endpoint.process.fail&quot;), t);
+        return false;
+    }
+    return true;
+}
+</code></pre>
+<pre><code class="language-java">@Override
+protected SocketProcessorBase&lt;NioChannel&gt; createSocketProcessor(
+        SocketWrapperBase&lt;NioChannel&gt; socketWrapper, SocketEvent event) {
+    return new SocketProcessor(socketWrapper, event);
+}
+</code></pre>
+<pre><code class="language-java">protected class SocketProcessor extends SocketProcessorBase&lt;NioChannel&gt; {
+
+    public SocketProcessor(SocketWrapperBase&lt;NioChannel&gt; socketWrapper, SocketEvent event) {
+        super(socketWrapper, event);
+    }
+
+    @Override
+    protected void doRun() {
+        NioChannel socket = socketWrapper.getSocket();
+        SelectionKey key = socket.getIOChannel().keyFor(socket.getPoller().getSelector());
+
+        try {
+            int handshake = -1;
+
+            try {
+                if (key != null) {
+                    if (socket.isHandshakeComplete()) {
+                        // No TLS handshaking required. Let the handler
+                        // process this socket / event combination.
+                        handshake = 0;
+                    } else if (event == SocketEvent.STOP || event == SocketEvent.DISCONNECT ||
+                            event == SocketEvent.ERROR) {
+                        // Unable to complete the TLS handshake. Treat it as
+                        // if the handshake failed.
+                        handshake = -1;
+                    } else {
+                        handshake = socket.handshake(key.isReadable(), key.isWritable());
+                        // The handshake process reads/writes from/to the
+                        // socket. status may therefore be OPEN_WRITE once
+                        // the handshake completes. However, the handshake
+                        // happens when the socket is opened so the status
+                        // must always be OPEN_READ after it completes. It
+                        // is OK to always set this as it is only used if
+                        // the handshake completes.
+                        event = SocketEvent.OPEN_READ;
+                    }
+                }
+            } catch (IOException x) {
+                handshake = -1;
+                if (log.isDebugEnabled()) log.debug(&quot;Error during SSL handshake&quot;,x);
+            } catch (CancelledKeyException ckx) {
+                handshake = -1;
+            }
+            if (handshake == 0) {
+                SocketState state = SocketState.OPEN;
+                // Process the request from this socket
+                if (event == null) {
+                    state = getHandler().process(socketWrapper, SocketEvent.OPEN_READ);
+                } else {
+                    state = getHandler().process(socketWrapper, event);
+                }
+                if (state == SocketState.CLOSED) {
+                    close(socket, key);
+                }
+            } else if (handshake == -1 ) {
+                close(socket, key);
+            } else if (handshake == SelectionKey.OP_READ){
+                socketWrapper.registerReadInterest();
+            } else if (handshake == SelectionKey.OP_WRITE){
+                socketWrapper.registerWriteInterest();
+            }
+        } catch (CancelledKeyException cx) {
+            socket.getPoller().cancelledKey(key);
+        } catch (VirtualMachineError vme) {
+            ExceptionUtils.handleThrowable(vme);
+        } catch (Throwable t) {
+            log.error(sm.getString(&quot;endpoint.processing.fail&quot;), t);
+            socket.getPoller().cancelledKey(key);
+        } finally {
+            socketWrapper = null;
+            event = null;
+            //return to cache
+            if (running &amp;&amp; !paused) {
+                processorCache.push(this);
+            }
+        }
+    }
+}
+</code></pre>
+</li>
+</ol>
+
+            </div>
+          </article>
+        </div>
+        <div class="paper" data-aos="fade-in">
+          
+            <div class="next-post">
+              <div class="next">
+                下一篇
+              </div>
+              <a href="https://caijh.github.io//post/yuan-ma-yue-du-hashmap-concurrenthashmap">
+                <h3 class="post-title">
+                  源码阅读-HashMap ConcurrentHashMap
+                </h3>
+              </a>
+            </div>
+          
+        </div>
+        
+          
+
+          
+            <div class="paper" data-aos="fade-in">
+              <div id="disqus_thread"></div>
+            </div>
+          
+        
+      </div>
+
+      <div class="sm-12 md-4 col sidebar">
+  <div class="paper info-container">
+    <img src="https://caijh.github.io//images/avatar.png?v=1562423052293" class="no-responsive avatar">
+    <div class="text-muted">搬砖大佬</div>
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      最新文章
+    </div>
+    <div class="row">
+      <ul>
+        
+          
+            <li>
+              <a href="https://caijh.github.io//post/yuan-ma-yue-du-tomcat">源码阅读-tomcat</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://caijh.github.io//post/yuan-ma-yue-du-hashmap-concurrenthashmap">源码阅读-HashMap ConcurrentHashMap</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://caijh.github.io//post/maven-fa-bu-zi-ji-de-maven-gou-jian-dao-zhong-yang-cang-ku">maven-发布自己的maven构件到中央仓库</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://caijh.github.io//post/yuan-ma-yue-du-hashmap-de-shi-xian-yuan-li">源码阅读-HashMap的实现原理</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://caijh.github.io//post/she-ji-mo-shi-qiao-jie-mo-shi">设计模式-桥接模式</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://caijh.github.io//post/she-ji-mo-shi-xiang-yuan-mo-shi">设计模式-享元模式</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://caijh.github.io//post/she-ji-mo-shi-jie-shi-qi-mo-shi">设计模式-解释器模式</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://caijh.github.io//post/she-ji-mo-shi-zhuang-tai-mo-shi">设计模式-状态模式</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://caijh.github.io//post/she-ji-mo-shi-fang-wen-zhe-mo-shi">设计模式-访问者模式</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://caijh.github.io//post/she-ji-mo-shi-bei-wang-lu-mo-shi">设计模式-备忘录模式</a>
+            </li>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      </ul>
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      标签列表
+    </div>
+    <div class="row">
+      
+        <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge ">
+          源代码
+        </a>
+      
+        <a href="https://caijh.github.io//tag/kmQV6iHOM" class="badge secondary">
+          面试
+        </a>
+      
+        <a href="https://caijh.github.io//tag/hm42pTrhV" class="badge ">
+          Maven
+        </a>
+      
+        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge ">
+          设计模式
+        </a>
+      
+        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge secondary">
+          MySQL
+        </a>
+      
+        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge ">
+          Java
+        </a>
+      
+    </div>
+  </div>
+  <div class="paper">
+    Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://caijh.github.io//atom.xml" target="_blank">RSS</a>
+  </div>
+</div>
+
+
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<script type="application/javascript">
+
+AOS.init();
+
+hljs.initHighlightingOnLoad()
+
+</script>
+
+
+
+  
+
+  
+    <script src="https://unpkg.com/disqusjs@1.1/dist/disqus.js"></script>
+    <script>
+
+    var options = {
+      shortname: 'caijh',
+      apikey: 'lO2xchFAyPIP4VOKbgm796D9jIvqLVziAqLHOPnOZySwUlyWXAhgwrIbPQ16AyUX',
+    }
+    if ('https://disqus.skk.moe/disqus/') {
+      options.api = 'https://disqus.skk.moe/disqus/'
+    }
+    var dsqjs = new DisqusJS(options)
+
+    </script>
+  
+
+
+
+
+  </body>
+</html>
