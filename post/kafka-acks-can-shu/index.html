@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>设计模式 | John&#39;s Blog</title>
+<title>Kafka-Acks参数 | John&#39;s Blog</title>
 <meta name="description" content="搬砖大佬">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -15,6 +15,12 @@
 <link rel="stylesheet" href="https://caijh.github.io//styles/main.css">
 
 
+  
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/disqusjs@1.1/dist/disqusjs.css" />
+  
+
 <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
 
 
@@ -23,6 +29,7 @@
 
   </head>
   <body>
+  
     <nav class="navbar border fixed split-nav">
   <div class="nav-brand">
     <h3><a href="https://caijh.github.io/">John&#39;s Blog</a></h3>
@@ -79,112 +86,57 @@
     <div id="top" class="row site">
       <div class="sm-12 md-8 col">
         <div class="paper">
-          <h2 class="current-tag">标签: 设计模式</h2>
-          
-  <article class="article">
-    <h2 class="article-title">
-      <a href="https://caijh.github.io//post/she-ji-mo-shi-gong-han-fang-fa-mo-shi">设计模式-工厂方法模式</a>
-    </h2>
-    <p class="article-meta">
-      2019-06-24
-      
-        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge secondary">
-          设计模式
-        </a>
-      
-    </p>
-    <p class="text-lead">
-      <h4 id="定义">定义</h4>
-<blockquote>
-<p>Define an interface for creating an object,but let subclasses decide which class to instantiate.Factory Method lets a class defer instantiation to subclasses.（定义一个用于创建对象的接口，让子类决定实例化哪一个类。工厂方法使一个类的实例化延迟到其子类。）</p>
-</blockquote>
-<h4 id="uml">UML</h4>
-<p><img src="https://design-patterns.readthedocs.io/zh_CN/latest/_images/FactoryMethod.jpg" alt="IMAGE"></p>
-
-    </p>
-    <div class="row">
-      <a href="https://caijh.github.io//post/she-ji-mo-shi-gong-han-fang-fa-mo-shi" class="readmore-link">
-        <button>
-          Read More
-        </button>
-      </a>
-    </div>
-  </article>
-
-  <article class="article">
-    <h2 class="article-title">
-      <a href="https://caijh.github.io//post/she-ji-mo-shi-dan-li-mo-shi">设计模式-单例模式</a>
-    </h2>
-    <p class="article-meta">
-      2019-06-24
-      
-        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge ">
-          设计模式
-        </a>
-      
-    </p>
-    <p class="text-lead">
-      <blockquote>
-<p>Ensure a class has only one instance, and provide a global point of access to it.（确保某一个类只有一个实例，而且自行实例化并向整个系统提供这个实例。）</p>
-</blockquote>
-<h5 id="类图">类图</h5>
-<p><img src="https://caijh.github.io//post-images/1561372464381.png" alt=""></p>
-
-    </p>
-    <div class="row">
-      <a href="https://caijh.github.io//post/she-ji-mo-shi-dan-li-mo-shi" class="readmore-link">
-        <button>
-          Read More
-        </button>
-      </a>
-    </div>
-  </article>
-
-  <article class="article">
-    <h2 class="article-title">
-      <a href="https://caijh.github.io//post/she-ji-mo-shi-solid-yuan-ze">设计模式-SOLID原则</a>
-    </h2>
-    <p class="article-meta">
-      2019-06-24
-      
-        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge secondary">
-          设计模式
-        </a>
-      
-    </p>
-    <p class="text-lead">
-      <p>运用设计模式，需要记住六大设计原则：</p>
+          <article class="article">
+            <h1>Kafka-Acks参数</h1>
+            <p class="article-meta">
+              2019-07-06
+              
+            </p>
+            
+            <div class="post-content">
+              <p>kafka中用topic表示同类的消息，topic可以有1个或多个partition.
+kafka集群中一个broker负责一部分partition，在kafka集群中，每个Partition都有多个副本，其中一个副本叫做leader，其他的副本叫做follower。</p>
+<!-- more -->
+<h4 id="多副本之间如何同步">多副本之间如何同步？</h4>
+<p>其实任何一个Partition，只有副本Leader是对外提供读写服务的，然后Leader副本接收到数据之后，Follower副本会不停的给他发送请求尝试去拉取最新的数据，拉取到自己本地后，写入磁盘中。</p>
+<h4 id="isr是指什么">ISR是指什么？</h4>
+<p>ISR全称是“In-Sync Replicas”，也就是保持同步的副本，他的含义就是，跟Leader始终保持同步的Follower有哪些。
+每个Partition都有一个ISR，这个ISR里一定会有Leader自己，因为Leader肯定数据是最新的，然后就是那些跟Leader保持同步的Follower，也会在ISR里。</p>
+<h4 id="acks参数">acks参数</h4>
 <ul>
-<li>Single Responsibility Principle：单一职责原则</li>
-<li>Open Closed Principle：开闭原则</li>
-<li>Liskov Substitution Principle：里氏替换原则</li>
-<li>Law of Demeter：迪米特法则</li>
-<li>Interface Segregation Principle：接口隔离原则</li>
-<li>Dependence Inversion Principle：依赖倒置原则</li>
+<li>acks = 0， KafkaProducer在客户端，只要把消息发送出去，不管那条数据有没有在哪怕Partition Leader上落到磁盘，我就不管他了，直接就认为这个消息发送成功了。如果你采用这种设置的话，那么你必须注意的一点是，可能你发送出去的消息还在半路。结果呢，Partition Leader所在Broker就直接挂了，然后结果你的客户端还认为消息发送成功了，此时就会导致这条消息就丢失了。</li>
+<li>acks =1， Partition Leader接收到消息而且写入本地磁盘了，就认为成功了，不管他其他的Follower有没有同步过去这条消息了。但是这里有一个问题，万一Partition Leader刚刚接收到消息，Follower还没来得及同步过去，结果Leader所在的broker宕机了，此时也会导致这条消息丢失，因为人家客户端已经认为发送成功了。</li>
+<li>acks = -1 (all), Partition Leader接收到消息之后，还必须要求ISR列表里跟Leader保持同步的那些Follower都要把消息同步过去，才能认为这条消息是写入成功了。</li>
 </ul>
 
-    </p>
-    <div class="row">
-      <a href="https://caijh.github.io//post/she-ji-mo-shi-solid-yuan-ze" class="readmore-link">
-        <button>
-          Read More
-        </button>
-      </a>
-    </div>
-  </article>
-
-
+            </div>
+          </article>
         </div>
-        <div class="row flex-edges">
-  
-    <a href="https://caijh.github.io//tag/CymMFfR-7//page/2/" class="paper-btn">
-      上一页
-    </a>
-  
-  
-</div>
+        <div class="paper" data-aos="fade-in">
+          
+            <div class="next-post">
+              <div class="next">
+                下一篇
+              </div>
+              <a href="https://caijh.github.io//post/yuan-ma-yue-du-tomcat">
+                <h3 class="post-title">
+                  源码阅读-tomcat
+                </h3>
+              </a>
+            </div>
+          
+        </div>
+        
+          
 
+          
+            <div class="paper" data-aos="fade-in">
+              <div id="disqus_thread"></div>
+            </div>
+          
+        
       </div>
+
       <div class="sm-12 md-4 col sidebar">
   <div class="paper info-container">
     <img src="https://caijh.github.io//images/avatar.png?v=1562427312844" class="no-responsive avatar">
@@ -321,15 +273,15 @@
     </div>
     <div class="row">
       
-        <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge secondary">
+        <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge warning">
           源代码
         </a>
       
-        <a href="https://caijh.github.io//tag/kmQV6iHOM" class="badge ">
+        <a href="https://caijh.github.io//tag/kmQV6iHOM" class="badge secondary">
           面试
         </a>
       
-        <a href="https://caijh.github.io//tag/hm42pTrhV" class="badge ">
+        <a href="https://caijh.github.io//tag/hm42pTrhV" class="badge warning">
           Maven
         </a>
       
@@ -337,7 +289,7 @@
           设计模式
         </a>
       
-        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge success">
+        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge ">
           MySQL
         </a>
       
@@ -352,6 +304,7 @@
   </div>
 </div>
 
+
     </div>
 
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
@@ -363,6 +316,26 @@ AOS.init();
 hljs.initHighlightingOnLoad()
 
 </script>
+
+
+
+  
+
+  
+    <script src="https://unpkg.com/disqusjs@1.1/dist/disqus.js"></script>
+    <script>
+
+    var options = {
+      shortname: 'caijh',
+      apikey: 'lO2xchFAyPIP4VOKbgm796D9jIvqLVziAqLHOPnOZySwUlyWXAhgwrIbPQ16AyUX',
+    }
+    if ('https://disqus.skk.moe/disqus/') {
+      options.api = 'https://disqus.skk.moe/disqus/'
+    }
+    var dsqjs = new DisqusJS(options)
+
+    </script>
+  
 
 
 

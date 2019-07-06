@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://caijh.github.io/</id>
     <title>John&apos;s Blog</title>
-    <updated>2019-07-06T14:28:18.730Z</updated>
+    <updated>2019-07-06T15:35:17.986Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://caijh.github.io/"/>
     <link rel="self" href="https://caijh.github.io//atom.xml"/>
@@ -10,6 +10,31 @@
     <logo>https://caijh.github.io//images/avatar.png</logo>
     <icon>https://caijh.github.io//favicon.ico</icon>
     <rights>All rights reserved 2019, John&apos;s Blog</rights>
+    <entry>
+        <title type="html"><![CDATA[Kafka-Acks参数]]></title>
+        <id>https://caijh.github.io//post/kafka-acks-can-shu</id>
+        <link href="https://caijh.github.io//post/kafka-acks-can-shu">
+        </link>
+        <updated>2019-07-06T15:16:29.000Z</updated>
+        <summary type="html"><![CDATA[<p>kafka中用topic表示同类的消息，topic可以有1个或多个partition.
+kafka集群中一个broker负责一部分partition，在kafka集群中，每个Partition都有多个副本，其中一个副本叫做leader，其他的副本叫做follower。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>kafka中用topic表示同类的消息，topic可以有1个或多个partition.
+kafka集群中一个broker负责一部分partition，在kafka集群中，每个Partition都有多个副本，其中一个副本叫做leader，其他的副本叫做follower。</p>
+<!-- more -->
+<h4 id="多副本之间如何同步">多副本之间如何同步？</h4>
+<p>其实任何一个Partition，只有副本Leader是对外提供读写服务的，然后Leader副本接收到数据之后，Follower副本会不停的给他发送请求尝试去拉取最新的数据，拉取到自己本地后，写入磁盘中。</p>
+<h4 id="isr是指什么">ISR是指什么？</h4>
+<p>ISR全称是“In-Sync Replicas”，也就是保持同步的副本，他的含义就是，跟Leader始终保持同步的Follower有哪些。
+每个Partition都有一个ISR，这个ISR里一定会有Leader自己，因为Leader肯定数据是最新的，然后就是那些跟Leader保持同步的Follower，也会在ISR里。</p>
+<h4 id="acks参数">acks参数</h4>
+<ul>
+<li>acks = 0， KafkaProducer在客户端，只要把消息发送出去，不管那条数据有没有在哪怕Partition Leader上落到磁盘，我就不管他了，直接就认为这个消息发送成功了。如果你采用这种设置的话，那么你必须注意的一点是，可能你发送出去的消息还在半路。结果呢，Partition Leader所在Broker就直接挂了，然后结果你的客户端还认为消息发送成功了，此时就会导致这条消息就丢失了。</li>
+<li>acks =1， Partition Leader接收到消息而且写入本地磁盘了，就认为成功了，不管他其他的Follower有没有同步过去这条消息了。但是这里有一个问题，万一Partition Leader刚刚接收到消息，Follower还没来得及同步过去，结果Leader所在的broker宕机了，此时也会导致这条消息丢失，因为人家客户端已经认为发送成功了。</li>
+<li>acks = -1 (all), Partition Leader接收到消息之后，还必须要求ISR列表里跟Leader保持同步的那些Follower都要把消息同步过去，才能认为这条消息是写入成功了。</li>
+</ul>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[源码阅读-tomcat]]></title>
         <id>https://caijh.github.io//post/yuan-ma-yue-du-tomcat</id>
@@ -2330,109 +2355,6 @@ public class Client {
 <ul>
 <li>javax.lang.model.element.Element and javax.lang.model.element.ElementVisitor</li>
 <li>javax.lang.model.type.TypeMirror and javax.lang.model.type.TypeVisitor</li>
-</ul>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[设计模式-备忘录模式]]></title>
-        <id>https://caijh.github.io//post/she-ji-mo-shi-bei-wang-lu-mo-shi</id>
-        <link href="https://caijh.github.io//post/she-ji-mo-shi-bei-wang-lu-mo-shi">
-        </link>
-        <updated>2019-06-30T10:43:33.000Z</updated>
-        <summary type="html"><![CDATA[<h4 id="定义">定义</h4>
-<blockquote>
-<p>Without violating encapsulation,capture and externalize an object's internal state so that the object can be restored to this state later.（在不破坏封装性的前提下，捕获一个对象的内部状态，并在该对象之外保存这个状态。这样以后就可将该对象恢复到原先保存的状态。）</p>
-</blockquote>
-<h4 id="uml">UML</h4>
-<p><img src="https://caijh.github.io//post-images/1561891474684.png" alt=""></p>
-]]></summary>
-        <content type="html"><![CDATA[<h4 id="定义">定义</h4>
-<blockquote>
-<p>Without violating encapsulation,capture and externalize an object's internal state so that the object can be restored to this state later.（在不破坏封装性的前提下，捕获一个对象的内部状态，并在该对象之外保存这个状态。这样以后就可将该对象恢复到原先保存的状态。）</p>
-</blockquote>
-<h4 id="uml">UML</h4>
-<p><img src="https://caijh.github.io//post-images/1561891474684.png" alt=""></p>
-<!-- more -->
-<h4 id="代码实现">代码实现</h4>
-<pre><code>/**
-* Originator发起人角色
-* 记录当前时刻的内部状态，负责定义哪些属于备份范围的状态，负责创建和恢复备忘录数据。
-*/
-public class Originator {
-     //内部状态
-     private String state = &quot;&quot;;
-     
-     public String getState() {
-             return state;
-     }
-     public void setState(String state) {
-             this.state = state;
-     }
-     //创建一个备忘录
-     public Memento createMemento(){
-             return new Memento(this.state);
-     }
-     //恢复一个备忘录
-     public void restoreMemento(Memento _memento){
-             this.setState(_memento.getState());
-     }
-}
-/**
-* Memento备忘录角色
-* 负责存储Originator发起人对象的内部状态，在需要的时候提供发起人需要的内部状态。
-*/
-public class Memento {
-     //发起人的内部状态
-     private String state = &quot;&quot;;
-     //构造函数传递参数
-     public Memento(String _state){
-             this.state = _state;
-     }
-     public String getState() {
-             return state;
-     }
-     public void setState(String state) {
-             this.state = state;
-     }
-}
-/**
-* Caretaker备忘录管理员角色
-* 对备忘录进行管理、保存和提供备忘录。
-*/
-public class Caretaker {
-     //备忘录对象
-     private Memento memento;
-     public Memento getMemento() {
-             return memento;
-     }
-     public void setMemento(Memento memento) {
-             this.memento = memento;
-     }
-}
-public class Client {
-     public static void main(String[] args) {
-             //定义发起人
-             Originator originator = new Originator();
-             //定义出备忘录管理员
-             Caretaker caretaker = new Caretaker();
-             //创建一个备忘录
-             caretaker.setMemento(originator.createMemento());
-             //恢复一个备忘录
-             originator.restoreMemento(caretaker.getMemento());
-     }
-}
-</code></pre>
-<h4 id="备忘录模式的使用场景">备忘录模式的使用场景</h4>
-<ul>
-<li>需要保存和恢复数据的相关状态场景。</li>
-<li>提供一个可回滚（rollback）的操作；比如Word中的CTRL+Z组合键，IE浏览器中的后退按钮，文件管理器上的backspace键等。</li>
-<li>需要监控的副本场景中。例如要监控一个对象的属性，但是监控又不应该作为系统的主业务来调用，它只是边缘应用，即使出现监控不准、错误报警也影响不大，因此一般的做法是备份一个主线程中的对象，然后由分析程序来分析。</li>
-<li>数据库连接的事务管理就是用的备忘录模式，想想看，如果你要实现一个JDBC驱动，你怎么来实现事务？还不是用备忘录模式嘛！</li>
-</ul>
-<h4 id="jdk中的备忘录模式">JDK中的备忘录模式</h4>
-<ul>
-<li>java.util.Date</li>
-<li>java.io.Serializable</li>
 </ul>
 ]]></content>
     </entry>
