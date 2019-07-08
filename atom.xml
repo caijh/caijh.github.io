@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://caijh.github.io/</id>
     <title>John&apos;s Blog</title>
-    <updated>2019-07-08T11:12:33.796Z</updated>
+    <updated>2019-07-08T11:16:50.328Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://caijh.github.io/"/>
     <link rel="self" href="https://caijh.github.io//atom.xml"/>
@@ -109,8 +109,8 @@ threadcount = tasks/(1/taskcost) =tasks*taskcout =  (500~1000)*0.1 = 50~100 个�
 <li>queueCapacity = (coreSizePool/taskcost)<em>responsetime
 计算可得 queueCapacity = 80/0.1</em>1 = 800。意思是队列里的线程可以等待1s，超过了的需要新开线程来执行
 切记不能设置为Integer.MAX_VALUE，这样队列会很大，线程数只会保持在corePoolSize大小，当任务陡增时，不能新开线程来执行，响应时间会随之陡增。</li>
-<li>maxPoolSize = (max(tasks)- queueCapacity)/(1/taskcost)
-计算可得 maxPoolSize = (1000-800)/10 = 20
+<li>maxPoolSize = (max(tasks)- queueCapacity)/(1/taskcost) + corePoolSize
+计算可得 maxPoolSize = (1000-800)/10 +80 = 100
 （最大任务数-队列容量）/每个线程每秒处理能力 = 最大线程数</li>
 <li>rejectedExecutionHandler：根据具体情况来决定，任务不重要可丢弃，任务重要则要利用一些缓冲机制来处理</li>
 <li>keepAliveTime和allowCoreThreadTimeout采用默认通常能满足
