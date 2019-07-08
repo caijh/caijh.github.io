@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>设计模式-SOLID原则 | John&#39;s Blog</title>
+<title>Java - 线程池 | John&#39;s Blog</title>
 <meta name="description" content="搬砖大佬">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -87,79 +87,88 @@
       <div class="sm-12 md-8 col">
         <div class="paper">
           <article class="article">
-            <h1>设计模式-SOLID原则</h1>
+            <h1>Java - 线程池</h1>
             <p class="article-meta">
-              2019-06-24
+              2019-07-08
               
-                <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge secondary">
-                  设计模式
+                <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge success">
+                  Java
                 </a>
               
             </p>
             
-              <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxjCdfGgTWAzqhGpx0HrUuhH17jWSfKSIXlQ504ms1BaoUndtiLQ" alt="设计模式-SOLID原则">
-            
             <div class="post-content">
-              <p>运用设计模式，需要记住六大设计原则：</p>
+              <h4 id="threadpoolexecutor的重要参数">ThreadPoolExecutor的重要参数</h4>
 <ul>
-<li>Single Responsibility Principle：单一职责原则</li>
-<li>Open Closed Principle：开闭原则</li>
-<li>Liskov Substitution Principle：里氏替换原则</li>
-<li>Law of Demeter：迪米特法则</li>
-<li>Interface Segregation Principle：接口隔离原则</li>
-<li>Dependence Inversion Principle：依赖倒置原则</li>
+<li>corePoolSize：核心线程数
+核心线程会一直存活，及时没有任务需要执行
+当线程数小于核心线程数时，即使有线程空闲，线程池也会优先创建新线程处理
+设置allowCoreThreadTimeout=true（默认false）时，核心线程会超时关闭</li>
+<li>queueCapacity：任务队列容量（阻塞队列）
+当核心线程数达到最大时，新任务会放在队列中排队等待执行</li>
+<li>maxPoolSize：最大线程数
+当线程数&gt;=corePoolSize，且任务队列已满时。线程池会创建新线程来处理任务
+当线程数=maxPoolSize，且任务队列已满时，线程池会拒绝处理任务而抛出异常</li>
+<li>keepAliveTime：线程空闲时间
+当线程空闲时间达到keepAliveTime时，线程会退出，直到线程数量=corePoolSize
+如果allowCoreThreadTimeout=true，则会直到线程数量=0</li>
+<li>allowCoreThreadTimeout：允许核心线程超时</li>
+<li>rejectedExecutionHandler：任务拒绝处理器
+两种情况会拒绝处理任务：
+当线程数已经达到maxPoolSize，切队列已满，会拒绝新任务
+当线程池被调用shutdown()后，会等待线程池里的任务执行完毕，再shutdown。如果在调用shutdown()和线程池真正shutdown之间提交任务，会拒绝新任务
+线程池会调用rejectedExecutionHandler来处理这个任务。如果没有设置默认是AbortPolicy，会抛出异常
+ThreadPoolExecutor类有几个内部实现类来处理这类情况：
+AbortPolicy 丢弃任务，抛运行时异常
+CallerRunsPolicy 执行任务
+DiscardPolicy 忽视，什么都不会发生
+DiscardOldestPolicy 从队列中踢出最先进入队列（最后一个执行）的任务
+实现RejectedExecutionHandler接口，可自定义处理器</li>
 </ul>
 <!-- more -->
-<h3 id="单一职责原则">单一职责原则</h3>
-<blockquote>
-<p>There should never be more than one reason for a class to change.
-引起类的变更原因只有一个，类或接口只负责做一件事。
-单一职责原则的好处：</p>
-</blockquote>
+<h4 id="threadpoolexecutor执行顺序">ThreadPoolExecutor执行顺序：</h4>
+<pre><code> 线程池按以下行为执行任务
+</code></pre>
+<ol>
+<li>当线程数小于核心线程数时，创建线程。</li>
+<li>当线程数大于等于核心线程数，且任务队列未满时，将任务放入任务队列。</li>
+<li>当线程数大于等于核心线程数，且任务队列已满
+3.1 若线程数小于最大线程数，创建线程
+3.2 若线程数等于最大线程数，抛出异常，拒绝任务</li>
+</ol>
+<p>三、如何设置参数</p>
 <ul>
-<li>类的复杂性降低，实现什么职责都有清晰明确的定义；</li>
-<li>可读性提高，复杂性降低，那当然可读性提高了；</li>
-<li>可维护性提高，可读性提高，那当然更容易维护了；
-变更引起的风险降低，变更是必不可少的，如果接口的单一职责做得好，一个接口修改只对相应的实现类有影响，对其他的接口无影响，这对系统的扩展性、维护性都有非常大的帮助。
-对于接口，我们在设计的时候一定要做到单一，但是对于实现类就需要多方面考虑了。生搬硬套单一职责原则会引起类的剧增，给维护带来非常多的麻烦，而且过分细分类的职责也会人为地增加系统的复杂性。本来一个类可以实现的行为硬要拆成两个类，然后再使用聚合或组合的方式耦合在一起，人为制造了系统的复杂性。</li>
+<li>默认值
+corePoolSize=1
+queueCapacity=Integer.MAX_VALUE
+maxPoolSize=Integer.MAX_VALUE
+keepAliveTime=60s
+allowCoreThreadTimeout=false
+rejectedExecutionHandler=AbortPolicy()</li>
 </ul>
-<h3 id="开闭原则">开闭原则</h3>
 <blockquote>
-<p>Software entities like classes,modules and functions should be open for extension but closed for modifications.（一个软件实体如类、模块和函数应该对扩展开放，对修改关闭。）
-开闭原则对扩展开放，对修改关闭，并不意味着不做任何修改，低层模块的变更，必然要有高层模块进行耦合，否则就是一个孤立无意义的代码片段。</p>
+<p>如何来设置?</p>
 </blockquote>
-<h4 id="为什么要使用开闭原则">为什么要使用开闭原则？</h4>
-<p>开闭原则对测试的影响
-开闭原则可以提高复用性
-开闭原则可以提高可维护性
-开闭原则可以提高可维护性</p>
-<h4 id="如何使用开闭原则">如何使用开闭原则？</h4>
+<ol>
+<li>需要根据几个值来决定
+tasks ：每秒的任务数，假设为500~1000
+taskcost：每个任务花费时间，假设为0.1s
+responsetime：系统允许容忍的最大响应时间，假设为1s</li>
+<li>做几个计算</li>
+</ol>
 <ul>
-<li>抽象约束</li>
-<li>元数据控制模块行为</li>
-<li>制定项目章程，约定优于配置</li>
-<li>封装变化，将相同的变化封装到一个接口或抽象类中</li>
-</ul>
-<h3 id="里氏替换原则">里氏替换原则</h3>
-<blockquote>
-<p>Functions that use pointers or references to base classes must be able to use objects of derived classes without knowing it.（所有引用基类的地方必须能透明地使用其子类的对象。）</p>
-</blockquote>
-<h3 id="迪米特法则">迪米特法则</h3>
-<blockquote>
-<p>一个对象应该对其他对象有最少的了解。</p>
-</blockquote>
-<h3 id="接口隔离原则">接口隔离原则</h3>
-<blockquote>
-<p>Clients should not be forced to depend upon interfaces that they don't use.（客户端不应该依赖它不需要的接口。）
-The dependency of one class to another one should depend on the smallest possible interface.（类间的依赖关系应该建立在最小的接口上。）</p>
-</blockquote>
-<h3 id="依赖倒置原则">依赖倒置原则</h3>
-<p>High level modules should not depend upon low level modules.Both should depend upon abstractions.Abstractions should not depend upon details.Details should depend upon abstractions.
-翻译过来，包含三层含义：</p>
-<ul>
-<li>高层模块不应该依赖低层模块，两者都应该依赖其抽象；</li>
-<li>抽象不应该依赖细节；</li>
-<li>细节应该依赖抽象。</li>
+<li>corePoolSize = 每秒需要多少个线程处理？
+threadcount = tasks/(1/taskcost) =tasks*taskcout =  (500~1000)*0.1 = 50~100 个线程。corePoolSize设置应该大于50
+根据8020原则，如果80%的每秒任务数小于800，那么corePoolSize设置为80即可</li>
+<li>queueCapacity = (coreSizePool/taskcost)<em>responsetime
+计算可得 queueCapacity = 80/0.1</em>1 = 800。意思是队列里的线程可以等待1s，超过了的需要新开线程来执行
+切记不能设置为Integer.MAX_VALUE，这样队列会很大，线程数只会保持在corePoolSize大小，当任务陡增时，不能新开线程来执行，响应时间会随之陡增。</li>
+<li>maxPoolSize = (max(tasks)- queueCapacity)/(1/taskcost)
+计算可得 maxPoolSize = (1000-800)/10 = 20
+（最大任务数-队列容量）/每个线程每秒处理能力 = 最大线程数</li>
+<li>rejectedExecutionHandler：根据具体情况来决定，任务不重要可丢弃，任务重要则要利用一些缓冲机制来处理</li>
+<li>keepAliveTime和allowCoreThreadTimeout采用默认通常能满足
+以上都是理想值，实际情况下要根据机器性能来决定。如果在未达到最大线程数的情况机器cpu load已经满了，则需要通过升级硬件（呵呵）和优化代码，降低taskcost来处理。</li>
 </ul>
 
             </div>
@@ -171,9 +180,9 @@ The dependency of one class to another one should depend on the smallest possibl
               <div class="next">
                 下一篇
               </div>
-              <a href="https://caijh.github.io//post/mysql-gui-fan">
+              <a href="https://caijh.github.io//post/kafka-acks-can-shu">
                 <h3 class="post-title">
-                  MySQL规范
+                  Kafka-Acks参数
                 </h3>
               </a>
             </div>
@@ -344,7 +353,7 @@ The dependency of one class to another one should depend on the smallest possibl
           Maven
         </a>
       
-        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge success">
+        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge secondary">
           设计模式
         </a>
       
