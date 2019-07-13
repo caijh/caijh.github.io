@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>设计模式-组合模式 | John&#39;s Blog</title>
+<title>Spring Cloud | John&#39;s Blog</title>
 <meta name="description" content="搬砖大佬">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -15,12 +15,6 @@
 <link rel="stylesheet" href="https://caijh.github.io//styles/main.css">
 
 
-  
-
-  
-    <link rel="stylesheet" href="https://unpkg.com/disqusjs@1.1/dist/disqusjs.css" />
-  
-
 <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
 
 
@@ -29,7 +23,6 @@
 
   </head>
   <body>
-  
     <nav class="navbar border fixed split-nav">
   <div class="nav-brand">
     <h3><a href="https://caijh.github.io/">John&#39;s Blog</a></h3>
@@ -86,123 +79,44 @@
     <div id="top" class="row site">
       <div class="sm-12 md-8 col">
         <div class="paper">
-          <article class="article">
-            <h1>设计模式-组合模式</h1>
-            <p class="article-meta">
-              2019-06-30
-              
-                <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge secondary">
-                  设计模式
-                </a>
-              
-            </p>
-            
-            <div class="post-content">
-              <h4 id="定义">定义</h4>
-<blockquote>
-<p>Compose objects into tree structures to represent part-whole hierarchies.Composite lets clients treat individual objects and compositions of objects uniformly.（将对象组合成树形结构以表示“部分-整体”的层次结构，使得用户对单个对象和组合对象的使用具有一致性。）</p>
+          <h2 class="current-tag">标签: Spring Cloud</h2>
+          
+  <article class="article">
+    <h2 class="article-title">
+      <a href="https://caijh.github.io//post/spring-cloud-ru-he-jie-jue-feignribbon-di-yi-ci-qing-qiu-shi-bai-de-wen-ti">Spring Cloud - 如何解决Feign/Ribbon第一次请求失败的问题</a>
+    </h2>
+    <p class="article-meta">
+      2019-07-13
+      
+        <a href="https://caijh.github.io//tag/nHOjalh2s" class="badge success">
+          Spring Cloud
+        </a>
+      
+    </p>
+    <p class="text-lead">
+      <blockquote>
+<p>造成该问题的原因？
+Hystrix默认的超时时间是1秒，如果超过这个时间尚未响应，将会进入fallback代码。而首次请求往往会比较慢（由于Ribbon是懒加载的，在首次请求时，才会开始初始化相关类），这个响应时间可能就大于1秒了。</p>
 </blockquote>
-<h4 id="uml">UML</h4>
-<p><img src="https://caijh.github.io//post-images/1561889214924.png" alt=""></p>
-<h4 id="代码实现">代码实现</h4>
-<pre><code>public abstract class Component {
-     //个体和整体都具有的共享
-     public void doSomething(){
-             //编写业务逻辑
-     }
-}
-public class Composite extends Component {
-     //构件容器
-     private ArrayList&lt;Component&gt; componentArrayList = new ArrayList&lt;Component&gt;();
-     //增加一个叶子构件或树枝构件
-     public void add(Component component){
-             this.componentArrayList.add(component);
-     }
-     //删除一个叶子构件或树枝构件
-     public void remove(Component component){
-             this.componentArrayList.remove(component);
-     }
-     //获得分支下的所有叶子构件和树枝构件
-     public ArrayList&lt;Component&gt; getChildren(){
-             return this.componentArrayList;
-     }
-}
-public class Leaf extends Component {
-     /*
-      * 可以覆写父类方法
-      * public void doSomething(){
-      * 
-      * }
-      */
-}
-public class Client {
-     public static void main(String[] args) {
-            //创建一个根节点
-             Composite root = new Composite();
-             root.doSomething();
-             //创建一个树枝构件
-             Composite branch = new Composite();
-             //创建一个叶子节点
-             Leaf leaf = new Leaf();
-             //建立整体
-             root.add(branch);
-             branch.add(leaf);          
-     }
-     //通过递归遍历树
-     public static void display(Composite root){
-             for(Component c:root.getChildren()){
-                  if(c instanceof Leaf){ //叶子节点
-                          c.doSomething();
-                  }else{ //树枝节点
-                          display((Composite)c);
-                  }
-             }
-     }
-}
-</code></pre>
-<h4 id="组合模式的优点">组合模式的优点</h4>
-<ul>
-<li>高层模块调用简单
-一棵树形机构中的所有节点都是Component，局部和整体对调用者来说没有任何区别，也就是说，高层模块不必关心自己处理的是单个对象还是整个组合结构，简化了高层模块的代码。</li>
-<li>节点自由增加
-使用了组合模式后，我们可以看看，如果想增加一个树枝节点、树叶节点是不是都很容易，只要找到它的父节点就成，非常容易扩展，符合开闭原则，对以后的维护非常有利。</li>
-</ul>
-<h4 id="组合模式的缺点">组合模式的缺点</h4>
-<p>组合模式有一个非常明显的缺点，看到我们在场景类中的定义，提到树叶和树枝使用时的定义了吗？直接使用了实现类！这在面向接口编程上是很不恰当的，与依赖倒置原则冲突，读者在使用的时候要考虑清楚，它限制了你接口的影响范围。</p>
-<h4 id="组合模式使用场景">组合模式使用场景</h4>
-<ul>
-<li>想要表示对象间部分-整体的层次关系</li>
-<li>想让客户端略过组合与个体的差异</li>
-</ul>
 
-            </div>
-          </article>
-        </div>
-        <div class="paper" data-aos="fade-in">
-          
-            <div class="next-post">
-              <div class="next">
-                下一篇
-              </div>
-              <a href="https://caijh.github.io//post/she-ji-mo-shi-die-dai-qi-mo-shi">
-                <h3 class="post-title">
-                  设计模式-迭代器模式
-                </h3>
-              </a>
-            </div>
-          
-        </div>
-        
-          
+    </p>
+    <div class="row">
+      <a href="https://caijh.github.io//post/spring-cloud-ru-he-jie-jue-feignribbon-di-yi-ci-qing-qiu-shi-bai-de-wen-ti" class="readmore-link">
+        <button>
+          Read More
+        </button>
+      </a>
+    </div>
+  </article>
 
-          
-            <div class="paper" data-aos="fade-in">
-              <div id="disqus_thread"></div>
-            </div>
-          
-        
+
+        </div>
+        <div class="row flex-edges">
+  
+  
+</div>
+
       </div>
-
       <div class="sm-12 md-4 col sidebar">
   <div class="paper info-container">
     <img src="https://caijh.github.io//images/avatar.png?v=1563029414407" class="no-responsive avatar">
@@ -343,15 +257,15 @@ public class Client {
     </div>
     <div class="row">
       
-        <a href="https://caijh.github.io//tag/nHOjalh2s" class="badge warning">
+        <a href="https://caijh.github.io//tag/nHOjalh2s" class="badge success">
           Spring Cloud
         </a>
       
-        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge warning">
+        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge success">
           Java
         </a>
       
-        <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge warning">
+        <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge ">
           源代码
         </a>
       
@@ -359,11 +273,11 @@ public class Client {
           面试
         </a>
       
-        <a href="https://caijh.github.io//tag/hm42pTrhV" class="badge ">
+        <a href="https://caijh.github.io//tag/hm42pTrhV" class="badge secondary">
           Maven
         </a>
       
-        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge success">
+        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge secondary">
           设计模式
         </a>
       
@@ -378,7 +292,6 @@ public class Client {
   </div>
 </div>
 
-
     </div>
 
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
@@ -390,26 +303,6 @@ AOS.init();
 hljs.initHighlightingOnLoad()
 
 </script>
-
-
-
-  
-
-  
-    <script src="https://unpkg.com/disqusjs@1.1/dist/disqus.js"></script>
-    <script>
-
-    var options = {
-      shortname: 'caijh',
-      apikey: 'lO2xchFAyPIP4VOKbgm796D9jIvqLVziAqLHOPnOZySwUlyWXAhgwrIbPQ16AyUX',
-    }
-    if ('https://disqus.skk.moe/disqus/') {
-      options.api = 'https://disqus.skk.moe/disqus/'
-    }
-    var dsqjs = new DisqusJS(options)
-
-    </script>
-  
 
 
 

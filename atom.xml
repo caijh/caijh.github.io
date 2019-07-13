@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://caijh.github.io/</id>
     <title>John&apos;s Blog</title>
-    <updated>2019-07-08T11:16:50.328Z</updated>
+    <updated>2019-07-13T14:50:17.196Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://caijh.github.io/"/>
     <link rel="self" href="https://caijh.github.io//atom.xml"/>
@@ -10,6 +10,54 @@
     <logo>https://caijh.github.io//images/avatar.png</logo>
     <icon>https://caijh.github.io//favicon.ico</icon>
     <rights>All rights reserved 2019, John&apos;s Blog</rights>
+    <entry>
+        <title type="html"><![CDATA[Spring Cloud - 如何解决Feign/Ribbon第一次请求失败的问题]]></title>
+        <id>https://caijh.github.io//post/spring-cloud-ru-he-jie-jue-feignribbon-di-yi-ci-qing-qiu-shi-bai-de-wen-ti</id>
+        <link href="https://caijh.github.io//post/spring-cloud-ru-he-jie-jue-feignribbon-di-yi-ci-qing-qiu-shi-bai-de-wen-ti">
+        </link>
+        <updated>2019-07-13T14:43:38.000Z</updated>
+        <summary type="html"><![CDATA[<blockquote>
+<p>造成该问题的原因？
+Hystrix默认的超时时间是1秒，如果超过这个时间尚未响应，将会进入fallback代码。而首次请求往往会比较慢（由于Ribbon是懒加载的，在首次请求时，才会开始初始化相关类），这个响应时间可能就大于1秒了。</p>
+</blockquote>
+]]></summary>
+        <content type="html"><![CDATA[<blockquote>
+<p>造成该问题的原因？
+Hystrix默认的超时时间是1秒，如果超过这个时间尚未响应，将会进入fallback代码。而首次请求往往会比较慢（由于Ribbon是懒加载的，在首次请求时，才会开始初始化相关类），这个响应时间可能就大于1秒了。</p>
+</blockquote>
+<!-- more -->
+<h4 id="1-将hystrix的超时设长">1. 将Hystrix的超时设长</h4>
+<pre><code>hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds: 5000
+</code></pre>
+<h4 id="2-禁用hystrix超时">2. 禁用Hystrix超时</h4>
+<pre><code>hystrix.command.default.execution.timeout.enabled: false
+</code></pre>
+<h4 id="3-为feign禁用hystrix">3. 为Feign禁用Hystrix</h4>
+<p>全局禁用</p>
+<pre><code>feign.hystrix.enabled: false
+</code></pre>
+<p>局部禁用</p>
+<pre><code>@FeignClient(name = &quot;microservice-provider-user&quot;)
+public interface UserFeignClient {
+  @GetMapping(&quot;/users/{id}&quot;)
+  User findById(@PathVariable(&quot;id&quot;) Long id);
+}
+class FooConfiguration {
+  @Bean
+  @Scope(&quot;prototype&quot;)
+  public Feign.Builder feignBuilder(){
+    return Feign.builder();
+  }
+}
+</code></pre>
+<h4 id="4-ribbon配置饥饿加载">4. Ribbon配置饥饿加载</h4>
+<pre><code>ribbon:
+  eager-load:
+    enabled: true
+    clients: client1, client2, client3
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Java - 线程池]]></title>
         <id>https://caijh.github.io//post/java-xian-cheng-chi</id>
@@ -2231,125 +2279,6 @@ public class Client {
 <li>java.util.Pattern</li>
 <li>java.text.Normalizer</li>
 <li>java.text.Format</li>
-</ul>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[设计模式-状态模式]]></title>
-        <id>https://caijh.github.io//post/she-ji-mo-shi-zhuang-tai-mo-shi</id>
-        <link href="https://caijh.github.io//post/she-ji-mo-shi-zhuang-tai-mo-shi">
-        </link>
-        <updated>2019-06-30T11:15:56.000Z</updated>
-        <summary type="html"><![CDATA[<h4 id="定义">定义</h4>
-<blockquote>
-<p>Allow an object to alter its behavior when its internal state changes.The object will appear to change its class.（当一个对象内在状态改变时允许其改变行为，这个对象看起来像改变了其类。）</p>
-</blockquote>
-<h4 id="uml">UML</h4>
-<p><img src="https://caijh.github.io//post-images/1561893392766.png" alt=""></p>
-]]></summary>
-        <content type="html"><![CDATA[<h4 id="定义">定义</h4>
-<blockquote>
-<p>Allow an object to alter its behavior when its internal state changes.The object will appear to change its class.（当一个对象内在状态改变时允许其改变行为，这个对象看起来像改变了其类。）</p>
-</blockquote>
-<h4 id="uml">UML</h4>
-<p><img src="https://caijh.github.io//post-images/1561893392766.png" alt=""></p>
-<!-- more -->
-<h4 id="代码实现">代码实现</h4>
-<pre><code>public abstract class State {
-     //定义一个环境角色，提供子类访问
-     protected Context context;
-     //设置环境角色
-     public void setContext(Context _context){
-             this.context = _context;
-     }
-     //行为1
-     public abstract void handle1();
-     //行为2
-     public abstract void handle2();
-}
-public class ConcreteState1 extends State {
-     @Override
-     public void handle1() {
-             //本状态下必须处理的逻辑
-     }
-     @Override
-     public void handle2() {
-             //设置当前状态为stat2
-             super.context.setCurrentState(Context.STATE2);
-             //过渡到state2状态，由Context实现
-             super.context.handle2();
-     }
-}
-public class ConcreteState2 extends State {
-     @Override
-     public void handle1() {          
-             //设置当前状态为state1
-             super.context.setCurrentState(Context.STATE1);
-             //过渡到state1状态，由Context实现
-             super.context.handle1();
-     }
-     @Override
-     public void handle2() {
-             //本状态下必须处理的逻辑
-     }
-}
-public class Context {
-     //定义状态
-     public final static State STATE1 = new ConcreteState1();
-     public final static State STATE2 = new ConcreteState2();
-     //当前状态
-     private State CurrentState;
-     //获得当前状态
-     public State getCurrentState() {
-             return CurrentState;
-     }
-     //设置当前状态
-     public void setCurrentState(State currentState) {
-             this.CurrentState = currentState;
-             //切换状态
-             this.CurrentState.setContext(this);
-     }
-     //行为委托
-     public void handle1(){
-             this.CurrentState.handle1();
-     }
-     public void handle2(){
-             this.CurrentState.handle2();
-     }
-}
-public class Client {
-     public static void main(String[] args) {
-             //定义环境角色
-             Context context = new Context();
-             //初始化状态
-             context.setCurrentState(new ConcreteState1());
-             //行为执行
-             context.handle1();
-             context.handle2();
-     }
-}
-</code></pre>
-<h4 id="状态模式的优点">状态模式的优点</h4>
-<ul>
-<li>结构清晰
-避免了过多的switch...case或者if...else语句的使用，避免了程序的复杂性,提高系统的可维护性。</li>
-<li>遵循设计原则
-很好地体现了开闭原则和单一职责原则，每个状态都是一个子类，你要增加状态就要增加子类，你要修改状态，你只修改一个子类就可以了。</li>
-<li>封装性非常好
-这也是状态模式的基本要求，状态变换放置到类的内部来实现，外部的调用不用知道类内部如何实现状态和行为的变换。</li>
-</ul>
-<h4 id="状态模式的缺点">状态模式的缺点</h4>
-<p>状态模式既然有优点，那当然有缺点了。但只有一个缺点，子类会太多，也就是类膨胀。如果一个事物有很多个状态也不稀奇，如果完全使用状态模式就会有太多的子类，不好管理，这个需要大家在项目中自己衡量。其实有很多方式可以解决这个状态问题，如在数据库中建立一个状态表，然后根据状态执行相应的操作，这个也不复杂，看大家的习惯和嗜好了。</p>
-<h4 id="状态模式的使用场景">状态模式的使用场景</h4>
-<ul>
-<li>行为随状态改变而改变的场景
-这也是状态模式的根本出发点，例如权限设计，人员的状态不同即使执行相同的行为结果也会不同，在这种情况下需要考虑使用状态模式。</li>
-<li>条件、分支判断语句的替代者
-在程序中大量使用switch语句或者if判断语句会导致程序结构不清晰，逻辑混乱，使用状态模式可以很好地避免这一问题，它通过扩展子类实现了条件的判断处理。</li>
-</ul>
-<h4 id="jdk中的状态模式">JDK中的状态模式</h4>
-<ul>
-<li>javax.faces.lifecycle.LifeCycle#execute()</li>
 </ul>
 ]]></content>
     </entry>
