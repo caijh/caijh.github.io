@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>设计模式-解释器模式 | John&#39;s Blog</title>
+<title>MySQL - explain详解 | John&#39;s Blog</title>
 <meta name="description" content="搬砖大佬">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -87,66 +87,194 @@
       <div class="sm-12 md-8 col">
         <div class="paper">
           <article class="article">
-            <h1>设计模式-解释器模式</h1>
+            <h1>MySQL - explain详解</h1>
             <p class="article-meta">
-              2019-06-30
+              2019-07-14
               
-                <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge ">
-                  设计模式
+                <a href="https://caijh.github.io//tag/o82yUqML0" class="badge secondary">
+                  MySQL
                 </a>
               
             </p>
             
             <div class="post-content">
-              <h4 id="定义">定义</h4>
-<blockquote>
-<p>Given a language, define a representation for its grammar along with an interpreter that uses the representation to interpret sentences in the language.（给定一门语言，定义它的文法的一种表示，并定义一个解释器，该解释器使用该表示来解释语言中的句子。）</p>
-</blockquote>
-<h4 id="uml">UML</h4>
-<p><img src="https://caijh.github.io//post-images/1561899675724.png" alt=""></p>
-<!-- more -->
-<h4 id="代码实现">代码实现</h4>
-<pre><code>public abstract class Expression {
-     //每个表达式必须有一个解析任务
-     public abstract Object interpreter(Context  ctx);
-}
-public class TerminalExpression extends Expression {
-     //通常终结符表达式只有一个，但是有多个对象
-     public Object interpreter(Context ctx) {
-             return null;
-     }
-}
-public class NonterminalExpression extends Expression {
-     //每个非终结符表达式都会对其他表达式产生依赖
-     public NonterminalExpression(Expression... expression){
-     }
-     
-     public Object interpreter(Context ctx) {
-             //进行文法处理
-             return null;
-     }
-}
-public class Client {
-     public static void main(String[] args) {
-          Context ctx = new Context();
-          //通常定一个语法容器，容纳一个具体的表达式，通常为ListArray、LinkedList、Stack等类型
-          Stack&lt;Expression&gt; stack = null; 
-          for(;;){
-               //进行语法判断，并产生递归调用
-          }          
-          //产生一个完整的语法树，由各个具体的语法分析进行解析
-          Expression exp = stack.pop();
-          //具体元素进入场景
-          exp.interpreter(ctx);
-     }
-}
-</code></pre>
-<h4 id="jdk中解释模式">JDK中解释模式</h4>
-<ul>
-<li>java.util.Pattern</li>
-<li>java.text.Normalizer</li>
-<li>java.text.Format</li>
-</ul>
+              <h5 id="explain详解">Explain详解</h5>
+<ol>
+<li>
+<p>ID列</p>
+<p>ID值不同时, 执行计划由ID大的向ID小读; ID值相同时, 执行计划由上到下读</p>
+</li>
+<li>
+<p>SELECT_TYPE列</p>
+<table>
+<thead>
+<tr>
+<th>值</th>
+<th style="text-align:left">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SIMPLE</td>
+<td style="text-align:left">不包含子查询或UNION操作的查询</td>
+</tr>
+<tr>
+<td>PRIMARY</td>
+<td style="text-align:left">查询中如果包含了子查询,那么最外层的查询会被标为primary</td>
+</tr>
+<tr>
+<td>SUBQUERY</td>
+<td style="text-align:left">select列表中的子查询</td>
+</tr>
+<tr>
+<td>dependent subquery</td>
+<td style="text-align:left">依赖外部结果的子查询</td>
+</tr>
+<tr>
+<td>Union</td>
+<td style="text-align:left">Union操作的第二个表之后的查询值为union</td>
+</tr>
+<tr>
+<td>Dependent union</td>
+<td style="text-align:left">当union作为子查询, 第二或第二个后的查询select_type</td>
+</tr>
+<tr>
+<td>Union result</td>
+<td style="text-align:left">union产生的结果集</td>
+</tr>
+<tr>
+<td>Derived</td>
+<td style="text-align:left">出现在from子句中的子查询</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>table列</p>
+<p>表的名称或者表的别名.</p>
+<p>unionM,N 由ID为M,N查询union产生的结果集</p>
+<p>derivedN or subqueryN 表示由ID为N的查询产生结果集</p>
+</li>
+<li>
+<p>partition列</p>
+<p>对于分区表, 显示查询的分区id; 非分区表显示NULL</p>
+</li>
+<li>
+<p>Type列</p>
+<p>查询中使用了联结的类型</p>
+<table>
+<thead>
+<tr>
+<th>值</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>System</td>
+<td>这是const联接类型中的一个特例, 当查询的表中只在一行显示</td>
+</tr>
+<tr>
+<td>const</td>
+<td>表中有且只有一个匹配的行时使用, 如主键或者唯一索引的查询</td>
+</tr>
+<tr>
+<td>eq_ref</td>
+<td>唯一索引或主键查找, 对于每个索引键, 表中只有一条记录与之匹配</td>
+</tr>
+<tr>
+<td>ref</td>
+<td>非唯一索引查找, 返回匹配某个单独值的所有行</td>
+</tr>
+<tr>
+<td>ref_or_null</td>
+<td>类似于ref类型的查询, 但是附加了对NULL值列的查询</td>
+</tr>
+<tr>
+<td>index_merge</td>
+<td>表示使用了索引合并</td>
+</tr>
+<tr>
+<td>range</td>
+<td>索引范围</td>
+</tr>
+<tr>
+<td>index</td>
+<td>Full index Scan全索引扫描,</td>
+</tr>
+<tr>
+<td>all</td>
+<td>全表扫描</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>Extra列</p>
+<table>
+<thead>
+<tr>
+<th>值</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Distinct</td>
+<td>优化distinct操作, 找到第一匹配的元组后暂停找同样值的动作</td>
+</tr>
+<tr>
+<td>Not Exists</td>
+<td>使用Not Exists来优化查询</td>
+</tr>
+<tr>
+<td>Using filesort</td>
+<td>使用额外操作进行排序</td>
+</tr>
+<tr>
+<td>Using index</td>
+<td>使用了覆盖索引进行查询</td>
+</tr>
+<tr>
+<td>Using temporary</td>
+<td>需要使用临时表处理查询</td>
+</tr>
+<tr>
+<td>Using where</td>
+<td>需要在服务层使用where条件过滤</td>
+</tr>
+<tr>
+<td>select tables optimized away</td>
+<td>直接通过索引来获得数据, 不用访问表</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>possible_keys 列</p>
+<p>指出MySQL能使用哪些索引来优化查询, 查询列所涉及的列上的索引都会被列出, 但不一定会被使用.</p>
+</li>
+<li>
+<p>Key列</p>
+<p>查询优化器优化查询实际所使用索引列</p>
+</li>
+<li>
+<p>Key_len列</p>
+<p>表示索引字段的最大可能长度</p>
+</li>
+<li>
+<p>ref列</p>
+<p>表示哪些列或常量被用于查询索引列上的值</p>
+</li>
+<li>
+<p>rows列</p>
+<p>表示MySQL通过索引统计信息, 估算的需要读取的行数, 是一个统计抽样结果, 并不十分准确</p>
+</li>
+<li>
+<p>filtered列</p>
+<p>表示返回结果的行数占需要读取行数的百分比, 值越大越好</p>
+</li>
+</ol>
 
             </div>
           </article>
@@ -157,9 +285,9 @@ public class Client {
               <div class="next">
                 下一篇
               </div>
-              <a href="https://caijh.github.io//post/she-ji-mo-shi-zhuang-tai-mo-shi">
+              <a href="https://caijh.github.io//post/yuan-dai-ma-abstractqueuedsynchronizer">
                 <h3 class="post-title">
-                  设计模式-状态模式
+                  源码阅读 - AbstractQueuedSynchronizer
                 </h3>
               </a>
             </div>
@@ -324,7 +452,7 @@ public class Client {
           MySQL
         </a>
       
-        <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge secondary">
+        <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge ">
           源代码
         </a>
       
@@ -332,7 +460,7 @@ public class Client {
           Spring Cloud
         </a>
       
-        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge warning">
+        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge secondary">
           Java
         </a>
       
@@ -340,11 +468,11 @@ public class Client {
           面试
         </a>
       
-        <a href="https://caijh.github.io//tag/hm42pTrhV" class="badge secondary">
+        <a href="https://caijh.github.io//tag/hm42pTrhV" class="badge ">
           Maven
         </a>
       
-        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge secondary">
+        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge success">
           设计模式
         </a>
       

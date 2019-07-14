@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>设计模式-解释器模式 | John&#39;s Blog</title>
+<title>源码阅读 - AbstractQueuedSynchronizer | John&#39;s Blog</title>
 <meta name="description" content="搬砖大佬">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -87,66 +87,86 @@
       <div class="sm-12 md-8 col">
         <div class="paper">
           <article class="article">
-            <h1>设计模式-解释器模式</h1>
+            <h1>源码阅读 - AbstractQueuedSynchronizer</h1>
             <p class="article-meta">
-              2019-06-30
+              2019-07-14
               
-                <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge ">
-                  设计模式
+                <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge warning">
+                  源代码
                 </a>
               
             </p>
             
             <div class="post-content">
-              <h4 id="定义">定义</h4>
-<blockquote>
-<p>Given a language, define a representation for its grammar along with an interpreter that uses the representation to interpret sentences in the language.（给定一门语言，定义它的文法的一种表示，并定义一个解释器，该解释器使用该表示来解释语言中的句子。）</p>
+              <blockquote>
+<p>AbstractQueuedSynchronizer, 简称AQS, 是Java 并发包的基础类，并发包中的很多api都是基于AQS来实现加锁与释放锁等功能。</p>
 </blockquote>
-<h4 id="uml">UML</h4>
-<p><img src="https://caijh.github.io//post-images/1561899675724.png" alt=""></p>
+<p>例如ReentrantLock内部拥有一个继承于AbstractQueuedSynchronizer的Sync类实现加锁与释放锁。
+AQS内部有一个state状态记录当前线程的加锁次数，还有一个exclusiveOwnerThread变量记录了独占的线程。</p>
 <!-- more -->
-<h4 id="代码实现">代码实现</h4>
-<pre><code>public abstract class Expression {
-     //每个表达式必须有一个解析任务
-     public abstract Object interpreter(Context  ctx);
-}
-public class TerminalExpression extends Expression {
-     //通常终结符表达式只有一个，但是有多个对象
-     public Object interpreter(Context ctx) {
-             return null;
-     }
-}
-public class NonterminalExpression extends Expression {
-     //每个非终结符表达式都会对其他表达式产生依赖
-     public NonterminalExpression(Expression... expression){
-     }
-     
-     public Object interpreter(Context ctx) {
-             //进行文法处理
-             return null;
-     }
-}
-public class Client {
-     public static void main(String[] args) {
-          Context ctx = new Context();
-          //通常定一个语法容器，容纳一个具体的表达式，通常为ListArray、LinkedList、Stack等类型
-          Stack&lt;Expression&gt; stack = null; 
-          for(;;){
-               //进行语法判断，并产生递归调用
-          }          
-          //产生一个完整的语法树，由各个具体的语法分析进行解析
-          Expression exp = stack.pop();
-          //具体元素进入场景
-          exp.interpreter(ctx);
-     }
-}
+<pre><code>
+    /**
+     * Creates an instance of {@code ReentrantLock} with the
+     * given fairness policy.
+     *
+     * @param fair {@code true} if this lock should use a fair ordering policy
+     */
+    public ReentrantLock(boolean fair) {
+        sync = fair ? new FairSync() : new NonfairSync();
+    }
 </code></pre>
-<h4 id="jdk中解释模式">JDK中解释模式</h4>
-<ul>
-<li>java.util.Pattern</li>
-<li>java.text.Normalizer</li>
-<li>java.text.Format</li>
-</ul>
+<p>ReentrantLock可以是公平的也可以不非公平的。</p>
+<pre><code>/**
+     * Acquires in exclusive mode, ignoring interrupts.  Implemented
+     * by invoking at least once {@link #tryAcquire},
+     * returning on success.  Otherwise the thread is queued, possibly
+     * repeatedly blocking and unblocking, invoking {@link
+     * #tryAcquire} until success.  This method can be used
+     * to implement method {@link Lock#lock}.
+     *
+     * @param arg the acquire argument.  This value is conveyed to
+     *        {@link #tryAcquire} but is otherwise uninterpreted and
+     *        can represent anything you like.
+     */
+    public final void acquire(int arg) {
+        if (!tryAcquire(arg) &amp;&amp;
+            acquireQueued(addWaiter(Node.EXCLUSIVE), arg))
+            selfInterrupt();
+    }
+</code></pre>
+<p>AQS中的加锁，申请不到锁，加入等待队列。</p>
+<pre><code>/**
+     * Sync object for fair locks
+     */
+    static final class FairSync extends Sync {
+        private static final long serialVersionUID = -3000897897090466540L;
+        /**
+         * Fair version of tryAcquire.  Don't grant access unless
+         * recursive call or no waiters or is first.
+         */
+        @ReservedStackAccess
+        protected final boolean tryAcquire(int acquires) {
+            final Thread current = Thread.currentThread();
+            int c = getState();
+            if (c == 0) {
+                if (!hasQueuedPredecessors() &amp;&amp;
+                    compareAndSetState(0, acquires)) {
+                    setExclusiveOwnerThread(current);
+                    return true;
+                }
+            }
+            else if (current == getExclusiveOwnerThread()) {
+                int nextc = c + acquires;
+                if (nextc &lt; 0)
+                    throw new Error(&quot;Maximum lock count exceeded&quot;);
+                setState(nextc);
+                return true;
+            }
+            return false;
+        }
+    }
+</code></pre>
+<p>hasQueuedPredecessors看等待队列中是否有线程在排队。</p>
 
             </div>
           </article>
@@ -157,9 +177,9 @@ public class Client {
               <div class="next">
                 下一篇
               </div>
-              <a href="https://caijh.github.io//post/she-ji-mo-shi-zhuang-tai-mo-shi">
+              <a href="https://caijh.github.io//post/spring-cloud-ru-he-jie-jue-feignribbon-di-yi-ci-qing-qiu-shi-bai-de-wen-ti">
                 <h3 class="post-title">
-                  设计模式-状态模式
+                  Spring Cloud - 如何解决Feign/Ribbon第一次请求失败的问题
                 </h3>
               </a>
             </div>
@@ -320,7 +340,7 @@ public class Client {
     </div>
     <div class="row">
       
-        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge warning">
+        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge secondary">
           MySQL
         </a>
       
@@ -328,23 +348,23 @@ public class Client {
           源代码
         </a>
       
-        <a href="https://caijh.github.io//tag/nHOjalh2s" class="badge secondary">
+        <a href="https://caijh.github.io//tag/nHOjalh2s" class="badge success">
           Spring Cloud
         </a>
       
-        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge warning">
+        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge secondary">
           Java
         </a>
       
-        <a href="https://caijh.github.io//tag/kmQV6iHOM" class="badge secondary">
+        <a href="https://caijh.github.io//tag/kmQV6iHOM" class="badge ">
           面试
         </a>
       
-        <a href="https://caijh.github.io//tag/hm42pTrhV" class="badge secondary">
+        <a href="https://caijh.github.io//tag/hm42pTrhV" class="badge success">
           Maven
         </a>
       
-        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge secondary">
+        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge warning">
           设计模式
         </a>
       

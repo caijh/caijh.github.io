@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://caijh.github.io/</id>
     <title>John&apos;s Blog</title>
-    <updated>2019-07-13T14:50:17.196Z</updated>
+    <updated>2019-07-14T15:27:26.564Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://caijh.github.io/"/>
     <link rel="self" href="https://caijh.github.io//atom.xml"/>
@@ -10,6 +10,274 @@
     <logo>https://caijh.github.io//images/avatar.png</logo>
     <icon>https://caijh.github.io//favicon.ico</icon>
     <rights>All rights reserved 2019, John&apos;s Blog</rights>
+    <entry>
+        <title type="html"><![CDATA[MySQL - explain详解]]></title>
+        <id>https://caijh.github.io//post/mysql-explain-xiang-jie</id>
+        <link href="https://caijh.github.io//post/mysql-explain-xiang-jie">
+        </link>
+        <updated>2019-07-14T15:23:40.000Z</updated>
+        <content type="html"><![CDATA[<h5 id="explain详解">Explain详解</h5>
+<ol>
+<li>
+<p>ID列</p>
+<p>ID值不同时, 执行计划由ID大的向ID小读; ID值相同时, 执行计划由上到下读</p>
+</li>
+<li>
+<p>SELECT_TYPE列</p>
+<table>
+<thead>
+<tr>
+<th>值</th>
+<th style="text-align:left">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SIMPLE</td>
+<td style="text-align:left">不包含子查询或UNION操作的查询</td>
+</tr>
+<tr>
+<td>PRIMARY</td>
+<td style="text-align:left">查询中如果包含了子查询,那么最外层的查询会被标为primary</td>
+</tr>
+<tr>
+<td>SUBQUERY</td>
+<td style="text-align:left">select列表中的子查询</td>
+</tr>
+<tr>
+<td>dependent subquery</td>
+<td style="text-align:left">依赖外部结果的子查询</td>
+</tr>
+<tr>
+<td>Union</td>
+<td style="text-align:left">Union操作的第二个表之后的查询值为union</td>
+</tr>
+<tr>
+<td>Dependent union</td>
+<td style="text-align:left">当union作为子查询, 第二或第二个后的查询select_type</td>
+</tr>
+<tr>
+<td>Union result</td>
+<td style="text-align:left">union产生的结果集</td>
+</tr>
+<tr>
+<td>Derived</td>
+<td style="text-align:left">出现在from子句中的子查询</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>table列</p>
+<p>表的名称或者表的别名.</p>
+<p>unionM,N 由ID为M,N查询union产生的结果集</p>
+<p>derivedN or subqueryN 表示由ID为N的查询产生结果集</p>
+</li>
+<li>
+<p>partition列</p>
+<p>对于分区表, 显示查询的分区id; 非分区表显示NULL</p>
+</li>
+<li>
+<p>Type列</p>
+<p>查询中使用了联结的类型</p>
+<table>
+<thead>
+<tr>
+<th>值</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>System</td>
+<td>这是const联接类型中的一个特例, 当查询的表中只在一行显示</td>
+</tr>
+<tr>
+<td>const</td>
+<td>表中有且只有一个匹配的行时使用, 如主键或者唯一索引的查询</td>
+</tr>
+<tr>
+<td>eq_ref</td>
+<td>唯一索引或主键查找, 对于每个索引键, 表中只有一条记录与之匹配</td>
+</tr>
+<tr>
+<td>ref</td>
+<td>非唯一索引查找, 返回匹配某个单独值的所有行</td>
+</tr>
+<tr>
+<td>ref_or_null</td>
+<td>类似于ref类型的查询, 但是附加了对NULL值列的查询</td>
+</tr>
+<tr>
+<td>index_merge</td>
+<td>表示使用了索引合并</td>
+</tr>
+<tr>
+<td>range</td>
+<td>索引范围</td>
+</tr>
+<tr>
+<td>index</td>
+<td>Full index Scan全索引扫描,</td>
+</tr>
+<tr>
+<td>all</td>
+<td>全表扫描</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>Extra列</p>
+<table>
+<thead>
+<tr>
+<th>值</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Distinct</td>
+<td>优化distinct操作, 找到第一匹配的元组后暂停找同样值的动作</td>
+</tr>
+<tr>
+<td>Not Exists</td>
+<td>使用Not Exists来优化查询</td>
+</tr>
+<tr>
+<td>Using filesort</td>
+<td>使用额外操作进行排序</td>
+</tr>
+<tr>
+<td>Using index</td>
+<td>使用了覆盖索引进行查询</td>
+</tr>
+<tr>
+<td>Using temporary</td>
+<td>需要使用临时表处理查询</td>
+</tr>
+<tr>
+<td>Using where</td>
+<td>需要在服务层使用where条件过滤</td>
+</tr>
+<tr>
+<td>select tables optimized away</td>
+<td>直接通过索引来获得数据, 不用访问表</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>possible_keys 列</p>
+<p>指出MySQL能使用哪些索引来优化查询, 查询列所涉及的列上的索引都会被列出, 但不一定会被使用.</p>
+</li>
+<li>
+<p>Key列</p>
+<p>查询优化器优化查询实际所使用索引列</p>
+</li>
+<li>
+<p>Key_len列</p>
+<p>表示索引字段的最大可能长度</p>
+</li>
+<li>
+<p>ref列</p>
+<p>表示哪些列或常量被用于查询索引列上的值</p>
+</li>
+<li>
+<p>rows列</p>
+<p>表示MySQL通过索引统计信息, 估算的需要读取的行数, 是一个统计抽样结果, 并不十分准确</p>
+</li>
+<li>
+<p>filtered列</p>
+<p>表示返回结果的行数占需要读取行数的百分比, 值越大越好</p>
+</li>
+</ol>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[源码阅读 - AbstractQueuedSynchronizer]]></title>
+        <id>https://caijh.github.io//post/yuan-dai-ma-abstractqueuedsynchronizer</id>
+        <link href="https://caijh.github.io//post/yuan-dai-ma-abstractqueuedsynchronizer">
+        </link>
+        <updated>2019-07-14T10:38:40.000Z</updated>
+        <summary type="html"><![CDATA[<blockquote>
+<p>AbstractQueuedSynchronizer, 简称AQS, 是Java 并发包的基础类，并发包中的很多api都是基于AQS来实现加锁与释放锁等功能。</p>
+</blockquote>
+<p>例如ReentrantLock内部拥有一个继承于AbstractQueuedSynchronizer的Sync类实现加锁与释放锁。
+AQS内部有一个state状态记录当前线程的加锁次数，还有一个exclusiveOwnerThread变量记录了独占的线程。</p>
+]]></summary>
+        <content type="html"><![CDATA[<blockquote>
+<p>AbstractQueuedSynchronizer, 简称AQS, 是Java 并发包的基础类，并发包中的很多api都是基于AQS来实现加锁与释放锁等功能。</p>
+</blockquote>
+<p>例如ReentrantLock内部拥有一个继承于AbstractQueuedSynchronizer的Sync类实现加锁与释放锁。
+AQS内部有一个state状态记录当前线程的加锁次数，还有一个exclusiveOwnerThread变量记录了独占的线程。</p>
+<!-- more -->
+<pre><code>
+    /**
+     * Creates an instance of {@code ReentrantLock} with the
+     * given fairness policy.
+     *
+     * @param fair {@code true} if this lock should use a fair ordering policy
+     */
+    public ReentrantLock(boolean fair) {
+        sync = fair ? new FairSync() : new NonfairSync();
+    }
+</code></pre>
+<p>ReentrantLock可以是公平的也可以不非公平的。</p>
+<pre><code>/**
+     * Acquires in exclusive mode, ignoring interrupts.  Implemented
+     * by invoking at least once {@link #tryAcquire},
+     * returning on success.  Otherwise the thread is queued, possibly
+     * repeatedly blocking and unblocking, invoking {@link
+     * #tryAcquire} until success.  This method can be used
+     * to implement method {@link Lock#lock}.
+     *
+     * @param arg the acquire argument.  This value is conveyed to
+     *        {@link #tryAcquire} but is otherwise uninterpreted and
+     *        can represent anything you like.
+     */
+    public final void acquire(int arg) {
+        if (!tryAcquire(arg) &amp;&amp;
+            acquireQueued(addWaiter(Node.EXCLUSIVE), arg))
+            selfInterrupt();
+    }
+</code></pre>
+<p>AQS中的加锁，申请不到锁，加入等待队列。</p>
+<pre><code>/**
+     * Sync object for fair locks
+     */
+    static final class FairSync extends Sync {
+        private static final long serialVersionUID = -3000897897090466540L;
+        /**
+         * Fair version of tryAcquire.  Don't grant access unless
+         * recursive call or no waiters or is first.
+         */
+        @ReservedStackAccess
+        protected final boolean tryAcquire(int acquires) {
+            final Thread current = Thread.currentThread();
+            int c = getState();
+            if (c == 0) {
+                if (!hasQueuedPredecessors() &amp;&amp;
+                    compareAndSetState(0, acquires)) {
+                    setExclusiveOwnerThread(current);
+                    return true;
+                }
+            }
+            else if (current == getExclusiveOwnerThread()) {
+                int nextc = c + acquires;
+                if (nextc &lt; 0)
+                    throw new Error(&quot;Maximum lock count exceeded&quot;);
+                setState(nextc);
+                return true;
+            }
+            return false;
+        }
+    }
+</code></pre>
+<p>hasQueuedPredecessors看等待队列中是否有线程在排队。</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Spring Cloud - 如何解决Feign/Ribbon第一次请求失败的问题]]></title>
         <id>https://caijh.github.io//post/spring-cloud-ru-he-jie-jue-feignribbon-di-yi-ci-qing-qiu-shi-bai-de-wen-ti</id>
@@ -2120,165 +2388,6 @@ public class Client {
 <li>不希望或不适用使用继承的场景</li>
 <li>接口或抽象类不稳定的场景</li>
 <li>重用性要求较高的场景</li>
-</ul>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[设计模式-享元模式]]></title>
-        <id>https://caijh.github.io//post/she-ji-mo-shi-xiang-yuan-mo-shi</id>
-        <link href="https://caijh.github.io//post/she-ji-mo-shi-xiang-yuan-mo-shi">
-        </link>
-        <updated>2019-06-30T13:02:13.000Z</updated>
-        <summary type="html"><![CDATA[<h4 id="定义">定义</h4>
-<blockquote>
-<p>Use sharing to support large numbers of fine-grained objects efficiently.（使用共享对象可有效地支持大量的细粒度的对象。）</p>
-</blockquote>
-<h3 id="uml">UML</h3>
-<p><img src="https://caijh.github.io//post-images/1561899783648.png" alt=""></p>
-]]></summary>
-        <content type="html"><![CDATA[<h4 id="定义">定义</h4>
-<blockquote>
-<p>Use sharing to support large numbers of fine-grained objects efficiently.（使用共享对象可有效地支持大量的细粒度的对象。）</p>
-</blockquote>
-<h3 id="uml">UML</h3>
-<p><img src="https://caijh.github.io//post-images/1561899783648.png" alt=""></p>
-<!-- more -->
-<h4 id="代码实现">代码实现</h4>
-<pre><code>public abstract class Flyweight {
-     //内部状态
-     private String intrinsic;
-     //外部状态
-     protected final String Extrinsic;
-     //要求享元角色必须接受外部状态
-     public Flyweight(String _Extrinsic){
-             this.Extrinsic = _Extrinsic;
-     }
-     //定义业务操作
-     public abstract void operate();
-     //内部状态的getter/setter
-     public String getIntrinsic() {
-             return intrinsic;
-     }
-     public void setIntrinsic(String intrinsic) {
-             this.intrinsic = intrinsic;
-     }
-}
-public class ConcreteFlyweight1 extends Flyweight{
-     //接受外部状态
-     public ConcreteFlyweight1(String _Extrinsic){
-             super(_Extrinsic);
-     }
-     //根据外部状态进行逻辑处理
-     public void operate(){
-             //业务逻辑
-     }
-}
-public class ConcreteFlyweight2 extends Flyweight{
-     //接受外部状态
-     public ConcreteFlyweight2(String _Extrinsic){
-             super(_Extrinsic);
-     }
-     //根据外部状态进行逻辑处理
-     public void operate(){
-             //业务逻辑
-     }
-}
-public class FlyweightFactory {
-     //定义一个池容器
-     private static  HashMap&lt;String,Flyweight&gt; pool= new HashMap&lt;String,Flyweight&gt;();
-     //享元工厂
-     public static Flyweight getFlyweight(String Extrinsic){
-             //需要返回的对象
-             Flyweight flyweight = null;
-             //在池中没有该对象
-             if(pool.containsKey(Extrinsic)){
-                     flyweight = pool.get(Extrinsic);
-             }else{
-                     //根据外部状态创建享元对象
-                     flyweight = new ConcreteFlyweight1(Extrinsic);
-                     //放置到池中
-                     pool.put(Extrinsic, flyweight);
-             }
-             return flyweight;
-     }
-}
-</code></pre>
-<h4 id="享元模式的优点与缺点">享元模式的优点与缺点</h4>
-<p>享元模式是一个非常简单的模式，它可以大大减少应用程序创建的对象，降低程序内存的占用，增强程序的性能，但它同时也提高了系统复杂性，需要分离出外部状态和内部状态，而且外部状态具有固化特性，不应该随内部状态改变而改变，否则导致系统的逻辑混乱。</p>
-<h4 id="享元模式的使用场景">享元模式的使用场景</h4>
-<ul>
-<li>系统中存在大量的相似对象。</li>
-<li>细粒度的对象都具备较接近的外部状态，而且内部状态与环境无关，也就是说对象没有特定身份。</li>
-<li>需要缓冲池的场景。</li>
-<li>应用不根据对象的identity</li>
-</ul>
-<h4 id="jdk中flyweight模式">JDK中Flyweight模式</h4>
-<ul>
-<li>java.lang.Integer#valueOf(int) (also on Boolean, Byte, Character, Short and Long)</li>
-</ul>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[设计模式-解释器模式]]></title>
-        <id>https://caijh.github.io//post/she-ji-mo-shi-jie-shi-qi-mo-shi</id>
-        <link href="https://caijh.github.io//post/she-ji-mo-shi-jie-shi-qi-mo-shi">
-        </link>
-        <updated>2019-06-30T13:00:34.000Z</updated>
-        <summary type="html"><![CDATA[<h4 id="定义">定义</h4>
-<blockquote>
-<p>Given a language, define a representation for its grammar along with an interpreter that uses the representation to interpret sentences in the language.（给定一门语言，定义它的文法的一种表示，并定义一个解释器，该解释器使用该表示来解释语言中的句子。）</p>
-</blockquote>
-<h4 id="uml">UML</h4>
-<p><img src="https://caijh.github.io//post-images/1561899675724.png" alt=""></p>
-]]></summary>
-        <content type="html"><![CDATA[<h4 id="定义">定义</h4>
-<blockquote>
-<p>Given a language, define a representation for its grammar along with an interpreter that uses the representation to interpret sentences in the language.（给定一门语言，定义它的文法的一种表示，并定义一个解释器，该解释器使用该表示来解释语言中的句子。）</p>
-</blockquote>
-<h4 id="uml">UML</h4>
-<p><img src="https://caijh.github.io//post-images/1561899675724.png" alt=""></p>
-<!-- more -->
-<h4 id="代码实现">代码实现</h4>
-<pre><code>public abstract class Expression {
-     //每个表达式必须有一个解析任务
-     public abstract Object interpreter(Context  ctx);
-}
-public class TerminalExpression extends Expression {
-     //通常终结符表达式只有一个，但是有多个对象
-     public Object interpreter(Context ctx) {
-             return null;
-     }
-}
-public class NonterminalExpression extends Expression {
-     //每个非终结符表达式都会对其他表达式产生依赖
-     public NonterminalExpression(Expression... expression){
-     }
-     
-     public Object interpreter(Context ctx) {
-             //进行文法处理
-             return null;
-     }
-}
-public class Client {
-     public static void main(String[] args) {
-          Context ctx = new Context();
-          //通常定一个语法容器，容纳一个具体的表达式，通常为ListArray、LinkedList、Stack等类型
-          Stack&lt;Expression&gt; stack = null; 
-          for(;;){
-               //进行语法判断，并产生递归调用
-          }          
-          //产生一个完整的语法树，由各个具体的语法分析进行解析
-          Expression exp = stack.pop();
-          //具体元素进入场景
-          exp.interpreter(ctx);
-     }
-}
-</code></pre>
-<h4 id="jdk中解释模式">JDK中解释模式</h4>
-<ul>
-<li>java.util.Pattern</li>
-<li>java.text.Normalizer</li>
-<li>java.text.Format</li>
 </ul>
 ]]></content>
     </entry>
