@@ -7,7 +7,7 @@
 <meta name="description" content="搬砖大佬">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<link rel="shortcut icon" href="https://caijh.github.io//favicon.ico?v=1563118042363">
+<link rel="shortcut icon" href="https://caijh.github.io//favicon.ico?v=1563162508788">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 <link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
@@ -91,11 +91,11 @@
             <p class="article-meta">
               2019-07-03
               
-                <a href="https://caijh.github.io//tag/kmQV6iHOM" class="badge secondary">
+                <a href="https://caijh.github.io//tag/kmQV6iHOM" class="badge ">
                   面试
                 </a>
               
-                <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge success">
+                <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge ">
                   源代码
                 </a>
               
@@ -103,16 +103,16 @@
             
             <div class="post-content">
               <p>搬砖自 https://mp.weixin.qq.com/s/DTzd3jdtnnveffL-zcpmyg</p>
-<p>前言
+<p>前言<br>
 Map 这样的 Key Value 在软件开发中是非常经典的结构，常用于在内存中存放数据。</p>
 <p>本篇主要想讨论 ConcurrentHashMap 这样一个并发容器，在正式开始之前我觉得有必要谈谈 HashMap，没有它就不会有后面的 ConcurrentHashMap。</p>
 <!-- more -->
 <h4 id="hashmap">HashMap</h4>
 <p>众所周知 HashMap 底层是基于 数组 + 链表 组成的，不过在 jdk1.7 和 1.8 中具体实现稍有不同。</p>
 <h5 id="base-17">Base 1.7</h5>
-<p>1.7 中的数据结构图：
-<img src="https://mmbiz.qpic.cn/mmbiz_jpg/csD7FygBVl2YrHfgckicQvCZFaT240KJuniawDic6DVLxibmw3cLgbicF8ibyajrpibGcbezT6TWR0ibJcDmnHmwuss7ZQ/640?wx_fmt=jpeg&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="">
-先来看看 1.7 中的实现。
+<p>1.7 中的数据结构图：<br>
+<img src="https://mmbiz.qpic.cn/mmbiz_jpg/csD7FygBVl2YrHfgckicQvCZFaT240KJuniawDic6DVLxibmw3cLgbicF8ibyajrpibGcbezT6TWR0ibJcDmnHmwuss7ZQ/640?wx_fmt=jpeg&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt=""><br>
+先来看看 1.7 中的实现。<br>
 <img src="https://mmbiz.qpic.cn/mmbiz_jpg/csD7FygBVl2YrHfgckicQvCZFaT240KJuzYhM1hVO4fokTzXoDrcy5zjRLibfXhhF1QrWxXu3S9uVACrAbcLjNvg/640?wx_fmt=jpeg&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt=""></p>
 <p>这是 HashMap 中比较核心的几个成员变量；看看分别是什么意思？</p>
 <ol>
@@ -149,7 +149,7 @@ Map 这样的 Key Value 在软件开发中是非常经典的结构，常用于�
 <p>因此通常建议能提前预估 HashMap 的大小最好，尽量的减少扩容带来的性能损耗。</p>
 <p>根据代码可以看到其实真正存放数据的是</p>
 <p><code>transient Entry&lt;K,V&gt;[] table = (Entry&lt;K,V&gt;[]) EMPTY_TABLE;</code></p>
-<p>这个数组，那么它又是如何定义的呢？
+<p>这个数组，那么它又是如何定义的呢？<br>
 <img src="https://mmbiz.qpic.cn/mmbiz_jpg/csD7FygBVl2YrHfgckicQvCZFaT240KJuX0o4uxUqo3XFULiaWedAr9z48BjRicBLaLLq9muCt1ftNafgJDyWKribg/640?wx_fmt=jpeg&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt=""></p>
 <p>Entry 是 HashMap 中的一个内部类，从他的成员变量很容易看出：</p>
 <ul>
@@ -218,7 +218,7 @@ Map 这样的 Key Value 在软件开发中是非常经典的结构，常用于�
 <p>而在 createEntry 中会将当前位置的桶传入到新建的桶中，如果当前桶有值就会在位置形成链表。</p>
 </li>
 </ul>
-<p>get 方法
+<p>get 方法<br>
 再来看看 get 函数：</p>
 <pre><code> 1    public V get(Object key) {
  2        if (key == null)
@@ -246,17 +246,17 @@ Map 这样的 Key Value 在软件开发中是非常经典的结构，常用于�
 24    }
 </code></pre>
 <ul>
-<li>首先也是根据 key 计算出 hashcode，然后定位到具体的桶中。
+<li>首先也是根据 key 计算出 hashcode，然后定位到具体的桶中。<br>
 判断该位置是否为链表。</li>
 <li>不是链表就根据 key、key 的 hashcode 是否相等来返回值。</li>
 <li>为链表则需要遍历直到 key 及 hashcode 相等时候就返回值。</li>
 <li>啥都没取到就直接返回 null 。</li>
 </ul>
-<p>Base 1.8
-不知道 1.7 的实现大家看出需要优化的点没有？
+<p>Base 1.8<br>
+不知道 1.7 的实现大家看出需要优化的点没有？<br>
 其实一个很明显的地方就是：</p>
 <blockquote>
-<p>当 Hash 冲突严重时，在桶上形成的链表会变的越来越长，这样在查询时的效率就会越来越低；时间复杂度为 O(N)。
+<p>当 Hash 冲突严重时，在桶上形成的链表会变的越来越长，这样在查询时的效率就会越来越低；时间复杂度为 O(N)。<br>
 因此 1.8 中重点优化了这个查询效率。</p>
 </blockquote>
 <p>1.8 HashMap 结构图：</p>
@@ -298,7 +298,7 @@ Map 这样的 Key Value 在软件开发中是非常经典的结构，常用于�
 <li>Node 的核心组成其实也是和 1.7 中的 HashEntry 一样，存放的都是 key value hashcode next 等数据。</li>
 </ul>
 <p>再来看看核心方法。</p>
-<p>put 方法
+<p>put 方法<br>
 <img src="https://mmbiz.qpic.cn/mmbiz_jpg/csD7FygBVl2YrHfgckicQvCZFaT240KJu4UWuTyDjAgliaaiaD7QbiaSgcQSpuzyCI03VUHeU4mias8jExp4KoS7HAg/640?wx_fmt=jpeg&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt=""></p>
 <p>看似要比 1.7 的复杂，我们一步步拆解：</p>
 <ol>
@@ -361,9 +361,9 @@ Map 这样的 Key Value 在软件开发中是非常经典的结构，常用于�
 </code></pre>
 <p>但是为什么呢？简单分析下。</p>
 <p>看过上文的还记得在 HashMap 扩容的时候会调用 resize() 方法，就是这里的并发操作容易在一个桶上形成环形链表；这样当获取一个不存在的 key 时，计算出的 index 正好是环形链表的下标就会出现死循环。</p>
-<p>如下图：
+<p>如下图：<br>
 <img src="https://mmbiz.qpic.cn/mmbiz_jpg/csD7FygBVl2YrHfgckicQvCZFaT240KJu43gK5Lic4AUj9LBR0xMtVYYwIicM0I6GnyyqqHXv1ClnNrLvXYics71Mw/640?wx_fmt=jpeg&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt=""></p>
-<p>遍历方式
+<p>遍历方式<br>
 还有一个值得注意的是 HashMap 的遍历方式，通常有以下几种：</p>
 <pre><code> 1Iterator&lt;Map.Entry&lt;String, Integer&gt;&gt; entryIterator = map.entrySet().iterator();
  2        while (entryIterator.hasNext()) {
@@ -383,10 +383,10 @@ Map 这样的 Key Value 在软件开发中是非常经典的结构，常用于�
 <p>简单总结下 HashMap：无论是 1.7 还是 1.8 其实都能看出 JDK 没有对它做任何的同步操作，所以并发会出问题，甚至出现死循环导致系统不可用。</p>
 <p>因此 JDK 推出了专项专用的 ConcurrentHashMap ，该类位于 java.util.concurrent 包下，专门用于解决并发问题。</p>
 <p>坚持看到这里的朋友算是已经把 ConcurrentHashMap 的基础已经打牢了，下面正式开始分析。</p>
-<p>ConcurrentHashMap
+<p>ConcurrentHashMap<br>
 ConcurrentHashMap 同样也分为 1.7 、1.8 版，两者在实现上略有不同。</p>
-<p>Base 1.7
-先来看看 1.7 的实现，下面是他的结构图：
+<p>Base 1.7<br>
+先来看看 1.7 的实现，下面是他的结构图：<br>
 <img src="https://mmbiz.qpic.cn/mmbiz_jpg/csD7FygBVl2YrHfgckicQvCZFaT240KJuFYL4rHqAwSJOQXIBqL76h5M8hnOJdaVowDrHicIZ4LTYtKDPBa2Bl9Q/640?wx_fmt=jpeg&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt=""></p>
 <p>如图所示，是由 Segment 数组、HashEntry 组成，和 HashMap 一样，仍然是数组加链表。</p>
 <p>它的核心成员变量：</p>
@@ -416,7 +416,7 @@ Segment 是 ConcurrentHashMap 的一个内部类，主要的组成如下：
 15
 16    }
 </code></pre>
-<p>看看其中 HashEntry 的组成：
+<p>看看其中 HashEntry 的组成：<br>
 <img src="https://mmbiz.qpic.cn/mmbiz_jpg/csD7FygBVl2YrHfgckicQvCZFaT240KJuDFkA8uvql3mGTNqibibfuEOnjjC9FAB8VZwR0TazTgKf0MlhGrCXv7Sw/640?wx_fmt=jpeg&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt=""></p>
 <p>和 HashMap 非常类似，唯一的区别就是其中的核心数据如 value ，以及链表都是 volatile 修饰的，保证了获取时的可见性。</p>
 <p>原理上来说：ConcurrentHashMap 采用了分段锁技术，其中 Segment 继承于 ReentrantLock。不会像 HashTable 那样不管是 put 还是 get 操作都需要做同步处理，理论上 ConcurrentHashMap 支持 CurrencyLevel (Segment 数组数量)的线程并发。每当一个线程占用锁访问一个 Segment 时，不会影响到其他的 Segment。</p>
@@ -480,17 +480,17 @@ Segment 是 ConcurrentHashMap 的一个内部类，主要的组成如下：
 43        }
 </code></pre>
 <p>虽然 HashEntry 中的 value 是用 volatile 关键词修饰的，但是并不能保证并发的原子性，所以 put 操作时仍然需要加锁处理。</p>
-<p>首先第一步的时候会尝试获取锁，如果获取失败肯定就有其他线程存在竞争，则利用 scanAndLockForPut() 自旋获取锁。
+<p>首先第一步的时候会尝试获取锁，如果获取失败肯定就有其他线程存在竞争，则利用 scanAndLockForPut() 自旋获取锁。<br>
 <img src="https://mmbiz.qpic.cn/mmbiz_jpg/csD7FygBVl2YrHfgckicQvCZFaT240KJuQahXKiaeuX1t5Xn8vqMhDpCic05KvuyvN5lrrK17BlDiaE2Qrh4aw9KAQ/640?wx_fmt=jpeg&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt=""></p>
 <ol>
 <li>尝试自旋获取锁。</li>
-<li>如果重试的次数达到了 MAX_SCAN_RETRIES 则改为阻塞锁获取，保证能获取成功。
+<li>如果重试的次数达到了 MAX_SCAN_RETRIES 则改为阻塞锁获取，保证能获取成功。<br>
 <img src="https://mmbiz.qpic.cn/mmbiz_jpg/csD7FygBVl2YrHfgckicQvCZFaT240KJu5DphFu4lllNoynBAIK4Xzl4ZgTneCUkHYfibBIwFIamnYOGATYUpC5A/640?wx_fmt=jpeg&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt=""></li>
 </ol>
-<p>再结合图看看 put 的流程。
-1.将当前 Segment 中的 table 通过 key 的 hashcode 定位到 HashEntry。
-2. 遍历该 HashEntry，如果不为空则判断传入的 key 和当前遍历的 key 是否相等，相等则覆盖旧的 value。
-3. 不为空则需要新建一个 HashEntry 并加入到 Segment 中，同时会先判断是否需要扩容。
+<p>再结合图看看 put 的流程。<br>
+1.将当前 Segment 中的 table 通过 key 的 hashcode 定位到 HashEntry。<br>
+2. 遍历该 HashEntry，如果不为空则判断传入的 key 和当前遍历的 key 是否相等，相等则覆盖旧的 value。<br>
+3. 不为空则需要新建一个 HashEntry 并加入到 Segment 中，同时会先判断是否需要扩容。<br>
 4.最后会解除在 1 中所获取当前 Segment 的锁。</p>
 <p>get 方法</p>
 <pre><code> 1    public V get(Object key) {
@@ -515,7 +515,7 @@ Segment 是 ConcurrentHashMap 的一个内部类，主要的组成如下：
 <p>只需要将 Key 通过 Hash 之后定位到具体的 Segment ，再通过一次 Hash 定位到具体的元素上。</p>
 <p>由于 HashEntry 中的 value 属性是用 volatile 关键词修饰的，保证了内存可见性，所以每次获取时都是最新值。</p>
 <p>ConcurrentHashMap 的 get 方法是非常高效的，因为整个过程都不需要加锁。</p>
-<p>Base 1.8
+<p>Base 1.8<br>
 1.7 已经解决了并发问题，并且能支持 N 个 Segment 这么多次数的并发，但依然存在 HashMap 在 1.7 版本中的问题。</p>
 <p>那就是查询遍历链表效率太低。</p>
 <p>因此 1.8 做了一些数据结构上的调整。</p>
@@ -526,7 +526,7 @@ Segment 是 ConcurrentHashMap 的一个内部类，主要的组成如下：
 <p><img src="https://mmbiz.qpic.cn/mmbiz_jpg/csD7FygBVl2YrHfgckicQvCZFaT240KJuX0QiaOcnzqugCVfdNR0KRDHlMOic8Pn7TZ0BcG8Oc1NBiaZSgVsmQGt2g/640?wx_fmt=jpeg&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt=""></p>
 <p>也将 1.7 中存放数据的 HashEntry 改为 Node，但作用都是相同的。</p>
 <p>其中的 val next 都用了 volatile 修饰，保证了可见性。</p>
-<p>put 方法
+<p>put 方法<br>
 重点来看看 put 函数：</p>
 <p><img src="https://mmbiz.qpic.cn/mmbiz_jpg/csD7FygBVl2YrHfgckicQvCZFaT240KJu606XAOtEmOlp5WZyCNUL2PklOSq1SgbWtoNy06MpyVW3euNqibLRibWg/640?wx_fmt=jpeg&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt=""></p>
 <p>根据 key 计算出 hashcode 。</p>
@@ -541,7 +541,7 @@ Segment 是 ConcurrentHashMap 的一个内部类，主要的组成如下：
 <p>如果是红黑树那就按照树的方式获取值。</p>
 <p>就不满足那就按照链表的方式遍历获取值。</p>
 <p>1.8 在 1.7 的数据结构上做了大的改动，采用红黑树之后可以保证查询效率（O(logn)），甚至取消了 ReentrantLock 改为了 synchronized，这样可以看出在新版的 JDK 中对 synchronized 优化是很到位的。</p>
-<p>总结
+<p>总结<br>
 看完了整个 HashMap 和 ConcurrentHashMap 在 1.7 和 1.8 中不同的实现方式相信大家对他们的理解应该会更加到位。</p>
 <p>其实这块也是面试的重点内容，通常的套路是：</p>
 <p>谈谈你理解的 HashMap，讲讲其中的 get put 过程。</p>
@@ -582,7 +582,7 @@ Segment 是 ConcurrentHashMap 的一个内部类，主要的组成如下：
 
       <div class="sm-12 md-4 col sidebar">
   <div class="paper info-container">
-    <img src="https://caijh.github.io//images/avatar.png?v=1563118042363" class="no-responsive avatar">
+    <img src="https://caijh.github.io//images/avatar.png?v=1563162508788" class="no-responsive avatar">
     <div class="text-muted">搬砖大佬</div>
     <div class="social-container">
       
@@ -604,6 +604,12 @@ Segment 是 ConcurrentHashMap 的一个内部类，主要的组成如下：
     </div>
     <div class="row">
       <ul>
+        
+          
+            <li>
+              <a href="https://caijh.github.io//post/redis-guo-qi-shan-chu-ce-lue">Redis - 过期删除策略</a>
+            </li>
+          
         
           
             <li>
@@ -659,10 +665,6 @@ Segment 是 ConcurrentHashMap 的一个内部类，主要的组成如下：
             </li>
           
         
-          
-            <li>
-              <a href="https://caijh.github.io//post/she-ji-mo-shi-qiao-jie-mo-shi">设计模式-桥接模式</a>
-            </li>
           
         
           
@@ -724,31 +726,35 @@ Segment 是 ConcurrentHashMap 的一个内部类，主要的组成如下：
     </div>
     <div class="row">
       
+        <a href="https://caijh.github.io//tag/6w7rEzKhc" class="badge warning">
+          Redis
+        </a>
+      
         <a href="https://caijh.github.io//tag/o82yUqML0" class="badge secondary">
           MySQL
         </a>
       
-        <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge success">
+        <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge secondary">
           源代码
         </a>
       
-        <a href="https://caijh.github.io//tag/nHOjalh2s" class="badge warning">
+        <a href="https://caijh.github.io//tag/nHOjalh2s" class="badge ">
           Spring Cloud
         </a>
       
-        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge secondary">
+        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge warning">
           Java
         </a>
       
-        <a href="https://caijh.github.io//tag/kmQV6iHOM" class="badge secondary">
+        <a href="https://caijh.github.io//tag/kmQV6iHOM" class="badge warning">
           面试
         </a>
       
-        <a href="https://caijh.github.io//tag/hm42pTrhV" class="badge secondary">
+        <a href="https://caijh.github.io//tag/hm42pTrhV" class="badge success">
           Maven
         </a>
       
-        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge secondary">
+        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge ">
           设计模式
         </a>
       

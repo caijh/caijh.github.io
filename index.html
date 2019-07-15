@@ -7,7 +7,7 @@
 <meta name="description" content="搬砖大佬">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<link rel="shortcut icon" href="https://caijh.github.io//favicon.ico?v=1563118042363">
+<link rel="shortcut icon" href="https://caijh.github.io//favicon.ico?v=1563162508788">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 <link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
@@ -83,12 +83,37 @@
           
   <article class="article">
     <h2 class="article-title">
+      <a href="https://caijh.github.io//post/redis-guo-qi-shan-chu-ce-lue">Redis - 过期删除策略</a>
+    </h2>
+    <p class="article-meta">
+      2019-07-15
+      
+        <a href="https://caijh.github.io//tag/6w7rEzKhc" class="badge secondary">
+          Redis
+        </a>
+      
+    </p>
+    <p class="text-lead">
+      <p>Redis 采用的过期策略： 懒汉式删除 + 定期删除</p>
+
+    </p>
+    <div class="row">
+      <a href="https://caijh.github.io//post/redis-guo-qi-shan-chu-ce-lue" class="readmore-link">
+        <button>
+          Read More
+        </button>
+      </a>
+    </div>
+  </article>
+
+  <article class="article">
+    <h2 class="article-title">
       <a href="https://caijh.github.io//post/mysql-explain-xiang-jie">MySQL - explain详解</a>
     </h2>
     <p class="article-meta">
       2019-07-14
       
-        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge success">
+        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge secondary">
           MySQL
         </a>
       
@@ -112,7 +137,7 @@
     <p class="article-meta">
       2019-07-14
       
-        <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge success">
+        <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge warning">
           源代码
         </a>
       
@@ -121,7 +146,7 @@
       <blockquote>
 <p>AbstractQueuedSynchronizer, 简称AQS, 是Java 并发包的基础类，并发包中的很多api都是基于AQS来实现加锁与释放锁等功能。</p>
 </blockquote>
-<p>例如ReentrantLock内部拥有一个继承于AbstractQueuedSynchronizer的Sync类实现加锁与释放锁。
+<p>例如ReentrantLock内部拥有一个继承于AbstractQueuedSynchronizer的Sync类实现加锁与释放锁。<br>
 AQS内部有一个state状态记录当前线程的加锁次数，还有一个exclusiveOwnerThread变量记录了独占的线程。</p>
 
     </p>
@@ -141,14 +166,14 @@ AQS内部有一个state状态记录当前线程的加锁次数，还有一个exc
     <p class="article-meta">
       2019-07-13
       
-        <a href="https://caijh.github.io//tag/nHOjalh2s" class="badge secondary">
+        <a href="https://caijh.github.io//tag/nHOjalh2s" class="badge success">
           Spring Cloud
         </a>
       
     </p>
     <p class="text-lead">
       <blockquote>
-<p>造成该问题的原因？
+<p>造成该问题的原因？<br>
 Hystrix默认的超时时间是1秒，如果超过这个时间尚未响应，将会进入fallback代码。而首次请求往往会比较慢（由于Ribbon是懒加载的，在首次请求时，才会开始初始化相关类），这个响应时间可能就大于1秒了。</p>
 </blockquote>
 
@@ -169,7 +194,7 @@ Hystrix默认的超时时间是1秒，如果超过这个时间尚未响应，将
     <p class="article-meta">
       2019-07-08
       
-        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge ">
+        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge warning">
           Java
         </a>
       
@@ -177,29 +202,29 @@ Hystrix默认的超时时间是1秒，如果超过这个时间尚未响应，将
     <p class="text-lead">
       <h4 id="threadpoolexecutor的重要参数">ThreadPoolExecutor的重要参数</h4>
 <ul>
-<li>corePoolSize：核心线程数
-核心线程会一直存活，及时没有任务需要执行
-当线程数小于核心线程数时，即使有线程空闲，线程池也会优先创建新线程处理
+<li>corePoolSize：核心线程数<br>
+核心线程会一直存活，及时没有任务需要执行<br>
+当线程数小于核心线程数时，即使有线程空闲，线程池也会优先创建新线程处理<br>
 设置allowCoreThreadTimeout=true（默认false）时，核心线程会超时关闭</li>
-<li>queueCapacity：任务队列容量（阻塞队列）
+<li>queueCapacity：任务队列容量（阻塞队列）<br>
 当核心线程数达到最大时，新任务会放在队列中排队等待执行</li>
-<li>maxPoolSize：最大线程数
-当线程数&gt;=corePoolSize，且任务队列已满时。线程池会创建新线程来处理任务
+<li>maxPoolSize：最大线程数<br>
+当线程数&gt;=corePoolSize，且任务队列已满时。线程池会创建新线程来处理任务<br>
 当线程数=maxPoolSize，且任务队列已满时，线程池会拒绝处理任务而抛出异常</li>
-<li>keepAliveTime：线程空闲时间
-当线程空闲时间达到keepAliveTime时，线程会退出，直到线程数量=corePoolSize
+<li>keepAliveTime：线程空闲时间<br>
+当线程空闲时间达到keepAliveTime时，线程会退出，直到线程数量=corePoolSize<br>
 如果allowCoreThreadTimeout=true，则会直到线程数量=0</li>
 <li>allowCoreThreadTimeout：允许核心线程超时</li>
-<li>rejectedExecutionHandler：任务拒绝处理器
-两种情况会拒绝处理任务：
-当线程数已经达到maxPoolSize，切队列已满，会拒绝新任务
-当线程池被调用shutdown()后，会等待线程池里的任务执行完毕，再shutdown。如果在调用shutdown()和线程池真正shutdown之间提交任务，会拒绝新任务
-线程池会调用rejectedExecutionHandler来处理这个任务。如果没有设置默认是AbortPolicy，会抛出异常
-ThreadPoolExecutor类有几个内部实现类来处理这类情况：
-AbortPolicy 丢弃任务，抛运行时异常
-CallerRunsPolicy 执行任务
-DiscardPolicy 忽视，什么都不会发生
-DiscardOldestPolicy 从队列中踢出最先进入队列（最后一个执行）的任务
+<li>rejectedExecutionHandler：任务拒绝处理器<br>
+两种情况会拒绝处理任务：<br>
+当线程数已经达到maxPoolSize，切队列已满，会拒绝新任务<br>
+当线程池被调用shutdown()后，会等待线程池里的任务执行完毕，再shutdown。如果在调用shutdown()和线程池真正shutdown之间提交任务，会拒绝新任务<br>
+线程池会调用rejectedExecutionHandler来处理这个任务。如果没有设置默认是AbortPolicy，会抛出异常<br>
+ThreadPoolExecutor类有几个内部实现类来处理这类情况：<br>
+AbortPolicy 丢弃任务，抛运行时异常<br>
+CallerRunsPolicy 执行任务<br>
+DiscardPolicy 忽视，什么都不会发生<br>
+DiscardOldestPolicy 从队列中踢出最先进入队列（最后一个执行）的任务<br>
 实现RejectedExecutionHandler接口，可自定义处理器</li>
 </ul>
 
@@ -222,7 +247,7 @@ DiscardOldestPolicy 从队列中踢出最先进入队列（最后一个执行）
       
     </p>
     <p class="text-lead">
-      <p>kafka中用topic表示同类的消息，topic可以有1个或多个partition.
+      <p>kafka中用topic表示同类的消息，topic可以有1个或多个partition.<br>
 kafka集群中一个broker负责一部分partition，在kafka集群中，每个Partition都有多个副本，其中一个副本叫做leader，其他的副本叫做follower。</p>
 
     </p>
@@ -242,7 +267,7 @@ kafka集群中一个broker负责一部分partition，在kafka集群中，每个P
     <p class="article-meta">
       2019-07-06
       
-        <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge secondary">
+        <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge success">
           源代码
         </a>
       
@@ -268,18 +293,18 @@ kafka集群中一个broker负责一部分partition，在kafka集群中，每个P
     <p class="article-meta">
       2019-07-03
       
-        <a href="https://caijh.github.io//tag/kmQV6iHOM" class="badge success">
+        <a href="https://caijh.github.io//tag/kmQV6iHOM" class="badge warning">
           面试
         </a>
       
-        <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge warning">
+        <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge ">
           源代码
         </a>
       
     </p>
     <p class="text-lead">
       <p>搬砖自 https://mp.weixin.qq.com/s/DTzd3jdtnnveffL-zcpmyg</p>
-<p>前言
+<p>前言<br>
 Map 这样的 Key Value 在软件开发中是非常经典的结构，常用于在内存中存放数据。</p>
 <p>本篇主要想讨论 ConcurrentHashMap 这样一个并发容器，在正式开始之前我觉得有必要谈谈 HashMap，没有它就不会有后面的 ConcurrentHashMap。</p>
 
@@ -329,7 +354,7 @@ Map 这样的 Key Value 在软件开发中是非常经典的结构，常用于�
     <p class="article-meta">
       2019-07-01
       
-        <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge ">
+        <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge secondary">
           源代码
         </a>
       
@@ -345,32 +370,6 @@ Map 这样的 Key Value 在软件开发中是非常经典的结构，常用于�
     </p>
     <div class="row">
       <a href="https://caijh.github.io//post/yuan-ma-yue-du-hashmap-de-shi-xian-yuan-li" class="readmore-link">
-        <button>
-          Read More
-        </button>
-      </a>
-    </div>
-  </article>
-
-  <article class="article">
-    <h2 class="article-title">
-      <a href="https://caijh.github.io//post/she-ji-mo-shi-qiao-jie-mo-shi">设计模式-桥接模式</a>
-    </h2>
-    <p class="article-meta">
-      2019-06-30
-      
-    </p>
-    <p class="text-lead">
-      <h4 id="定义">定义</h4>
-<blockquote>
-<p>Decouple an abstraction from its implementation so that the two can vary independently.（将抽象和实现解耦，使得两者可以独立地变化。）</p>
-</blockquote>
-<h3 id="uml">UML</h3>
-<p><img src="https://caijh.github.io//post-images/1561899948043.png" alt=""></p>
-
-    </p>
-    <div class="row">
-      <a href="https://caijh.github.io//post/she-ji-mo-shi-qiao-jie-mo-shi" class="readmore-link">
         <button>
           Read More
         </button>
@@ -394,7 +393,7 @@ Map 这样的 Key Value 在软件开发中是非常经典的结构，常用于�
       
       <div class="sm-12 md-4 col sidebar">
   <div class="paper info-container">
-    <img src="https://caijh.github.io//images/avatar.png?v=1563118042363" class="no-responsive avatar">
+    <img src="https://caijh.github.io//images/avatar.png?v=1563162508788" class="no-responsive avatar">
     <div class="text-muted">搬砖大佬</div>
     <div class="social-container">
       
@@ -416,6 +415,12 @@ Map 这样的 Key Value 在软件开发中是非常经典的结构，常用于�
     </div>
     <div class="row">
       <ul>
+        
+          
+            <li>
+              <a href="https://caijh.github.io//post/redis-guo-qi-shan-chu-ce-lue">Redis - 过期删除策略</a>
+            </li>
+          
         
           
             <li>
@@ -471,10 +476,6 @@ Map 这样的 Key Value 在软件开发中是非常经典的结构，常用于�
             </li>
           
         
-          
-            <li>
-              <a href="https://caijh.github.io//post/she-ji-mo-shi-qiao-jie-mo-shi">设计模式-桥接模式</a>
-            </li>
           
         
           
@@ -536,7 +537,11 @@ Map 这样的 Key Value 在软件开发中是非常经典的结构，常用于�
     </div>
     <div class="row">
       
-        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge secondary">
+        <a href="https://caijh.github.io//tag/6w7rEzKhc" class="badge secondary">
+          Redis
+        </a>
+      
+        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge ">
           MySQL
         </a>
       
@@ -544,23 +549,23 @@ Map 这样的 Key Value 在软件开发中是非常经典的结构，常用于�
           源代码
         </a>
       
-        <a href="https://caijh.github.io//tag/nHOjalh2s" class="badge ">
+        <a href="https://caijh.github.io//tag/nHOjalh2s" class="badge warning">
           Spring Cloud
         </a>
       
-        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge ">
+        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge success">
           Java
         </a>
       
-        <a href="https://caijh.github.io//tag/kmQV6iHOM" class="badge secondary">
+        <a href="https://caijh.github.io//tag/kmQV6iHOM" class="badge ">
           面试
         </a>
       
-        <a href="https://caijh.github.io//tag/hm42pTrhV" class="badge warning">
+        <a href="https://caijh.github.io//tag/hm42pTrhV" class="badge secondary">
           Maven
         </a>
       
-        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge secondary">
+        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge ">
           设计模式
         </a>
       

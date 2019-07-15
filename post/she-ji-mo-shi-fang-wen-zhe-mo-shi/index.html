@@ -7,7 +7,7 @@
 <meta name="description" content="搬砖大佬">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<link rel="shortcut icon" href="https://caijh.github.io//favicon.ico?v=1563118042363">
+<link rel="shortcut icon" href="https://caijh.github.io//favicon.ico?v=1563162508788">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 <link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
@@ -91,7 +91,7 @@
             <p class="article-meta">
               2019-06-30
               
-                <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge warning">
+                <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge success">
                   设计模式
                 </a>
               
@@ -171,19 +171,19 @@ public class Client {
 </code></pre>
 <h4 id="访问者模式的优点">访问者模式的优点</h4>
 <ul>
-<li>符合单一职责原则
+<li>符合单一职责原则<br>
 具体元素角色也就是Employee抽象类的两个子类负责数据的加载，而Visitor类则负责报表的展现，两个不同的职责非常明确地分离开来，各自演绎变化。</li>
-<li>优秀的扩展性
+<li>优秀的扩展性<br>
 由于职责分开，继续增加对数据的操作是非常快捷的，例如，现在要增加一份给大老板的报表，这份报表格式又有所不同，直接在Visitor中增加一个方法，传递数据后进行整理打印。</li>
 <li>灵活性非常高</li>
 </ul>
 <h4 id="访问者模式的缺点">访问者模式的缺点</h4>
 <ul>
-<li>具体元素对访问者公布细节
+<li>具体元素对访问者公布细节<br>
 访问者要访问一个类就必然要求这个类公布一些方法和数据，也就是说访问者关注了其他类的内部细节，这是迪米特法则所不建议的。</li>
-<li>具体元素变更比较困难
-具体元素角色的增加、删除、修改都是比较困难的，就上面那个例子，你想想，你要是想增加一个成员变量，如年龄age，Visitor就需要修改，如果Visitor是一个还好办，多个呢？业务逻辑再复杂点呢？
--- 违背了依赖倒置转原则
+<li>具体元素变更比较困难<br>
+具体元素角色的增加、删除、修改都是比较困难的，就上面那个例子，你想想，你要是想增加一个成员变量，如年龄age，Visitor就需要修改，如果Visitor是一个还好办，多个呢？业务逻辑再复杂点呢？<br>
+-- 违背了依赖倒置转原则<br>
 访问者依赖的是具体元素，而不是抽象元素，这破坏了依赖倒置原则，特别是在面向对象的编程中，抛弃了对接口的依赖，而直接依赖实现类，扩展比较难。</li>
 </ul>
 <h4 id="访问者模式的使用场景">访问者模式的使用场景</h4>
@@ -227,7 +227,7 @@ public class Client {
 
       <div class="sm-12 md-4 col sidebar">
   <div class="paper info-container">
-    <img src="https://caijh.github.io//images/avatar.png?v=1563118042363" class="no-responsive avatar">
+    <img src="https://caijh.github.io//images/avatar.png?v=1563162508788" class="no-responsive avatar">
     <div class="text-muted">搬砖大佬</div>
     <div class="social-container">
       
@@ -249,6 +249,12 @@ public class Client {
     </div>
     <div class="row">
       <ul>
+        
+          
+            <li>
+              <a href="https://caijh.github.io//post/redis-guo-qi-shan-chu-ce-lue">Redis - 过期删除策略</a>
+            </li>
+          
         
           
             <li>
@@ -304,10 +310,6 @@ public class Client {
             </li>
           
         
-          
-            <li>
-              <a href="https://caijh.github.io//post/she-ji-mo-shi-qiao-jie-mo-shi">设计模式-桥接模式</a>
-            </li>
           
         
           
@@ -369,11 +371,15 @@ public class Client {
     </div>
     <div class="row">
       
+        <a href="https://caijh.github.io//tag/6w7rEzKhc" class="badge warning">
+          Redis
+        </a>
+      
         <a href="https://caijh.github.io//tag/o82yUqML0" class="badge secondary">
           MySQL
         </a>
       
-        <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge success">
+        <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge secondary">
           源代码
         </a>
       
@@ -385,15 +391,15 @@ public class Client {
           Java
         </a>
       
-        <a href="https://caijh.github.io//tag/kmQV6iHOM" class="badge ">
+        <a href="https://caijh.github.io//tag/kmQV6iHOM" class="badge secondary">
           面试
         </a>
       
-        <a href="https://caijh.github.io//tag/hm42pTrhV" class="badge secondary">
+        <a href="https://caijh.github.io//tag/hm42pTrhV" class="badge ">
           Maven
         </a>
       
-        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge ">
+        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge warning">
           设计模式
         </a>
       

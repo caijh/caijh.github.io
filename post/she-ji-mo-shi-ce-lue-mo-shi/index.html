@@ -7,7 +7,7 @@
 <meta name="description" content="搬砖大佬">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<link rel="shortcut icon" href="https://caijh.github.io//favicon.ico?v=1563118042363">
+<link rel="shortcut icon" href="https://caijh.github.io//favicon.ico?v=1563162508788">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 <link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
@@ -145,18 +145,18 @@ public class Client {
 </code></pre>
 <h4 id="策略模式的优点">策略模式的优点</h4>
 <ul>
-<li>算法可以自由切换
+<li>算法可以自由切换<br>
 这是策略模式本身定义的，只要实现抽象策略，它就成为策略家族的一个成员，通过封装角色对其进行封装，保证对外提供“可自由切换”的策略。</li>
-<li>避免使用多重条件判断
+<li>避免使用多重条件判断<br>
 如果没有策略模式，我们想想看会是什么样子？一个策略家族有5个策略算法，一会要使用A策略，一会要使用B策略，怎么设计呢？使用多重的条件语句？多重条件语句不易维护，而且出错的概率大大增强。使用策略模式后，可以由其他模块决定采用何种策略，策略家族对外提供的访问接口就是封装类，简化了操作，同时避免了条件语句判断。</li>
-<li>扩展性良好
+<li>扩展性良好<br>
 这甚至都不用说是它的优点，因为它太明显了。在现有的系统中增加一个策略太容易了，只要实现接口就可以了，其他都不用修改，类似于一个可反复拆卸的插件，这大大地符合了OCP原则。</li>
 </ul>
 <h4 id="策略模式的缺点">策略模式的缺点</h4>
 <ul>
-<li>策略类数量增多
+<li>策略类数量增多<br>
 每一个策略都是一个类，复用的可能性很小，类数量增多。</li>
-<li>所有的策略类都需要对外暴露
+<li>所有的策略类都需要对外暴露<br>
 上层模块必须知道有哪些策略，然后才能决定使用哪一个策略，这与迪米特法则是相违背的，我只是想使用了一个策略，我凭什么就要了解这个策略呢？那要你的封装类还有什么意义？这是原装策略模式的一个缺点，幸运的是，我们可以使用其他模式来修正这个缺陷，如工厂方法模式、代理模式或享元模式。</li>
 </ul>
 <h4 id="jdk中的策略模式">JDK中的策略模式</h4>
@@ -196,7 +196,7 @@ public class Client {
 
       <div class="sm-12 md-4 col sidebar">
   <div class="paper info-container">
-    <img src="https://caijh.github.io//images/avatar.png?v=1563118042363" class="no-responsive avatar">
+    <img src="https://caijh.github.io//images/avatar.png?v=1563162508788" class="no-responsive avatar">
     <div class="text-muted">搬砖大佬</div>
     <div class="social-container">
       
@@ -218,6 +218,12 @@ public class Client {
     </div>
     <div class="row">
       <ul>
+        
+          
+            <li>
+              <a href="https://caijh.github.io//post/redis-guo-qi-shan-chu-ce-lue">Redis - 过期删除策略</a>
+            </li>
+          
         
           
             <li>
@@ -273,10 +279,6 @@ public class Client {
             </li>
           
         
-          
-            <li>
-              <a href="https://caijh.github.io//post/she-ji-mo-shi-qiao-jie-mo-shi">设计模式-桥接模式</a>
-            </li>
           
         
           
@@ -338,23 +340,27 @@ public class Client {
     </div>
     <div class="row">
       
-        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge success">
+        <a href="https://caijh.github.io//tag/6w7rEzKhc" class="badge secondary">
+          Redis
+        </a>
+      
+        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge ">
           MySQL
         </a>
       
-        <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge secondary">
+        <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge warning">
           源代码
         </a>
       
-        <a href="https://caijh.github.io//tag/nHOjalh2s" class="badge success">
+        <a href="https://caijh.github.io//tag/nHOjalh2s" class="badge secondary">
           Spring Cloud
         </a>
       
-        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge warning">
+        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge success">
           Java
         </a>
       
-        <a href="https://caijh.github.io//tag/kmQV6iHOM" class="badge secondary">
+        <a href="https://caijh.github.io//tag/kmQV6iHOM" class="badge success">
           面试
         </a>
       
@@ -362,7 +368,7 @@ public class Client {
           Maven
         </a>
       
-        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge secondary">
+        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge warning">
           设计模式
         </a>
       

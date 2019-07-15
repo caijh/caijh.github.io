@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://caijh.github.io/</id>
     <title>John&apos;s Blog</title>
-    <updated>2019-07-14T15:27:26.564Z</updated>
+    <updated>2019-07-15T03:48:32.649Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://caijh.github.io/"/>
     <link rel="self" href="https://caijh.github.io//atom.xml"/>
@@ -10,6 +10,39 @@
     <logo>https://caijh.github.io//images/avatar.png</logo>
     <icon>https://caijh.github.io//favicon.ico</icon>
     <rights>All rights reserved 2019, John&apos;s Blog</rights>
+    <entry>
+        <title type="html"><![CDATA[Redis - 过期删除策略]]></title>
+        <id>https://caijh.github.io//post/redis-guo-qi-shan-chu-ce-lue</id>
+        <link href="https://caijh.github.io//post/redis-guo-qi-shan-chu-ce-lue">
+        </link>
+        <updated>2019-07-15T03:18:31.000Z</updated>
+        <summary type="html"><![CDATA[<p>Redis 采用的过期策略： 懒汉式删除 + 定期删除</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>Redis 采用的过期策略： 懒汉式删除 + 定期删除</p>
+<!-- more -->
+<h1 id="三种过期删除策略">三种过期删除策略</h1>
+<h2 id="定时删除">定时删除</h2>
+<p>设置key的过期时间的同时为key设置一个定时器，在key过期时对key进行删除。<br>
+优点： 保证内存被尽快回收。<br>
+缺点：</p>
+<ol>
+<li>若key过多，删除key占用CPU时间</li>
+<li>定时器的创建耗时，若对每个key创建定时器，会有大量定时器产生，影响性能</li>
+</ol>
+<h2 id="懒汉式删除">懒汉式删除</h2>
+<p>在访问key的时候，判断key是否过期，如过期，删除key.<br>
+优点： 删除操作只发生个获取key的时候，对CPU占用少<br>
+缺点：若大量key超时，但很长一段时间内都没有访问，那些key会一直占用内存，可能会有内存泄漏</p>
+<h2 id="定期删除">定期删除</h2>
+<p>每隔一段时间执行一次删除过期key<br>
+优点：</p>
+<ol>
+<li>减少对CPU的占用</li>
+<li>克服懒汉式删除的缺点<br>
+缺点：获取的key可以已经是过期的</li>
+</ol>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[MySQL - explain详解]]></title>
         <id>https://caijh.github.io//post/mysql-explain-xiang-jie</id>
@@ -204,13 +237,13 @@
         <summary type="html"><![CDATA[<blockquote>
 <p>AbstractQueuedSynchronizer, 简称AQS, 是Java 并发包的基础类，并发包中的很多api都是基于AQS来实现加锁与释放锁等功能。</p>
 </blockquote>
-<p>例如ReentrantLock内部拥有一个继承于AbstractQueuedSynchronizer的Sync类实现加锁与释放锁。
+<p>例如ReentrantLock内部拥有一个继承于AbstractQueuedSynchronizer的Sync类实现加锁与释放锁。<br>
 AQS内部有一个state状态记录当前线程的加锁次数，还有一个exclusiveOwnerThread变量记录了独占的线程。</p>
 ]]></summary>
         <content type="html"><![CDATA[<blockquote>
 <p>AbstractQueuedSynchronizer, 简称AQS, 是Java 并发包的基础类，并发包中的很多api都是基于AQS来实现加锁与释放锁等功能。</p>
 </blockquote>
-<p>例如ReentrantLock内部拥有一个继承于AbstractQueuedSynchronizer的Sync类实现加锁与释放锁。
+<p>例如ReentrantLock内部拥有一个继承于AbstractQueuedSynchronizer的Sync类实现加锁与释放锁。<br>
 AQS内部有一个state状态记录当前线程的加锁次数，还有一个exclusiveOwnerThread变量记录了独占的线程。</p>
 <!-- more -->
 <pre><code>
@@ -285,12 +318,12 @@ AQS内部有一个state状态记录当前线程的加锁次数，还有一个exc
         </link>
         <updated>2019-07-13T14:43:38.000Z</updated>
         <summary type="html"><![CDATA[<blockquote>
-<p>造成该问题的原因？
+<p>造成该问题的原因？<br>
 Hystrix默认的超时时间是1秒，如果超过这个时间尚未响应，将会进入fallback代码。而首次请求往往会比较慢（由于Ribbon是懒加载的，在首次请求时，才会开始初始化相关类），这个响应时间可能就大于1秒了。</p>
 </blockquote>
 ]]></summary>
         <content type="html"><![CDATA[<blockquote>
-<p>造成该问题的原因？
+<p>造成该问题的原因？<br>
 Hystrix默认的超时时间是1秒，如果超过这个时间尚未响应，将会进入fallback代码。而首次请求往往会比较慢（由于Ribbon是懒加载的，在首次请求时，才会开始初始化相关类），这个响应时间可能就大于1秒了。</p>
 </blockquote>
 <!-- more -->
@@ -334,57 +367,57 @@ class FooConfiguration {
         <updated>2019-07-08T10:49:35.000Z</updated>
         <summary type="html"><![CDATA[<h4 id="threadpoolexecutor的重要参数">ThreadPoolExecutor的重要参数</h4>
 <ul>
-<li>corePoolSize：核心线程数
-核心线程会一直存活，及时没有任务需要执行
-当线程数小于核心线程数时，即使有线程空闲，线程池也会优先创建新线程处理
+<li>corePoolSize：核心线程数<br>
+核心线程会一直存活，及时没有任务需要执行<br>
+当线程数小于核心线程数时，即使有线程空闲，线程池也会优先创建新线程处理<br>
 设置allowCoreThreadTimeout=true（默认false）时，核心线程会超时关闭</li>
-<li>queueCapacity：任务队列容量（阻塞队列）
+<li>queueCapacity：任务队列容量（阻塞队列）<br>
 当核心线程数达到最大时，新任务会放在队列中排队等待执行</li>
-<li>maxPoolSize：最大线程数
-当线程数&gt;=corePoolSize，且任务队列已满时。线程池会创建新线程来处理任务
+<li>maxPoolSize：最大线程数<br>
+当线程数&gt;=corePoolSize，且任务队列已满时。线程池会创建新线程来处理任务<br>
 当线程数=maxPoolSize，且任务队列已满时，线程池会拒绝处理任务而抛出异常</li>
-<li>keepAliveTime：线程空闲时间
-当线程空闲时间达到keepAliveTime时，线程会退出，直到线程数量=corePoolSize
+<li>keepAliveTime：线程空闲时间<br>
+当线程空闲时间达到keepAliveTime时，线程会退出，直到线程数量=corePoolSize<br>
 如果allowCoreThreadTimeout=true，则会直到线程数量=0</li>
 <li>allowCoreThreadTimeout：允许核心线程超时</li>
-<li>rejectedExecutionHandler：任务拒绝处理器
-两种情况会拒绝处理任务：
-当线程数已经达到maxPoolSize，切队列已满，会拒绝新任务
-当线程池被调用shutdown()后，会等待线程池里的任务执行完毕，再shutdown。如果在调用shutdown()和线程池真正shutdown之间提交任务，会拒绝新任务
-线程池会调用rejectedExecutionHandler来处理这个任务。如果没有设置默认是AbortPolicy，会抛出异常
-ThreadPoolExecutor类有几个内部实现类来处理这类情况：
-AbortPolicy 丢弃任务，抛运行时异常
-CallerRunsPolicy 执行任务
-DiscardPolicy 忽视，什么都不会发生
-DiscardOldestPolicy 从队列中踢出最先进入队列（最后一个执行）的任务
+<li>rejectedExecutionHandler：任务拒绝处理器<br>
+两种情况会拒绝处理任务：<br>
+当线程数已经达到maxPoolSize，切队列已满，会拒绝新任务<br>
+当线程池被调用shutdown()后，会等待线程池里的任务执行完毕，再shutdown。如果在调用shutdown()和线程池真正shutdown之间提交任务，会拒绝新任务<br>
+线程池会调用rejectedExecutionHandler来处理这个任务。如果没有设置默认是AbortPolicy，会抛出异常<br>
+ThreadPoolExecutor类有几个内部实现类来处理这类情况：<br>
+AbortPolicy 丢弃任务，抛运行时异常<br>
+CallerRunsPolicy 执行任务<br>
+DiscardPolicy 忽视，什么都不会发生<br>
+DiscardOldestPolicy 从队列中踢出最先进入队列（最后一个执行）的任务<br>
 实现RejectedExecutionHandler接口，可自定义处理器</li>
 </ul>
 ]]></summary>
         <content type="html"><![CDATA[<h4 id="threadpoolexecutor的重要参数">ThreadPoolExecutor的重要参数</h4>
 <ul>
-<li>corePoolSize：核心线程数
-核心线程会一直存活，及时没有任务需要执行
-当线程数小于核心线程数时，即使有线程空闲，线程池也会优先创建新线程处理
+<li>corePoolSize：核心线程数<br>
+核心线程会一直存活，及时没有任务需要执行<br>
+当线程数小于核心线程数时，即使有线程空闲，线程池也会优先创建新线程处理<br>
 设置allowCoreThreadTimeout=true（默认false）时，核心线程会超时关闭</li>
-<li>queueCapacity：任务队列容量（阻塞队列）
+<li>queueCapacity：任务队列容量（阻塞队列）<br>
 当核心线程数达到最大时，新任务会放在队列中排队等待执行</li>
-<li>maxPoolSize：最大线程数
-当线程数&gt;=corePoolSize，且任务队列已满时。线程池会创建新线程来处理任务
+<li>maxPoolSize：最大线程数<br>
+当线程数&gt;=corePoolSize，且任务队列已满时。线程池会创建新线程来处理任务<br>
 当线程数=maxPoolSize，且任务队列已满时，线程池会拒绝处理任务而抛出异常</li>
-<li>keepAliveTime：线程空闲时间
-当线程空闲时间达到keepAliveTime时，线程会退出，直到线程数量=corePoolSize
+<li>keepAliveTime：线程空闲时间<br>
+当线程空闲时间达到keepAliveTime时，线程会退出，直到线程数量=corePoolSize<br>
 如果allowCoreThreadTimeout=true，则会直到线程数量=0</li>
 <li>allowCoreThreadTimeout：允许核心线程超时</li>
-<li>rejectedExecutionHandler：任务拒绝处理器
-两种情况会拒绝处理任务：
-当线程数已经达到maxPoolSize，切队列已满，会拒绝新任务
-当线程池被调用shutdown()后，会等待线程池里的任务执行完毕，再shutdown。如果在调用shutdown()和线程池真正shutdown之间提交任务，会拒绝新任务
-线程池会调用rejectedExecutionHandler来处理这个任务。如果没有设置默认是AbortPolicy，会抛出异常
-ThreadPoolExecutor类有几个内部实现类来处理这类情况：
-AbortPolicy 丢弃任务，抛运行时异常
-CallerRunsPolicy 执行任务
-DiscardPolicy 忽视，什么都不会发生
-DiscardOldestPolicy 从队列中踢出最先进入队列（最后一个执行）的任务
+<li>rejectedExecutionHandler：任务拒绝处理器<br>
+两种情况会拒绝处理任务：<br>
+当线程数已经达到maxPoolSize，切队列已满，会拒绝新任务<br>
+当线程池被调用shutdown()后，会等待线程池里的任务执行完毕，再shutdown。如果在调用shutdown()和线程池真正shutdown之间提交任务，会拒绝新任务<br>
+线程池会调用rejectedExecutionHandler来处理这个任务。如果没有设置默认是AbortPolicy，会抛出异常<br>
+ThreadPoolExecutor类有几个内部实现类来处理这类情况：<br>
+AbortPolicy 丢弃任务，抛运行时异常<br>
+CallerRunsPolicy 执行任务<br>
+DiscardPolicy 忽视，什么都不会发生<br>
+DiscardOldestPolicy 从队列中踢出最先进入队列（最后一个执行）的任务<br>
 实现RejectedExecutionHandler接口，可自定义处理器</li>
 </ul>
 <!-- more -->
@@ -394,42 +427,42 @@ DiscardOldestPolicy 从队列中踢出最先进入队列（最后一个执行）
 <ol>
 <li>当线程数小于核心线程数时，创建线程。</li>
 <li>当线程数大于等于核心线程数，且任务队列未满时，将任务放入任务队列。</li>
-<li>当线程数大于等于核心线程数，且任务队列已满
-3.1 若线程数小于最大线程数，创建线程
+<li>当线程数大于等于核心线程数，且任务队列已满<br>
+3.1 若线程数小于最大线程数，创建线程<br>
 3.2 若线程数等于最大线程数，抛出异常，拒绝任务</li>
 </ol>
 <p>三、如何设置参数</p>
 <ul>
-<li>默认值
-corePoolSize=1
-queueCapacity=Integer.MAX_VALUE
-maxPoolSize=Integer.MAX_VALUE
-keepAliveTime=60s
-allowCoreThreadTimeout=false
+<li>默认值<br>
+corePoolSize=1<br>
+queueCapacity=Integer.MAX_VALUE<br>
+maxPoolSize=Integer.MAX_VALUE<br>
+keepAliveTime=60s<br>
+allowCoreThreadTimeout=false<br>
 rejectedExecutionHandler=AbortPolicy()</li>
 </ul>
 <blockquote>
 <p>如何来设置?</p>
 </blockquote>
 <ol>
-<li>需要根据几个值来决定
-tasks ：每秒的任务数，假设为500~1000
-taskcost：每个任务花费时间，假设为0.1s
+<li>需要根据几个值来决定<br>
+tasks ：每秒的任务数，假设为500~1000<br>
+taskcost：每个任务花费时间，假设为0.1s<br>
 responsetime：系统允许容忍的最大响应时间，假设为1s</li>
 <li>做几个计算</li>
 </ol>
 <ul>
-<li>corePoolSize = 每秒需要多少个线程处理？
-threadcount = tasks/(1/taskcost) =tasks*taskcout =  (500~1000)*0.1 = 50~100 个线程。corePoolSize设置应该大于50
+<li>corePoolSize = 每秒需要多少个线程处理？<br>
+threadcount = tasks/(1/taskcost) =tasks*taskcout =  (500~1000)*0.1 = 50~100 个线程。corePoolSize设置应该大于50<br>
 根据8020原则，如果80%的每秒任务数小于800，那么corePoolSize设置为80即可</li>
-<li>queueCapacity = (coreSizePool/taskcost)<em>responsetime
-计算可得 queueCapacity = 80/0.1</em>1 = 800。意思是队列里的线程可以等待1s，超过了的需要新开线程来执行
+<li>queueCapacity = (coreSizePool/taskcost)<em>responsetime<br>
+计算可得 queueCapacity = 80/0.1</em>1 = 800。意思是队列里的线程可以等待1s，超过了的需要新开线程来执行<br>
 切记不能设置为Integer.MAX_VALUE，这样队列会很大，线程数只会保持在corePoolSize大小，当任务陡增时，不能新开线程来执行，响应时间会随之陡增。</li>
-<li>maxPoolSize = (max(tasks)- queueCapacity)/(1/taskcost) + corePoolSize
-计算可得 maxPoolSize = (1000-800)/10 +80 = 100
+<li>maxPoolSize = (max(tasks)- queueCapacity)/(1/taskcost) + corePoolSize<br>
+计算可得 maxPoolSize = (1000-800)/10 +80 = 100<br>
 （最大任务数-队列容量）/每个线程每秒处理能力 = 最大线程数</li>
 <li>rejectedExecutionHandler：根据具体情况来决定，任务不重要可丢弃，任务重要则要利用一些缓冲机制来处理</li>
-<li>keepAliveTime和allowCoreThreadTimeout采用默认通常能满足
+<li>keepAliveTime和allowCoreThreadTimeout采用默认通常能满足<br>
 以上都是理想值，实际情况下要根据机器性能来决定。如果在未达到最大线程数的情况机器cpu load已经满了，则需要通过升级硬件（呵呵）和优化代码，降低taskcost来处理。</li>
 </ul>
 ]]></content>
@@ -440,16 +473,16 @@ threadcount = tasks/(1/taskcost) =tasks*taskcout =  (500~1000)*0.1 = 50~100 个�
         <link href="https://caijh.github.io//post/kafka-acks-can-shu">
         </link>
         <updated>2019-07-06T15:16:29.000Z</updated>
-        <summary type="html"><![CDATA[<p>kafka中用topic表示同类的消息，topic可以有1个或多个partition.
+        <summary type="html"><![CDATA[<p>kafka中用topic表示同类的消息，topic可以有1个或多个partition.<br>
 kafka集群中一个broker负责一部分partition，在kafka集群中，每个Partition都有多个副本，其中一个副本叫做leader，其他的副本叫做follower。</p>
 ]]></summary>
-        <content type="html"><![CDATA[<p>kafka中用topic表示同类的消息，topic可以有1个或多个partition.
+        <content type="html"><![CDATA[<p>kafka中用topic表示同类的消息，topic可以有1个或多个partition.<br>
 kafka集群中一个broker负责一部分partition，在kafka集群中，每个Partition都有多个副本，其中一个副本叫做leader，其他的副本叫做follower。</p>
 <!-- more -->
 <h4 id="多副本之间如何同步">多副本之间如何同步？</h4>
 <p>其实任何一个Partition，只有副本Leader是对外提供读写服务的，然后Leader副本接收到数据之后，Follower副本会不停的给他发送请求尝试去拉取最新的数据，拉取到自己本地后，写入磁盘中。</p>
 <h4 id="isr是指什么">ISR是指什么？</h4>
-<p>ISR全称是“In-Sync Replicas”，也就是保持同步的副本，他的含义就是，跟Leader始终保持同步的Follower有哪些。
+<p>ISR全称是“In-Sync Replicas”，也就是保持同步的副本，他的含义就是，跟Leader始终保持同步的Follower有哪些。<br>
 每个Partition都有一个ISR，这个ISR里一定会有Leader自己，因为Leader肯定数据是最新的，然后就是那些跟Leader保持同步的Follower，也会在ISR里。</p>
 <h4 id="acks参数">acks参数</h4>
 <ul>
@@ -1381,21 +1414,21 @@ protected SocketProcessorBase&lt;NioChannel&gt; createSocketProcessor(
         </link>
         <updated>2019-07-03T03:17:17.000Z</updated>
         <summary type="html"><![CDATA[<p>搬砖自 https://mp.weixin.qq.com/s/DTzd3jdtnnveffL-zcpmyg</p>
-<p>前言
+<p>前言<br>
 Map 这样的 Key Value 在软件开发中是非常经典的结构，常用于在内存中存放数据。</p>
 <p>本篇主要想讨论 ConcurrentHashMap 这样一个并发容器，在正式开始之前我觉得有必要谈谈 HashMap，没有它就不会有后面的 ConcurrentHashMap。</p>
 ]]></summary>
         <content type="html"><![CDATA[<p>搬砖自 https://mp.weixin.qq.com/s/DTzd3jdtnnveffL-zcpmyg</p>
-<p>前言
+<p>前言<br>
 Map 这样的 Key Value 在软件开发中是非常经典的结构，常用于在内存中存放数据。</p>
 <p>本篇主要想讨论 ConcurrentHashMap 这样一个并发容器，在正式开始之前我觉得有必要谈谈 HashMap，没有它就不会有后面的 ConcurrentHashMap。</p>
 <!-- more -->
 <h4 id="hashmap">HashMap</h4>
 <p>众所周知 HashMap 底层是基于 数组 + 链表 组成的，不过在 jdk1.7 和 1.8 中具体实现稍有不同。</p>
 <h5 id="base-17">Base 1.7</h5>
-<p>1.7 中的数据结构图：
-<img src="https://mmbiz.qpic.cn/mmbiz_jpg/csD7FygBVl2YrHfgckicQvCZFaT240KJuniawDic6DVLxibmw3cLgbicF8ibyajrpibGcbezT6TWR0ibJcDmnHmwuss7ZQ/640?wx_fmt=jpeg&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="">
-先来看看 1.7 中的实现。
+<p>1.7 中的数据结构图：<br>
+<img src="https://mmbiz.qpic.cn/mmbiz_jpg/csD7FygBVl2YrHfgckicQvCZFaT240KJuniawDic6DVLxibmw3cLgbicF8ibyajrpibGcbezT6TWR0ibJcDmnHmwuss7ZQ/640?wx_fmt=jpeg&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt=""><br>
+先来看看 1.7 中的实现。<br>
 <img src="https://mmbiz.qpic.cn/mmbiz_jpg/csD7FygBVl2YrHfgckicQvCZFaT240KJuzYhM1hVO4fokTzXoDrcy5zjRLibfXhhF1QrWxXu3S9uVACrAbcLjNvg/640?wx_fmt=jpeg&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt=""></p>
 <p>这是 HashMap 中比较核心的几个成员变量；看看分别是什么意思？</p>
 <ol>
@@ -1432,7 +1465,7 @@ Map 这样的 Key Value 在软件开发中是非常经典的结构，常用于�
 <p>因此通常建议能提前预估 HashMap 的大小最好，尽量的减少扩容带来的性能损耗。</p>
 <p>根据代码可以看到其实真正存放数据的是</p>
 <p><code>transient Entry&lt;K,V&gt;[] table = (Entry&lt;K,V&gt;[]) EMPTY_TABLE;</code></p>
-<p>这个数组，那么它又是如何定义的呢？
+<p>这个数组，那么它又是如何定义的呢？<br>
 <img src="https://mmbiz.qpic.cn/mmbiz_jpg/csD7FygBVl2YrHfgckicQvCZFaT240KJuX0o4uxUqo3XFULiaWedAr9z48BjRicBLaLLq9muCt1ftNafgJDyWKribg/640?wx_fmt=jpeg&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt=""></p>
 <p>Entry 是 HashMap 中的一个内部类，从他的成员变量很容易看出：</p>
 <ul>
@@ -1501,7 +1534,7 @@ Map 这样的 Key Value 在软件开发中是非常经典的结构，常用于�
 <p>而在 createEntry 中会将当前位置的桶传入到新建的桶中，如果当前桶有值就会在位置形成链表。</p>
 </li>
 </ul>
-<p>get 方法
+<p>get 方法<br>
 再来看看 get 函数：</p>
 <pre><code> 1    public V get(Object key) {
  2        if (key == null)
@@ -1529,17 +1562,17 @@ Map 这样的 Key Value 在软件开发中是非常经典的结构，常用于�
 24    }
 </code></pre>
 <ul>
-<li>首先也是根据 key 计算出 hashcode，然后定位到具体的桶中。
+<li>首先也是根据 key 计算出 hashcode，然后定位到具体的桶中。<br>
 判断该位置是否为链表。</li>
 <li>不是链表就根据 key、key 的 hashcode 是否相等来返回值。</li>
 <li>为链表则需要遍历直到 key 及 hashcode 相等时候就返回值。</li>
 <li>啥都没取到就直接返回 null 。</li>
 </ul>
-<p>Base 1.8
-不知道 1.7 的实现大家看出需要优化的点没有？
+<p>Base 1.8<br>
+不知道 1.7 的实现大家看出需要优化的点没有？<br>
 其实一个很明显的地方就是：</p>
 <blockquote>
-<p>当 Hash 冲突严重时，在桶上形成的链表会变的越来越长，这样在查询时的效率就会越来越低；时间复杂度为 O(N)。
+<p>当 Hash 冲突严重时，在桶上形成的链表会变的越来越长，这样在查询时的效率就会越来越低；时间复杂度为 O(N)。<br>
 因此 1.8 中重点优化了这个查询效率。</p>
 </blockquote>
 <p>1.8 HashMap 结构图：</p>
@@ -1581,7 +1614,7 @@ Map 这样的 Key Value 在软件开发中是非常经典的结构，常用于�
 <li>Node 的核心组成其实也是和 1.7 中的 HashEntry 一样，存放的都是 key value hashcode next 等数据。</li>
 </ul>
 <p>再来看看核心方法。</p>
-<p>put 方法
+<p>put 方法<br>
 <img src="https://mmbiz.qpic.cn/mmbiz_jpg/csD7FygBVl2YrHfgckicQvCZFaT240KJu4UWuTyDjAgliaaiaD7QbiaSgcQSpuzyCI03VUHeU4mias8jExp4KoS7HAg/640?wx_fmt=jpeg&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt=""></p>
 <p>看似要比 1.7 的复杂，我们一步步拆解：</p>
 <ol>
@@ -1644,9 +1677,9 @@ Map 这样的 Key Value 在软件开发中是非常经典的结构，常用于�
 </code></pre>
 <p>但是为什么呢？简单分析下。</p>
 <p>看过上文的还记得在 HashMap 扩容的时候会调用 resize() 方法，就是这里的并发操作容易在一个桶上形成环形链表；这样当获取一个不存在的 key 时，计算出的 index 正好是环形链表的下标就会出现死循环。</p>
-<p>如下图：
+<p>如下图：<br>
 <img src="https://mmbiz.qpic.cn/mmbiz_jpg/csD7FygBVl2YrHfgckicQvCZFaT240KJu43gK5Lic4AUj9LBR0xMtVYYwIicM0I6GnyyqqHXv1ClnNrLvXYics71Mw/640?wx_fmt=jpeg&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt=""></p>
-<p>遍历方式
+<p>遍历方式<br>
 还有一个值得注意的是 HashMap 的遍历方式，通常有以下几种：</p>
 <pre><code> 1Iterator&lt;Map.Entry&lt;String, Integer&gt;&gt; entryIterator = map.entrySet().iterator();
  2        while (entryIterator.hasNext()) {
@@ -1666,10 +1699,10 @@ Map 这样的 Key Value 在软件开发中是非常经典的结构，常用于�
 <p>简单总结下 HashMap：无论是 1.7 还是 1.8 其实都能看出 JDK 没有对它做任何的同步操作，所以并发会出问题，甚至出现死循环导致系统不可用。</p>
 <p>因此 JDK 推出了专项专用的 ConcurrentHashMap ，该类位于 java.util.concurrent 包下，专门用于解决并发问题。</p>
 <p>坚持看到这里的朋友算是已经把 ConcurrentHashMap 的基础已经打牢了，下面正式开始分析。</p>
-<p>ConcurrentHashMap
+<p>ConcurrentHashMap<br>
 ConcurrentHashMap 同样也分为 1.7 、1.8 版，两者在实现上略有不同。</p>
-<p>Base 1.7
-先来看看 1.7 的实现，下面是他的结构图：
+<p>Base 1.7<br>
+先来看看 1.7 的实现，下面是他的结构图：<br>
 <img src="https://mmbiz.qpic.cn/mmbiz_jpg/csD7FygBVl2YrHfgckicQvCZFaT240KJuFYL4rHqAwSJOQXIBqL76h5M8hnOJdaVowDrHicIZ4LTYtKDPBa2Bl9Q/640?wx_fmt=jpeg&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt=""></p>
 <p>如图所示，是由 Segment 数组、HashEntry 组成，和 HashMap 一样，仍然是数组加链表。</p>
 <p>它的核心成员变量：</p>
@@ -1699,7 +1732,7 @@ Segment 是 ConcurrentHashMap 的一个内部类，主要的组成如下：
 15
 16    }
 </code></pre>
-<p>看看其中 HashEntry 的组成：
+<p>看看其中 HashEntry 的组成：<br>
 <img src="https://mmbiz.qpic.cn/mmbiz_jpg/csD7FygBVl2YrHfgckicQvCZFaT240KJuDFkA8uvql3mGTNqibibfuEOnjjC9FAB8VZwR0TazTgKf0MlhGrCXv7Sw/640?wx_fmt=jpeg&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt=""></p>
 <p>和 HashMap 非常类似，唯一的区别就是其中的核心数据如 value ，以及链表都是 volatile 修饰的，保证了获取时的可见性。</p>
 <p>原理上来说：ConcurrentHashMap 采用了分段锁技术，其中 Segment 继承于 ReentrantLock。不会像 HashTable 那样不管是 put 还是 get 操作都需要做同步处理，理论上 ConcurrentHashMap 支持 CurrencyLevel (Segment 数组数量)的线程并发。每当一个线程占用锁访问一个 Segment 时，不会影响到其他的 Segment。</p>
@@ -1763,17 +1796,17 @@ Segment 是 ConcurrentHashMap 的一个内部类，主要的组成如下：
 43        }
 </code></pre>
 <p>虽然 HashEntry 中的 value 是用 volatile 关键词修饰的，但是并不能保证并发的原子性，所以 put 操作时仍然需要加锁处理。</p>
-<p>首先第一步的时候会尝试获取锁，如果获取失败肯定就有其他线程存在竞争，则利用 scanAndLockForPut() 自旋获取锁。
+<p>首先第一步的时候会尝试获取锁，如果获取失败肯定就有其他线程存在竞争，则利用 scanAndLockForPut() 自旋获取锁。<br>
 <img src="https://mmbiz.qpic.cn/mmbiz_jpg/csD7FygBVl2YrHfgckicQvCZFaT240KJuQahXKiaeuX1t5Xn8vqMhDpCic05KvuyvN5lrrK17BlDiaE2Qrh4aw9KAQ/640?wx_fmt=jpeg&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt=""></p>
 <ol>
 <li>尝试自旋获取锁。</li>
-<li>如果重试的次数达到了 MAX_SCAN_RETRIES 则改为阻塞锁获取，保证能获取成功。
+<li>如果重试的次数达到了 MAX_SCAN_RETRIES 则改为阻塞锁获取，保证能获取成功。<br>
 <img src="https://mmbiz.qpic.cn/mmbiz_jpg/csD7FygBVl2YrHfgckicQvCZFaT240KJu5DphFu4lllNoynBAIK4Xzl4ZgTneCUkHYfibBIwFIamnYOGATYUpC5A/640?wx_fmt=jpeg&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt=""></li>
 </ol>
-<p>再结合图看看 put 的流程。
-1.将当前 Segment 中的 table 通过 key 的 hashcode 定位到 HashEntry。
-2. 遍历该 HashEntry，如果不为空则判断传入的 key 和当前遍历的 key 是否相等，相等则覆盖旧的 value。
-3. 不为空则需要新建一个 HashEntry 并加入到 Segment 中，同时会先判断是否需要扩容。
+<p>再结合图看看 put 的流程。<br>
+1.将当前 Segment 中的 table 通过 key 的 hashcode 定位到 HashEntry。<br>
+2. 遍历该 HashEntry，如果不为空则判断传入的 key 和当前遍历的 key 是否相等，相等则覆盖旧的 value。<br>
+3. 不为空则需要新建一个 HashEntry 并加入到 Segment 中，同时会先判断是否需要扩容。<br>
 4.最后会解除在 1 中所获取当前 Segment 的锁。</p>
 <p>get 方法</p>
 <pre><code> 1    public V get(Object key) {
@@ -1798,7 +1831,7 @@ Segment 是 ConcurrentHashMap 的一个内部类，主要的组成如下：
 <p>只需要将 Key 通过 Hash 之后定位到具体的 Segment ，再通过一次 Hash 定位到具体的元素上。</p>
 <p>由于 HashEntry 中的 value 属性是用 volatile 关键词修饰的，保证了内存可见性，所以每次获取时都是最新值。</p>
 <p>ConcurrentHashMap 的 get 方法是非常高效的，因为整个过程都不需要加锁。</p>
-<p>Base 1.8
+<p>Base 1.8<br>
 1.7 已经解决了并发问题，并且能支持 N 个 Segment 这么多次数的并发，但依然存在 HashMap 在 1.7 版本中的问题。</p>
 <p>那就是查询遍历链表效率太低。</p>
 <p>因此 1.8 做了一些数据结构上的调整。</p>
@@ -1809,7 +1842,7 @@ Segment 是 ConcurrentHashMap 的一个内部类，主要的组成如下：
 <p><img src="https://mmbiz.qpic.cn/mmbiz_jpg/csD7FygBVl2YrHfgckicQvCZFaT240KJuX0QiaOcnzqugCVfdNR0KRDHlMOic8Pn7TZ0BcG8Oc1NBiaZSgVsmQGt2g/640?wx_fmt=jpeg&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt=""></p>
 <p>也将 1.7 中存放数据的 HashEntry 改为 Node，但作用都是相同的。</p>
 <p>其中的 val next 都用了 volatile 修饰，保证了可见性。</p>
-<p>put 方法
+<p>put 方法<br>
 重点来看看 put 函数：</p>
 <p><img src="https://mmbiz.qpic.cn/mmbiz_jpg/csD7FygBVl2YrHfgckicQvCZFaT240KJu606XAOtEmOlp5WZyCNUL2PklOSq1SgbWtoNy06MpyVW3euNqibLRibWg/640?wx_fmt=jpeg&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt=""></p>
 <p>根据 key 计算出 hashcode 。</p>
@@ -1824,7 +1857,7 @@ Segment 是 ConcurrentHashMap 的一个内部类，主要的组成如下：
 <p>如果是红黑树那就按照树的方式获取值。</p>
 <p>就不满足那就按照链表的方式遍历获取值。</p>
 <p>1.8 在 1.7 的数据结构上做了大的改动，采用红黑树之后可以保证查询效率（O(logn)），甚至取消了 ReentrantLock 改为了 synchronized，这样可以看出在新版的 JDK 中对 synchronized 优化是很到位的。</p>
-<p>总结
+<p>总结<br>
 看完了整个 HashMap 和 ConcurrentHashMap 在 1.7 和 1.8 中不同的实现方式相信大家对他们的理解应该会更加到位。</p>
 <p>其实这块也是面试的重点内容，通常的套路是：</p>
 <p>谈谈你理解的 HashMap，讲讲其中的 get put 过程。</p>
@@ -1855,7 +1888,7 @@ Segment 是 ConcurrentHashMap 的一个内部类，主要的组成如下：
 </ol>
 <!-- more -->
 <h2 id="注册-sonatype的jira-帐号">注册 sonatype的Jira 帐号</h2>
-<p>注册地址: https://issues.sonatype.org/secure/Signup!default.jspa
+<p>注册地址: https://issues.sonatype.org/secure/Signup!default.jspa<br>
 注册很简单,重要的是邮箱地址一定要正确,issue有任何变动都会通过邮件通知.</p>
 <h2 id="登录jira">登录Jira</h2>
 <p>注册完成后就登录: https://issues.sonatype.org/login.jsp</p>
@@ -2288,107 +2321,6 @@ static final int hash(Object key) {
         return null;
     }
 </code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[设计模式-桥接模式]]></title>
-        <id>https://caijh.github.io//post/she-ji-mo-shi-qiao-jie-mo-shi</id>
-        <link href="https://caijh.github.io//post/she-ji-mo-shi-qiao-jie-mo-shi">
-        </link>
-        <updated>2019-06-30T13:04:34.000Z</updated>
-        <summary type="html"><![CDATA[<h4 id="定义">定义</h4>
-<blockquote>
-<p>Decouple an abstraction from its implementation so that the two can vary independently.（将抽象和实现解耦，使得两者可以独立地变化。）</p>
-</blockquote>
-<h3 id="uml">UML</h3>
-<p><img src="https://caijh.github.io//post-images/1561899948043.png" alt=""></p>
-]]></summary>
-        <content type="html"><![CDATA[<h4 id="定义">定义</h4>
-<blockquote>
-<p>Decouple an abstraction from its implementation so that the two can vary independently.（将抽象和实现解耦，使得两者可以独立地变化。）</p>
-</blockquote>
-<h3 id="uml">UML</h3>
-<p><img src="https://caijh.github.io//post-images/1561899948043.png" alt=""></p>
-<!-- more -->
-<h3 id="代码实现">代码实现</h3>
-<pre><code>public interface Implementor {
-     //基本方法
-     public void doSomething();
-     public void doAnything();
-}
-public class ConcreteImplementor1 implements Implementor{
-     public void doSomething(){
-             //业务逻辑处理
-     }
-     public void doAnything(){
-             //业务逻辑处理
-     }
-}
-public class ConcreteImplementor2 implements Implementor{
-     public void doSomething(){
-             //业务逻辑处理
-     }
-     public void doAnything(){
-             //业务逻辑处理
-     }
-}
-public abstract class Abstraction {
-     //定义对实现化角色的引用
-     private Implementor imp;
-     //约束子类必须实现该构造函数
-     public Abstraction(Implementor _imp){
-             this.imp = _imp;
-     }
-     //自身的行为和属性
-     public void request(){
-             this.imp.doSomething();
-     }
-     //获得实现化角色
-     public Implementor getImp(){
-             return imp;
-     }
-}
-public class RefinedAbstraction extends Abstraction {
-     //覆写构造函数
-     public RefinedAbstraction(Implementor _imp){
-             super(_imp);
-     }
-     //修正父类的行为
-     @Override
-     public void request(){
-             /*
-              * 业务处理...
-              */
-             super.request();
-             super.getImp().doAnything();
-     }
-}
-public class Client {
-     public static void main(String[] args) {
-             //定义一个实现化角色
-             Implementor imp = new ConcreteImplementor1();
-             //定义一个抽象化角色
-             Abstraction abs = new RefinedAbstraction(imp);
-             //执行行文
-             abs.request();
-     }
-}
-</code></pre>
-<h4 id="桥梁模式的优点">桥梁模式的优点</h4>
-<ul>
-<li>抽象和实现分离
-这也是桥梁模式的主要特点，它完全是为了解决继承的缺点而提出的设计模式。在该模式下，实现可以不受抽象的约束，不用再绑定在一个固定的抽象层次上。</li>
-<li>优秀的扩充能力
-看看我们的例子，想增加实现？没问题！想增加抽象，也没有问题！只要对外暴露的接口层允许这样的变化，我们已经把变化的可能性减到最小。</li>
-<li>实现细节对客户透明
-客户不用关心细节的实现，它已经由抽象层通过聚合关系完成了封装。</li>
-</ul>
-<h4 id="桥梁模式的使用场景">桥梁模式的使用场景</h4>
-<ul>
-<li>不希望或不适用使用继承的场景</li>
-<li>接口或抽象类不稳定的场景</li>
-<li>重用性要求较高的场景</li>
-</ul>
 ]]></content>
     </entry>
 </feed>

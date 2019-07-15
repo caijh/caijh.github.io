@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>设计模式-模板方法模式 | John&#39;s Blog</title>
+<title>Redis - 过期删除策略 | John&#39;s Blog</title>
 <meta name="description" content="搬砖大佬">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -87,93 +87,40 @@
       <div class="sm-12 md-8 col">
         <div class="paper">
           <article class="article">
-            <h1>设计模式-模板方法模式</h1>
+            <h1>Redis - 过期删除策略</h1>
             <p class="article-meta">
-              2019-06-24
+              2019-07-15
               
-                <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge secondary">
-                  设计模式
+                <a href="https://caijh.github.io//tag/6w7rEzKhc" class="badge secondary">
+                  Redis
                 </a>
               
             </p>
             
-              <img src="https://pic3.zhimg.com/v2-49714ca1bde181ca24bfaf9bf8244cab_1200x500.jpg" alt="设计模式-模板方法模式">
-            
             <div class="post-content">
-              <h4 id="定义">定义</h4>
-<blockquote>
-<p>Define the skeleton of an algorithm in an operation,deferring some steps to subclasses.Template Method lets subclasses redefine certain steps of an algorithm without changing the algorithm's structure.（定义一个操作中的算法的框架，而将一些步骤延迟到子类中。使得子类可以不改变一个算法的结构即可重定义该算法的某些特定步骤。）</p>
-</blockquote>
-<h4 id="uml">UML</h4>
-<p><img src="https://caijh.github.io//post-images/1561387763499.png" alt=""></p>
+              <p>Redis 采用的过期策略： 懒汉式删除 + 定期删除</p>
 <!-- more -->
-<h4 id="代码实现">代码实现</h4>
-<pre><code>public abstract class AbstractClass {
-     //基本方法
-     protected abstract void doSomething();
-     //基本方法
-     protected abstract void doAnything();
-     //模板方法
-     public void templateMethod(){
-             /*
-              * 调用基本方法，完成相关的逻辑
-              */
-             this.doAnything();
-             this.doSomething();
-     }
-}
-public class ConcreteClass1 extends AbstractClass {
-     //实现基本方法
-     protected void doAnything() {
-             //业务逻辑处理
-     }
-     protected void doSomething() {
-             //业务逻辑处理
-     }
-}
-public class ConcreteClass2 extends AbstractClass {
-     //实现基本方法
-     protected void doAnything() {
-             //业务逻辑处理
-     }
-     protected void doSomething() {
-             //业务逻辑处理
-     }
-}
-public class Client {
-     public static void main(String[] args) {
-             AbstractClass class1 = new ConcreteClass1();
-             AbstractClass class2 = new ConcreteClass2();               
-             //调用模板方法
-             class1.templateMethod();
-             class2.templateMethod();
-     }
-}
-</code></pre>
-<h4 id="模板方法模式的优点">模板方法模式的优点</h4>
-<ul>
-<li>封装不变部分，扩展可变部分<br>
-把认为是不变部分的算法封装到父类实现，而可变部分的则可以通过继承来继续扩展。</li>
-<li>提取公共部分代码，便于维护<br>
-我们例子中刚刚走过的弯路就是最好的证明，如果我们不抽取到父类中，任由这种散乱的代码发生，想想后果是什么样子？维护人员为了修正一个缺陷，需要到处查找类似的代码！</li>
-<li>行为由父类控制，子类实现<br>
-基本方法是由子类实现的，因此子类可以通过扩展的方式增加相应的功能，符合开闭原则。</li>
-</ul>
-<h4 id="模板方法模式的缺点">模板方法模式的缺点</h4>
-<p>按照我们的设计习惯，抽象类负责声明最抽象、最一般的事物属性和方法，实现类完成具体的事物属性和方法。但是模板方法模式却颠倒了，抽象类定义了部分抽象方法，由子类实现，子类执行的结果影响了父类的结果，也就是子类对父类产生了影响，这在复杂的项目中，会带来代码阅读的难度，而且也会让新手产生不适感。</p>
-<h4 id="模板方法的使用场景">模板方法的使用场景</h4>
-<ul>
-<li>多个子类有公有的方法，并且逻辑基本相同时。</li>
-<li>重要、复杂的算法，可以把核心算法设计为模板方法，周边的相关细节功能则由各个子类实现。</li>
-<li>重构时，模板方法模式是一个经常使用的模式，把相同的代码抽取到父类中，然后通过钩子函数（见“模板方法模式的扩展”）约束其行为。</li>
-</ul>
-<h4 id="jdk中的模板方法模式">JDK中的模板方法模式</h4>
-<ul>
-<li>java.util.Collections#sort()</li>
-<li>java.io.InputStream#skip()</li>
-<li>java.io.InputStream#read()</li>
-<li>java.util.AbstractList#indexOf()</li>
-</ul>
+<h1 id="三种过期删除策略">三种过期删除策略</h1>
+<h2 id="定时删除">定时删除</h2>
+<p>设置key的过期时间的同时为key设置一个定时器，在key过期时对key进行删除。<br>
+优点： 保证内存被尽快回收。<br>
+缺点：</p>
+<ol>
+<li>若key过多，删除key占用CPU时间</li>
+<li>定时器的创建耗时，若对每个key创建定时器，会有大量定时器产生，影响性能</li>
+</ol>
+<h2 id="懒汉式删除">懒汉式删除</h2>
+<p>在访问key的时候，判断key是否过期，如过期，删除key.<br>
+优点： 删除操作只发生个获取key的时候，对CPU占用少<br>
+缺点：若大量key超时，但很长一段时间内都没有访问，那些key会一直占用内存，可能会有内存泄漏</p>
+<h2 id="定期删除">定期删除</h2>
+<p>每隔一段时间执行一次删除过期key<br>
+优点：</p>
+<ol>
+<li>减少对CPU的占用</li>
+<li>克服懒汉式删除的缺点<br>
+缺点：获取的key可以已经是过期的</li>
+</ol>
 
             </div>
           </article>
@@ -184,9 +131,9 @@ public class Client {
               <div class="next">
                 下一篇
               </div>
-              <a href="https://caijh.github.io//post/she-ji-mo-shi-chou-xiang-gong-han-mo-shi">
+              <a href="https://caijh.github.io//post/mysql-explain-xiang-jie">
                 <h3 class="post-title">
-                  设计模式-抽象工厂模式
+                  MySQL - explain详解
                 </h3>
               </a>
             </div>
@@ -349,35 +296,35 @@ public class Client {
     </div>
     <div class="row">
       
-        <a href="https://caijh.github.io//tag/6w7rEzKhc" class="badge secondary">
+        <a href="https://caijh.github.io//tag/6w7rEzKhc" class="badge success">
           Redis
         </a>
       
-        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge success">
+        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge secondary">
           MySQL
         </a>
       
-        <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge warning">
+        <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge success">
           源代码
         </a>
       
-        <a href="https://caijh.github.io//tag/nHOjalh2s" class="badge secondary">
+        <a href="https://caijh.github.io//tag/nHOjalh2s" class="badge warning">
           Spring Cloud
         </a>
       
-        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge success">
+        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge warning">
           Java
         </a>
       
-        <a href="https://caijh.github.io//tag/kmQV6iHOM" class="badge secondary">
+        <a href="https://caijh.github.io//tag/kmQV6iHOM" class="badge success">
           面试
         </a>
       
-        <a href="https://caijh.github.io//tag/hm42pTrhV" class="badge secondary">
+        <a href="https://caijh.github.io//tag/hm42pTrhV" class="badge warning">
           Maven
         </a>
       
-        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge warning">
+        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge ">
           设计模式
         </a>
       
