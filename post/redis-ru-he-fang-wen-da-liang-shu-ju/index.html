@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>Redis - 过期删除策略 | John&#39;s Blog</title>
+<title>Redis - 如何访问大量数据 | John&#39;s Blog</title>
 <meta name="description" content="搬砖小弟">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -87,40 +87,28 @@
       <div class="sm-12 md-8 col">
         <div class="paper">
           <article class="article">
-            <h1>Redis - 过期删除策略</h1>
+            <h1>Redis - 如何访问大量数据</h1>
             <p class="article-meta">
-              2019-07-15
-              
-                <a href="https://caijh.github.io//tag/6w7rEzKhc" class="badge secondary">
-                  Redis
-                </a>
+              2019-07-18
               
             </p>
             
             <div class="post-content">
-              <p>Redis 采用的过期策略： 懒汉式删除 + 定期删除</p>
-<!-- more -->
-<h1 id="三种过期删除策略">三种过期删除策略</h1>
-<h2 id="定时删除">定时删除</h2>
-<p>设置key的过期时间的同时为key设置一个定时器，在key过期时对key进行删除。<br>
-优点： 保证内存被尽快回收。<br>
-缺点：</p>
-<ol>
-<li>若key过多，删除key占用CPU时间</li>
-<li>定时器的创建耗时，若对每个key创建定时器，会有大量定时器产生，影响性能</li>
-</ol>
-<h2 id="懒汉式删除">懒汉式删除</h2>
-<p>在访问key的时候，判断key是否过期，如过期，删除key.<br>
-优点： 删除操作只发生个获取key的时候，对CPU占用少<br>
-缺点：若大量key超时，但很长一段时间内都没有访问，那些key会一直占用内存，可能会有内存泄漏</p>
-<h2 id="定期删除">定期删除</h2>
-<p>每隔一段时间执行一次删除过期key<br>
-优点：</p>
-<ol>
-<li>减少对CPU的占用</li>
-<li>克服懒汉式删除的缺点<br>
-缺点：获取的key可以已经是过期的</li>
-</ol>
+              <p>众如周知，Redis中<code>keys pattern</code>命令可以返回大量数据。<br>
+非生产环境可以结合linux的管道删除相同pattern的key.</p>
+<pre><code>redis-cli keys &quot;*&quot; | xargs redis-cli del
+</code></pre>
+<p>但是生产环境一般keys会被重命名禁止在生产使用。<br>
+这时可以使用scan命令删除。</p>
+<p>scan的特点：</p>
+<ul>
+<li>复杂度虽然也是 O(n)，但是它是通过游标分步进行的，不会阻塞线程</li>
+<li>提供 count 参数，不是结果数量，是Redis单次遍历字典槽位数量(约等于)</li>
+<li>同 keys 一样，它也提供模式匹配功能;</li>
+<li>服务器不需要为游标保存状态，游标的唯一状态就是 scan 返回给客户端的游标整数;</li>
+<li>返回的结果可能会有重复，需要客户端去重复，这点非常重要;</li>
+<li>单次返回的结果是空的并不意味着遍历结束，而要看返回的游标值是否为零</li>
+</ul>
 
             </div>
           </article>
@@ -131,9 +119,9 @@
               <div class="next">
                 下一篇
               </div>
-              <a href="https://caijh.github.io//post/mysql-explain-xiang-jie">
+              <a href="https://caijh.github.io//post/redis-huan-cun-wen-ti">
                 <h3 class="post-title">
-                  MySQL - explain详解
+                  Redis - 缓存问题
                 </h3>
               </a>
             </div>
@@ -306,11 +294,11 @@
     </div>
     <div class="row">
       
-        <a href="https://caijh.github.io//tag/6w7rEzKhc" class="badge ">
+        <a href="https://caijh.github.io//tag/6w7rEzKhc" class="badge secondary">
           Redis
         </a>
       
-        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge success">
+        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge ">
           MySQL
         </a>
       
@@ -318,23 +306,23 @@
           源代码
         </a>
       
-        <a href="https://caijh.github.io//tag/nHOjalh2s" class="badge secondary">
+        <a href="https://caijh.github.io//tag/nHOjalh2s" class="badge warning">
           Spring Cloud
         </a>
       
-        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge secondary">
+        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge success">
           Java
         </a>
       
-        <a href="https://caijh.github.io//tag/kmQV6iHOM" class="badge secondary">
+        <a href="https://caijh.github.io//tag/kmQV6iHOM" class="badge warning">
           面试
         </a>
       
-        <a href="https://caijh.github.io//tag/hm42pTrhV" class="badge success">
+        <a href="https://caijh.github.io//tag/hm42pTrhV" class="badge secondary">
           Maven
         </a>
       
-        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge warning">
+        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge ">
           设计模式
         </a>
       
