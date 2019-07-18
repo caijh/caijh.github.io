@@ -2,11 +2,11 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://caijh.github.io/</id>
     <title>John&apos;s Blog</title>
-    <updated>2019-07-18T04:09:47.375Z</updated>
+    <updated>2019-07-18T04:30:10.107Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://caijh.github.io/"/>
     <link rel="self" href="https://caijh.github.io//atom.xml"/>
-    <subtitle>搬砖大佬</subtitle>
+    <subtitle>搬砖小弟</subtitle>
     <logo>https://caijh.github.io//images/avatar.png</logo>
     <icon>https://caijh.github.io//favicon.ico</icon>
     <rights>All rights reserved 2019, John&apos;s Blog</rights>
@@ -88,6 +88,14 @@
 <li>no-enviction（驱逐）：禁止驱逐数据，返回错误</li>
 </ul>
 <!-- more -->
+<h3 id="参数设置">参数设置</h3>
+<p>Redis中存在一个参数用来设定内存使用上限，这个参数是maxmemory，可以在redis.conf中设置redis内存使用的最大值，当redis使用内存达到最大值时，redis会根据配置文件中的策略选取要删除的key，并删除这些key-value的值。若根据配置的策略，没有符合策略的key，也就是说内存已经容不下新的key-value了，但此时有不能删除key，那么这时候写的话，将会出现写错误。</p>
+<h3 id="何时触发内存淘汰">何时触发内存淘汰</h3>
+<ol>
+<li>客户端发送指令，导致数据的增加时</li>
+<li>redis检测到内存的使用达到上限</li>
+<li>redis自身执行指令时</li>
+</ol>
 ]]></content>
     </entry>
     <entry>
