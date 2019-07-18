@@ -7,7 +7,7 @@
 <meta name="description" content="搬砖小弟">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<link rel="shortcut icon" href="https://caijh.github.io//favicon.ico?v=1563436590170">
+<link rel="shortcut icon" href="https://caijh.github.io//favicon.ico?v=1563438702420">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 <link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
@@ -90,7 +90,8 @@
       
     </p>
     <p class="text-lead">
-      
+      <p>按redis官网编译的redis, 可执行文件会与源码在一起, 如果想编译纯净版可按下边的步骤。</p>
+
     </p>
     <div class="row">
       <a href="https://caijh.github.io//post/redis-bian-yi-chun-jing-ban" class="readmore-link">
@@ -110,7 +111,13 @@
       
     </p>
     <p class="text-lead">
-      
+      <p>众如周知，Redis中<code>keys pattern</code>命令可以返回大量数据。<br>
+非生产环境可以结合linux的管道删除相同pattern的key.</p>
+<pre><code>redis-cli keys &quot;*&quot; | xargs redis-cli del
+</code></pre>
+<p>但是生产环境一般keys会被重命名禁止在生产使用。<br>
+这时可以使用scan命令删除。</p>
+
     </p>
     <div class="row">
       <a href="https://caijh.github.io//post/redis-ru-he-fang-wen-da-liang-shu-ju" class="readmore-link">
@@ -221,7 +228,7 @@
     <p class="article-meta">
       2019-07-15
       
-        <a href="https://caijh.github.io//tag/6w7rEzKhc" class="badge warning">
+        <a href="https://caijh.github.io//tag/6w7rEzKhc" class="badge ">
           Redis
         </a>
       
@@ -299,7 +306,7 @@ AQS内部有一个state状态记录当前线程的加锁次数，还有一个exc
     <p class="article-meta">
       2019-07-13
       
-        <a href="https://caijh.github.io//tag/nHOjalh2s" class="badge success">
+        <a href="https://caijh.github.io//tag/nHOjalh2s" class="badge ">
           Spring Cloud
         </a>
       
@@ -327,7 +334,7 @@ Hystrix默认的超时时间是1秒，如果超过这个时间尚未响应，将
     <p class="article-meta">
       2019-07-08
       
-        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge ">
+        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge secondary">
           Java
         </a>
       
@@ -387,7 +394,7 @@ DiscardOldestPolicy 从队列中踢出最先进入队列（最后一个执行）
       
       <div class="sm-12 md-4 col sidebar">
   <div class="paper info-container">
-    <img src="https://caijh.github.io//images/avatar.png?v=1563436590170" class="no-responsive avatar">
+    <img src="https://caijh.github.io//images/avatar.png?v=1563438702420" class="no-responsive avatar">
     <div class="text-muted">搬砖小弟</div>
     <div class="social-container">
       
@@ -541,19 +548,19 @@ DiscardOldestPolicy 从队列中踢出最先进入队列（最后一个执行）
     </div>
     <div class="row">
       
-        <a href="https://caijh.github.io//tag/6w7rEzKhc" class="badge success">
+        <a href="https://caijh.github.io//tag/6w7rEzKhc" class="badge secondary">
           Redis
         </a>
       
-        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge secondary">
+        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge success">
           MySQL
         </a>
       
-        <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge secondary">
+        <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge ">
           源代码
         </a>
       
-        <a href="https://caijh.github.io//tag/nHOjalh2s" class="badge secondary">
+        <a href="https://caijh.github.io//tag/nHOjalh2s" class="badge ">
           Spring Cloud
         </a>
       
@@ -561,11 +568,11 @@ DiscardOldestPolicy 从队列中踢出最先进入队列（最后一个执行）
           Java
         </a>
       
-        <a href="https://caijh.github.io//tag/kmQV6iHOM" class="badge warning">
+        <a href="https://caijh.github.io//tag/kmQV6iHOM" class="badge secondary">
           面试
         </a>
       
-        <a href="https://caijh.github.io//tag/hm42pTrhV" class="badge ">
+        <a href="https://caijh.github.io//tag/hm42pTrhV" class="badge secondary">
           Maven
         </a>
       

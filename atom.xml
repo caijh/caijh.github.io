@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://caijh.github.io/</id>
     <title>John&apos;s Blog</title>
-    <updated>2019-07-18T07:56:36.546Z</updated>
+    <updated>2019-07-18T08:31:45.892Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://caijh.github.io/"/>
     <link rel="self" href="https://caijh.github.io//atom.xml"/>
@@ -16,7 +16,10 @@
         <link href="https://caijh.github.io//post/redis-bian-yi-chun-jing-ban">
         </link>
         <updated>2019-07-18T07:38:08.000Z</updated>
+        <summary type="html"><![CDATA[<p>按redis官网编译的redis, 可执行文件会与源码在一起, 如果想编译纯净版可按下边的步骤。</p>
+]]></summary>
         <content type="html"><![CDATA[<p>按redis官网编译的redis, 可执行文件会与源码在一起, 如果想编译纯净版可按下边的步骤。</p>
+<!-- more -->
 <h3 id="下载redis">下载redis</h3>
 <pre><code>$ wget http://download.redis.io/releases/redis-5.0.5.tar.gz
 $ tar xzf redis-5.0.5.tar.gz
@@ -37,12 +40,20 @@ $ cd redis-5.0.5
         <link href="https://caijh.github.io//post/redis-ru-he-fang-wen-da-liang-shu-ju">
         </link>
         <updated>2019-07-18T04:31:22.000Z</updated>
+        <summary type="html"><![CDATA[<p>众如周知，Redis中<code>keys pattern</code>命令可以返回大量数据。<br>
+非生产环境可以结合linux的管道删除相同pattern的key.</p>
+<pre><code>redis-cli keys &quot;*&quot; | xargs redis-cli del
+</code></pre>
+<p>但是生产环境一般keys会被重命名禁止在生产使用。<br>
+这时可以使用scan命令删除。</p>
+]]></summary>
         <content type="html"><![CDATA[<p>众如周知，Redis中<code>keys pattern</code>命令可以返回大量数据。<br>
 非生产环境可以结合linux的管道删除相同pattern的key.</p>
 <pre><code>redis-cli keys &quot;*&quot; | xargs redis-cli del
 </code></pre>
 <p>但是生产环境一般keys会被重命名禁止在生产使用。<br>
 这时可以使用scan命令删除。</p>
+<!-- more -->
 <p>scan的特点：</p>
 <ul>
 <li>复杂度虽然也是 O(n)，但是它是通过游标分步进行的，不会阻塞线程</li>
