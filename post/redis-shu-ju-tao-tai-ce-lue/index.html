@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>设计模式-桥接模式 | John&#39;s Blog</title>
+<title>Redis - 数据淘汰策略 | John&#39;s Blog</title>
 <meta name="description" content="搬砖大佬">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -87,99 +87,22 @@
       <div class="sm-12 md-8 col">
         <div class="paper">
           <article class="article">
-            <h1>设计模式-桥接模式</h1>
+            <h1>Redis - 数据淘汰策略</h1>
             <p class="article-meta">
-              2019-06-30
+              2019-07-18
               
             </p>
             
             <div class="post-content">
-              <h4 id="定义">定义</h4>
-<blockquote>
-<p>Decouple an abstraction from its implementation so that the two can vary independently.（将抽象和实现解耦，使得两者可以独立地变化。）</p>
-</blockquote>
-<h3 id="uml">UML</h3>
-<p><img src="https://caijh.github.io//post-images/1561899948043.png" alt=""></p>
+              <ul>
+<li>volatile-lru：从已设置过期时间的数据集（server.db[i].expires）中挑选最近最少使用的数据淘汰</li>
+<li>volatile-ttl：从已设置过期时间的数据集（server.db[i].expires）中挑选将要过期的数据淘汰</li>
+<li>volatile-random：从已设置过期时间的数据集（server.db[i].expires）中任意选择数据淘汰</li>
+<li>allkeys-lru：从数据集（server.db[i].dict）中挑选最近最少使用的数据淘汰</li>
+<li>allkeys-random：从数据集（server.db[i].dict）中任意选择数据淘汰</li>
+<li>no-enviction（驱逐）：禁止驱逐数据，返回错误</li>
+</ul>
 <!-- more -->
-<h3 id="代码实现">代码实现</h3>
-<pre><code>public interface Implementor {
-     //基本方法
-     public void doSomething();
-     public void doAnything();
-}
-public class ConcreteImplementor1 implements Implementor{
-     public void doSomething(){
-             //业务逻辑处理
-     }
-     public void doAnything(){
-             //业务逻辑处理
-     }
-}
-public class ConcreteImplementor2 implements Implementor{
-     public void doSomething(){
-             //业务逻辑处理
-     }
-     public void doAnything(){
-             //业务逻辑处理
-     }
-}
-public abstract class Abstraction {
-     //定义对实现化角色的引用
-     private Implementor imp;
-     //约束子类必须实现该构造函数
-     public Abstraction(Implementor _imp){
-             this.imp = _imp;
-     }
-     //自身的行为和属性
-     public void request(){
-             this.imp.doSomething();
-     }
-     //获得实现化角色
-     public Implementor getImp(){
-             return imp;
-     }
-}
-public class RefinedAbstraction extends Abstraction {
-     //覆写构造函数
-     public RefinedAbstraction(Implementor _imp){
-             super(_imp);
-     }
-     //修正父类的行为
-     @Override
-     public void request(){
-             /*
-              * 业务处理...
-              */
-             super.request();
-             super.getImp().doAnything();
-     }
-}
-public class Client {
-     public static void main(String[] args) {
-             //定义一个实现化角色
-             Implementor imp = new ConcreteImplementor1();
-             //定义一个抽象化角色
-             Abstraction abs = new RefinedAbstraction(imp);
-             //执行行文
-             abs.request();
-     }
-}
-</code></pre>
-<h4 id="桥梁模式的优点">桥梁模式的优点</h4>
-<ul>
-<li>抽象和实现分离<br>
-这也是桥梁模式的主要特点，它完全是为了解决继承的缺点而提出的设计模式。在该模式下，实现可以不受抽象的约束，不用再绑定在一个固定的抽象层次上。</li>
-<li>优秀的扩充能力<br>
-看看我们的例子，想增加实现？没问题！想增加抽象，也没有问题！只要对外暴露的接口层允许这样的变化，我们已经把变化的可能性减到最小。</li>
-<li>实现细节对客户透明<br>
-客户不用关心细节的实现，它已经由抽象层通过聚合关系完成了封装。</li>
-</ul>
-<h4 id="桥梁模式的使用场景">桥梁模式的使用场景</h4>
-<ul>
-<li>不希望或不适用使用继承的场景</li>
-<li>接口或抽象类不稳定的场景</li>
-<li>重用性要求较高的场景</li>
-</ul>
 
             </div>
           </article>
@@ -190,9 +113,9 @@ public class Client {
               <div class="next">
                 下一篇
               </div>
-              <a href="https://caijh.github.io//post/she-ji-mo-shi-xiang-yuan-mo-shi">
+              <a href="https://caijh.github.io//post/vagrant-shi-yong">
                 <h3 class="post-title">
-                  设计模式-享元模式
+                  Vagrant - 使用
                 </h3>
               </a>
             </div>
@@ -361,15 +284,15 @@ public class Client {
     </div>
     <div class="row">
       
-        <a href="https://caijh.github.io//tag/6w7rEzKhc" class="badge secondary">
+        <a href="https://caijh.github.io//tag/6w7rEzKhc" class="badge warning">
           Redis
         </a>
       
-        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge secondary">
+        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge ">
           MySQL
         </a>
       
-        <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge secondary">
+        <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge success">
           源代码
         </a>
       
@@ -377,15 +300,15 @@ public class Client {
           Spring Cloud
         </a>
       
-        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge success">
+        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge secondary">
           Java
         </a>
       
-        <a href="https://caijh.github.io//tag/kmQV6iHOM" class="badge secondary">
+        <a href="https://caijh.github.io//tag/kmQV6iHOM" class="badge success">
           面试
         </a>
       
-        <a href="https://caijh.github.io//tag/hm42pTrhV" class="badge success">
+        <a href="https://caijh.github.io//tag/hm42pTrhV" class="badge ">
           Maven
         </a>
       

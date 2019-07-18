@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://caijh.github.io/</id>
     <title>John&apos;s Blog</title>
-    <updated>2019-07-15T03:48:32.649Z</updated>
+    <updated>2019-07-18T04:09:47.375Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://caijh.github.io/"/>
     <link rel="self" href="https://caijh.github.io//atom.xml"/>
@@ -10,6 +10,109 @@
     <logo>https://caijh.github.io//images/avatar.png</logo>
     <icon>https://caijh.github.io//favicon.ico</icon>
     <rights>All rights reserved 2019, John&apos;s Blog</rights>
+    <entry>
+        <title type="html"><![CDATA[Redis - 缓存问题]]></title>
+        <id>https://caijh.github.io//post/redis-huan-cun-wen-ti</id>
+        <link href="https://caijh.github.io//post/redis-huan-cun-wen-ti">
+        </link>
+        <updated>2019-07-18T03:42:55.000Z</updated>
+        <summary type="html"><![CDATA[<h3 id="缓存穿透">缓存穿透</h3>
+<blockquote>
+<p>什么是缓存穿透？<br>
+缓存穿透是指查询一个一定不在缓存中存在的key. 由于key不存在，每次都会去查询数据库，如果对于这个key的请求很多的话，可能会把数据库搞垮。</p>
+</blockquote>
+<p>解决方案：</p>
+<ol>
+<li>布隆过滤器</li>
+<li>将查询数据库的空结果也缓存起来，设置一个较短的过期时间。</li>
+</ol>
+<h3 id="缓存雪崩">缓存雪崩</h3>
+<blockquote>
+<p>什么是缓存雪崩？<br>
+对于多个key的查询，全部请求都走数据库了。有两种情况：一种是redis挂掉，别一个情况是一段时间内那些key都失效了。<br>
+对于第一种情况要保证redis的的高可性，对于第二种情况可以为key设置不同的随随机过期时间。</p>
+</blockquote>
+<h3 id="缓存数据一致性">缓存数据一致性</h3>
+<ol>
+<li>写数据库也写缓存，保证了数据一致性；但是难保证数据库与redis的事务</li>
+<li>写数据库，直接删缓存；读缓存发现没有，从数据库读取并保存缓存；带来问题是并发问题。</li>
+<li>应该根据不同的业务，来处理缓存的生成。</li>
+</ol>
+]]></summary>
+        <content type="html"><![CDATA[<h3 id="缓存穿透">缓存穿透</h3>
+<blockquote>
+<p>什么是缓存穿透？<br>
+缓存穿透是指查询一个一定不在缓存中存在的key. 由于key不存在，每次都会去查询数据库，如果对于这个key的请求很多的话，可能会把数据库搞垮。</p>
+</blockquote>
+<p>解决方案：</p>
+<ol>
+<li>布隆过滤器</li>
+<li>将查询数据库的空结果也缓存起来，设置一个较短的过期时间。</li>
+</ol>
+<h3 id="缓存雪崩">缓存雪崩</h3>
+<blockquote>
+<p>什么是缓存雪崩？<br>
+对于多个key的查询，全部请求都走数据库了。有两种情况：一种是redis挂掉，别一个情况是一段时间内那些key都失效了。<br>
+对于第一种情况要保证redis的的高可性，对于第二种情况可以为key设置不同的随随机过期时间。</p>
+</blockquote>
+<h3 id="缓存数据一致性">缓存数据一致性</h3>
+<ol>
+<li>写数据库也写缓存，保证了数据一致性；但是难保证数据库与redis的事务</li>
+<li>写数据库，直接删缓存；读缓存发现没有，从数据库读取并保存缓存；带来问题是并发问题。</li>
+<li>应该根据不同的业务，来处理缓存的生成。</li>
+</ol>
+<!-- more -->
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Redis - 数据淘汰策略]]></title>
+        <id>https://caijh.github.io//post/redis-shu-ju-tao-tai-ce-lue</id>
+        <link href="https://caijh.github.io//post/redis-shu-ju-tao-tai-ce-lue">
+        </link>
+        <updated>2019-07-18T03:08:46.000Z</updated>
+        <summary type="html"><![CDATA[<ul>
+<li>volatile-lru：从已设置过期时间的数据集（server.db[i].expires）中挑选最近最少使用的数据淘汰</li>
+<li>volatile-ttl：从已设置过期时间的数据集（server.db[i].expires）中挑选将要过期的数据淘汰</li>
+<li>volatile-random：从已设置过期时间的数据集（server.db[i].expires）中任意选择数据淘汰</li>
+<li>allkeys-lru：从数据集（server.db[i].dict）中挑选最近最少使用的数据淘汰</li>
+<li>allkeys-random：从数据集（server.db[i].dict）中任意选择数据淘汰</li>
+<li>no-enviction（驱逐）：禁止驱逐数据，返回错误</li>
+</ul>
+]]></summary>
+        <content type="html"><![CDATA[<ul>
+<li>volatile-lru：从已设置过期时间的数据集（server.db[i].expires）中挑选最近最少使用的数据淘汰</li>
+<li>volatile-ttl：从已设置过期时间的数据集（server.db[i].expires）中挑选将要过期的数据淘汰</li>
+<li>volatile-random：从已设置过期时间的数据集（server.db[i].expires）中任意选择数据淘汰</li>
+<li>allkeys-lru：从数据集（server.db[i].dict）中挑选最近最少使用的数据淘汰</li>
+<li>allkeys-random：从数据集（server.db[i].dict）中任意选择数据淘汰</li>
+<li>no-enviction（驱逐）：禁止驱逐数据，返回错误</li>
+</ul>
+<!-- more -->
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Vagrant - 使用]]></title>
+        <id>https://caijh.github.io//post/vagrant-shi-yong</id>
+        <link href="https://caijh.github.io//post/vagrant-shi-yong">
+        </link>
+        <updated>2019-07-17T14:11:55.000Z</updated>
+        <summary type="html"><![CDATA[<p>Vagrant是用来管理虚拟机的，如VirtualBox、VMware、AWS等，主要好处是可以提供一个可配置、可移植和复用的软件环境，可以使用shell、chef、puppet等工具部署。所以vagrant不能单独使用，如果你用它来管理自己的开发环境的话，必须在自己的电脑里安装了虚拟机软件，我使用的是virtualbox。</p>
+<p>Vagrant提供一个命令行工具vagrant，通过这个命令行工具可以直接启动一个虚拟机，当然你需要提前定义一个Vagrantfile文件，这有点类似Dockerfile之于docker了。</p>
+<p>跟docker类比这来看vagrant就比较好理解了，vagrant也是用来提供一致性环境的，vagrant本身也提供一个镜像源，使用vagrant init hashicorp/precise64就可以初始化一个Ubuntu 12.04的镜像。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>Vagrant是用来管理虚拟机的，如VirtualBox、VMware、AWS等，主要好处是可以提供一个可配置、可移植和复用的软件环境，可以使用shell、chef、puppet等工具部署。所以vagrant不能单独使用，如果你用它来管理自己的开发环境的话，必须在自己的电脑里安装了虚拟机软件，我使用的是virtualbox。</p>
+<p>Vagrant提供一个命令行工具vagrant，通过这个命令行工具可以直接启动一个虚拟机，当然你需要提前定义一个Vagrantfile文件，这有点类似Dockerfile之于docker了。</p>
+<p>跟docker类比这来看vagrant就比较好理解了，vagrant也是用来提供一致性环境的，vagrant本身也提供一个镜像源，使用vagrant init hashicorp/precise64就可以初始化一个Ubuntu 12.04的镜像。</p>
+<!-- more -->
+<h3 id="启动并运行">启动并运行</h3>
+<pre><code>$ vagrant init hashicorp/precise64
+$ vagrant up // 启动
+</code></pre>
+<p>先在目录生成一个Vagrantfile文件, 下载系统并启动。</p>
+<h3 id="进入虚拟机">进入虚拟机</h3>
+<p>vagrant up</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Redis - 过期删除策略]]></title>
         <id>https://caijh.github.io//post/redis-guo-qi-shan-chu-ce-lue</id>
@@ -1405,922 +1508,6 @@ protected SocketProcessorBase&lt;NioChannel&gt; createSocketProcessor(
 </code></pre>
 </li>
 </ol>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[源码阅读-HashMap ConcurrentHashMap]]></title>
-        <id>https://caijh.github.io//post/yuan-ma-yue-du-hashmap-concurrenthashmap</id>
-        <link href="https://caijh.github.io//post/yuan-ma-yue-du-hashmap-concurrenthashmap">
-        </link>
-        <updated>2019-07-03T03:17:17.000Z</updated>
-        <summary type="html"><![CDATA[<p>搬砖自 https://mp.weixin.qq.com/s/DTzd3jdtnnveffL-zcpmyg</p>
-<p>前言<br>
-Map 这样的 Key Value 在软件开发中是非常经典的结构，常用于在内存中存放数据。</p>
-<p>本篇主要想讨论 ConcurrentHashMap 这样一个并发容器，在正式开始之前我觉得有必要谈谈 HashMap，没有它就不会有后面的 ConcurrentHashMap。</p>
-]]></summary>
-        <content type="html"><![CDATA[<p>搬砖自 https://mp.weixin.qq.com/s/DTzd3jdtnnveffL-zcpmyg</p>
-<p>前言<br>
-Map 这样的 Key Value 在软件开发中是非常经典的结构，常用于在内存中存放数据。</p>
-<p>本篇主要想讨论 ConcurrentHashMap 这样一个并发容器，在正式开始之前我觉得有必要谈谈 HashMap，没有它就不会有后面的 ConcurrentHashMap。</p>
-<!-- more -->
-<h4 id="hashmap">HashMap</h4>
-<p>众所周知 HashMap 底层是基于 数组 + 链表 组成的，不过在 jdk1.7 和 1.8 中具体实现稍有不同。</p>
-<h5 id="base-17">Base 1.7</h5>
-<p>1.7 中的数据结构图：<br>
-<img src="https://mmbiz.qpic.cn/mmbiz_jpg/csD7FygBVl2YrHfgckicQvCZFaT240KJuniawDic6DVLxibmw3cLgbicF8ibyajrpibGcbezT6TWR0ibJcDmnHmwuss7ZQ/640?wx_fmt=jpeg&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt=""><br>
-先来看看 1.7 中的实现。<br>
-<img src="https://mmbiz.qpic.cn/mmbiz_jpg/csD7FygBVl2YrHfgckicQvCZFaT240KJuzYhM1hVO4fokTzXoDrcy5zjRLibfXhhF1QrWxXu3S9uVACrAbcLjNvg/640?wx_fmt=jpeg&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt=""></p>
-<p>这是 HashMap 中比较核心的几个成员变量；看看分别是什么意思？</p>
-<ol>
-<li>初始化桶大小，因为底层是数组，所以这是数组默认的大小。</li>
-<li>桶最大值。</li>
-<li>默认的负载因子（0.75）</li>
-<li>table 真正存放数据的数组。</li>
-<li>Map 存放数量的大小。</li>
-<li>桶大小，可在初始化时显式指定。</li>
-<li>负载因子，可在初始化时显式指定。</li>
-</ol>
-<p>重点解释下负载因子：</p>
-<p>由于给定的 HashMap 的容量大小是固定的，比如默认初始化：</p>
-<pre><code> 1    public HashMap() {
- 2        this(DEFAULT_INITIAL_CAPACITY, DEFAULT_LOAD_FACTOR);
- 3    }
- 4
- 5    public HashMap(int initialCapacity, float loadFactor) {
- 6        if (initialCapacity &lt; 0)
- 7            throw new IllegalArgumentException(&quot;Illegal initial capacity: &quot; +
- 8                                               initialCapacity);
- 9        if (initialCapacity &gt; MAXIMUM_CAPACITY)
-10            initialCapacity = MAXIMUM_CAPACITY;
-11        if (loadFactor &lt;= 0 || Float.isNaN(loadFactor))
-12            throw new IllegalArgumentException(&quot;Illegal load factor: &quot; +
-13                                               loadFactor);
-14
-15        this.loadFactor = loadFactor;
-16        threshold = initialCapacity;
-17        init();
-18    }
-</code></pre>
-<p>给定的默认容量为 16，负载因子为 0.75。Map 在使用过程中不断的往里面存放数据，当数量达到了 16 * 0.75 = 12 就需要将当前 16 的容量进行扩容，而扩容这个过程涉及到 rehash、复制数据等操作，所以非常消耗性能。</p>
-<p>因此通常建议能提前预估 HashMap 的大小最好，尽量的减少扩容带来的性能损耗。</p>
-<p>根据代码可以看到其实真正存放数据的是</p>
-<p><code>transient Entry&lt;K,V&gt;[] table = (Entry&lt;K,V&gt;[]) EMPTY_TABLE;</code></p>
-<p>这个数组，那么它又是如何定义的呢？<br>
-<img src="https://mmbiz.qpic.cn/mmbiz_jpg/csD7FygBVl2YrHfgckicQvCZFaT240KJuX0o4uxUqo3XFULiaWedAr9z48BjRicBLaLLq9muCt1ftNafgJDyWKribg/640?wx_fmt=jpeg&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt=""></p>
-<p>Entry 是 HashMap 中的一个内部类，从他的成员变量很容易看出：</p>
-<ul>
-<li>key 就是写入时的键。</li>
-<li>value 自然就是值。</li>
-<li>开始的时候就提到 HashMap 是由数组和链表组成，所以这个 next 就是用于实现链表结构。</li>
-<li>hash 存放的是当前 key 的 hashcode。</li>
-</ul>
-<p>知晓了基本结构，那来看看其中重要的写入、获取函数：</p>
-<p>put 方法</p>
-<pre><code> 1    public V put(K key, V value) {
- 2        if (table == EMPTY_TABLE) {
- 3            inflateTable(threshold);
- 4        }
- 5        if (key == null)
- 6            return putForNullKey(value);
- 7        int hash = hash(key);
- 8        int i = indexFor(hash, table.length);
- 9        for (Entry&lt;K,V&gt; e = table[i]; e != null; e = e.next) {
-10            Object k;
-11            if (e.hash == hash &amp;&amp; ((k = e.key) == key || key.equals(k))) {
-12                V oldValue = e.value;
-13                e.value = value;
-14                e.recordAccess(this);
-15                return oldValue;
-16            }
-17        }
-18
-19        modCount++;
-20        addEntry(hash, key, value, i);
-21        return null;
-22    }
-</code></pre>
-<ul>
-<li>判断当前数组是否需要初始化。</li>
-<li>如果 key 为空，则 put 一个空值进去。</li>
-<li>根据 key 计算出 hashcode。</li>
-<li>根据计算出的 hashcode 定位出所在桶。</li>
-<li>如果桶是一个链表则需要遍历判断里面的 hashcode、key 是否和传入 key 相等，如果相等则进行覆盖，并返回原来的值。</li>
-</ul>
-<p>如果桶是空的，说明当前位置没有数据存入；新增一个 Entry 对象写入当前位置。</p>
-<pre><code> 1    void addEntry(int hash, K key, V value, int bucketIndex) {
- 2        if ((size &gt;= threshold) &amp;&amp; (null != table[bucketIndex])) {
- 3            resize(2 * table.length);
- 4            hash = (null != key) ? hash(key) : 0;
- 5            bucketIndex = indexFor(hash, table.length);
- 6        }
- 7
- 8        createEntry(hash, key, value, bucketIndex);
- 9    }
-10
-11    void createEntry(int hash, K key, V value, int bucketIndex) {
-12        Entry&lt;K,V&gt; e = table[bucketIndex];
-13        table[bucketIndex] = new Entry&lt;&gt;(hash, key, value, e);
-14        size++;
-15    }
-</code></pre>
-<ul>
-<li>
-<p>当调用 addEntry 写入 Entry 时需要判断是否需要扩容。</p>
-</li>
-<li>
-<p>如果需要就进行两倍扩充，并将当前的 key 重新 hash 并定位。</p>
-</li>
-<li>
-<p>而在 createEntry 中会将当前位置的桶传入到新建的桶中，如果当前桶有值就会在位置形成链表。</p>
-</li>
-</ul>
-<p>get 方法<br>
-再来看看 get 函数：</p>
-<pre><code> 1    public V get(Object key) {
- 2        if (key == null)
- 3            return getForNullKey();
- 4        Entry&lt;K,V&gt; entry = getEntry(key);
- 5
- 6        return null == entry ? null : entry.getValue();
- 7    }
- 8
- 9    final Entry&lt;K,V&gt; getEntry(Object key) {
-10        if (size == 0) {
-11            return null;
-12        }
-13
-14        int hash = (key == null) ? 0 : hash(key);
-15        for (Entry&lt;K,V&gt; e = table[indexFor(hash, table.length)];
-16             e != null;
-17             e = e.next) {
-18            Object k;
-19            if (e.hash == hash &amp;&amp;
-20                ((k = e.key) == key || (key != null &amp;&amp; key.equals(k))))
-21                return e;
-22        }
-23        return null;
-24    }
-</code></pre>
-<ul>
-<li>首先也是根据 key 计算出 hashcode，然后定位到具体的桶中。<br>
-判断该位置是否为链表。</li>
-<li>不是链表就根据 key、key 的 hashcode 是否相等来返回值。</li>
-<li>为链表则需要遍历直到 key 及 hashcode 相等时候就返回值。</li>
-<li>啥都没取到就直接返回 null 。</li>
-</ul>
-<p>Base 1.8<br>
-不知道 1.7 的实现大家看出需要优化的点没有？<br>
-其实一个很明显的地方就是：</p>
-<blockquote>
-<p>当 Hash 冲突严重时，在桶上形成的链表会变的越来越长，这样在查询时的效率就会越来越低；时间复杂度为 O(N)。<br>
-因此 1.8 中重点优化了这个查询效率。</p>
-</blockquote>
-<p>1.8 HashMap 结构图：</p>
-<p><img src="https://mmbiz.qpic.cn/mmbiz_jpg/csD7FygBVl2YrHfgckicQvCZFaT240KJuFVB8SHEbdxmchRiakoeFXwlzQUX5ld65WsGsPGZ2n7UMWcu3y2hl1QQ/640?wx_fmt=jpeg&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt=""></p>
-<p>先来看看几个核心的成员变量：</p>
-<pre><code> 1    static final int DEFAULT_INITIAL_CAPACITY = 1 &lt;&lt; 4; // aka 16
- 2
- 3    /**
- 4     * The maximum capacity, used if a higher value is implicitly specified
- 5     * by either of the constructors with arguments.
- 6     * MUST be a power of two &lt;= 1&lt;&lt;30.
- 7     */
- 8    static final int MAXIMUM_CAPACITY = 1 &lt;&lt; 30;
- 9
-10    /**
-11     * The load factor used when none specified in constructor.
-12     */
-13    static final float DEFAULT_LOAD_FACTOR = 0.75f;
-14
-15    static final int TREEIFY_THRESHOLD = 8;
-16
-17    transient Node&lt;K,V&gt;[] table;
-18
-19    /**
-20     * Holds cached entrySet(). Note that AbstractMap fields are used
-21     * for keySet() and values().
-22     */
-23    transient Set&lt;Map.Entry&lt;K,V&gt;&gt; entrySet;
-24
-25    /**
-26     * The number of key-value mappings contained in this map.
-27     */
-28    transient int size;
-</code></pre>
-<p>和 1.7 大体上都差不多，还是有几个重要的区别：</p>
-<ul>
-<li>TREEIFY_THRESHOLD 用于判断是否需要将链表转换为红黑树的阈值。</li>
-<li>HashEntry 修改为 Node。</li>
-<li>Node 的核心组成其实也是和 1.7 中的 HashEntry 一样，存放的都是 key value hashcode next 等数据。</li>
-</ul>
-<p>再来看看核心方法。</p>
-<p>put 方法<br>
-<img src="https://mmbiz.qpic.cn/mmbiz_jpg/csD7FygBVl2YrHfgckicQvCZFaT240KJu4UWuTyDjAgliaaiaD7QbiaSgcQSpuzyCI03VUHeU4mias8jExp4KoS7HAg/640?wx_fmt=jpeg&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt=""></p>
-<p>看似要比 1.7 的复杂，我们一步步拆解：</p>
-<ol>
-<li>判断当前桶是否为空，空的就需要初始化（resize 中会判断是否进行初始化）。</li>
-<li>根据当前 key 的 hashcode 定位到具体的桶中并判断是否为空，为空表明没有 Hash 冲突就直接在当前位置创建一个新桶即可。</li>
-<li>如果当前桶有值（ Hash 冲突），那么就要比较当前桶中的 key、key 的 hashcode 与写入的 key 是否相等，相等就赋值给 e,在第 8 步的时候会统一进行赋值及返回。</li>
-<li>如果当前桶为红黑树，那就要按照红黑树的方式写入数据。</li>
-<li>如果是个链表，就需要将当前的 key、value 封装成一个新节点写入到当前桶的后面（形成链表）。</li>
-<li>接着判断当前链表的大小是否大于预设的阈值，大于时就要转换为红黑树。</li>
-<li>如果在遍历过程中找到 key 相同时直接退出遍历。</li>
-<li>如果 e != null 就相当于存在相同的 key,那就需要将值覆盖。</li>
-</ol>
-<p>最后判断是否需要进行扩容。</p>
-<p>get 方法</p>
-<pre><code> 1    public V get(Object key) {
- 2        Node&lt;K,V&gt; e;
- 3        return (e = getNode(hash(key), key)) == null ? null : e.value;
- 4    }
- 5
- 6    final Node&lt;K,V&gt; getNode(int hash, Object key) {
- 7        Node&lt;K,V&gt;[] tab; Node&lt;K,V&gt; first, e; int n; K k;
- 8        if ((tab = table) != null &amp;&amp; (n = tab.length) &gt; 0 &amp;&amp;
- 9            (first = tab[(n - 1) &amp; hash]) != null) {
-10            if (first.hash == hash &amp;&amp; // always check first node
-11                ((k = first.key) == key || (key != null &amp;&amp; key.equals(k))))
-12                return first;
-13            if ((e = first.next) != null) {
-14                if (first instanceof TreeNode)
-15                    return ((TreeNode&lt;K,V&gt;)first).getTreeNode(hash, key);
-16                do {
-17                    if (e.hash == hash &amp;&amp;
-18                        ((k = e.key) == key || (key != null &amp;&amp; key.equals(k))))
-19                        return e;
-20                } while ((e = e.next) != null);
-21            }
-22        }
-23        return null;
-24    }
-</code></pre>
-<p>get 方法看起来就要简单许多了。</p>
-<ol>
-<li>首先将 key hash 之后取得所定位的桶。</li>
-<li>如果桶为空则直接返回 null 。</li>
-<li>否则判断桶的第一个位置(有可能是链表、红黑树)的 key 是否为查询的 key，是就直接返回 value。</li>
-<li>如果第一个不匹配，则判断它的下一个是红黑树还是链表。</li>
-<li>红黑树就按照树的查找方式返回值。</li>
-<li>不然就按照链表的方式遍历匹配返回值。</li>
-</ol>
-<p>从这两个核心方法（get/put）可以看出 1.8 中对大链表做了优化，修改为红黑树之后查询效率直接提高到了 O(logn)。</p>
-<p>但是 HashMap 原有的问题也都存在，比如在并发场景下使用时容易出现死循环。</p>
-<pre><code>1final HashMap&lt;String, String&gt; map = new HashMap&lt;String, String&gt;();
-2for (int i = 0; i &lt; 1000; i++) {
-3    new Thread(new Runnable() {
-4        @Override
-5        public void run() {
-6            map.put(UUID.randomUUID().toString(), &quot;&quot;);
-7        }
-8    }).start();
-9}
-</code></pre>
-<p>但是为什么呢？简单分析下。</p>
-<p>看过上文的还记得在 HashMap 扩容的时候会调用 resize() 方法，就是这里的并发操作容易在一个桶上形成环形链表；这样当获取一个不存在的 key 时，计算出的 index 正好是环形链表的下标就会出现死循环。</p>
-<p>如下图：<br>
-<img src="https://mmbiz.qpic.cn/mmbiz_jpg/csD7FygBVl2YrHfgckicQvCZFaT240KJu43gK5Lic4AUj9LBR0xMtVYYwIicM0I6GnyyqqHXv1ClnNrLvXYics71Mw/640?wx_fmt=jpeg&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt=""></p>
-<p>遍历方式<br>
-还有一个值得注意的是 HashMap 的遍历方式，通常有以下几种：</p>
-<pre><code> 1Iterator&lt;Map.Entry&lt;String, Integer&gt;&gt; entryIterator = map.entrySet().iterator();
- 2        while (entryIterator.hasNext()) {
- 3            Map.Entry&lt;String, Integer&gt; next = entryIterator.next();
- 4            System.out.println(&quot;key=&quot; + next.getKey() + &quot; value=&quot; + next.getValue());
- 5        }
- 6
- 7Iterator&lt;String&gt; iterator = map.keySet().iterator();
- 8        while (iterator.hasNext()){
- 9            String key = iterator.next();
-10            System.out.println(&quot;key=&quot; + key + &quot; value=&quot; + map.get(key));
-11
-12        }
-</code></pre>
-<p>强烈建议使用第一种 EntrySet 进行遍历。</p>
-<p>第一种可以把 key value 同时取出，第二种还得需要通过 key 取一次 value，效率较低。</p>
-<p>简单总结下 HashMap：无论是 1.7 还是 1.8 其实都能看出 JDK 没有对它做任何的同步操作，所以并发会出问题，甚至出现死循环导致系统不可用。</p>
-<p>因此 JDK 推出了专项专用的 ConcurrentHashMap ，该类位于 java.util.concurrent 包下，专门用于解决并发问题。</p>
-<p>坚持看到这里的朋友算是已经把 ConcurrentHashMap 的基础已经打牢了，下面正式开始分析。</p>
-<p>ConcurrentHashMap<br>
-ConcurrentHashMap 同样也分为 1.7 、1.8 版，两者在实现上略有不同。</p>
-<p>Base 1.7<br>
-先来看看 1.7 的实现，下面是他的结构图：<br>
-<img src="https://mmbiz.qpic.cn/mmbiz_jpg/csD7FygBVl2YrHfgckicQvCZFaT240KJuFYL4rHqAwSJOQXIBqL76h5M8hnOJdaVowDrHicIZ4LTYtKDPBa2Bl9Q/640?wx_fmt=jpeg&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt=""></p>
-<p>如图所示，是由 Segment 数组、HashEntry 组成，和 HashMap 一样，仍然是数组加链表。</p>
-<p>它的核心成员变量：</p>
-<pre><code>1    /**
-2     * Segment 数组，存放数据时首先需要定位到具体的 Segment 中。
-3     */
-4    final Segment&lt;K,V&gt;[] segments;
-5
-6    transient Set&lt;K&gt; keySet;
-7    transient Set&lt;Map.Entry&lt;K,V&gt;&gt; entrySet;
-Segment 是 ConcurrentHashMap 的一个内部类，主要的组成如下：
-
- 1    static final class Segment&lt;K,V&gt; extends ReentrantLock implements Serializable {
- 2
- 3        private static final long serialVersionUID = 2249069246763182397L;
- 4
- 5        // 和 HashMap 中的 HashEntry 作用一样，真正存放数据的桶
- 6        transient volatile HashEntry&lt;K,V&gt;[] table;
- 7
- 8        transient int count;
- 9
-10        transient int modCount;
-11
-12        transient int threshold;
-13
-14        final float loadFactor;
-15
-16    }
-</code></pre>
-<p>看看其中 HashEntry 的组成：<br>
-<img src="https://mmbiz.qpic.cn/mmbiz_jpg/csD7FygBVl2YrHfgckicQvCZFaT240KJuDFkA8uvql3mGTNqibibfuEOnjjC9FAB8VZwR0TazTgKf0MlhGrCXv7Sw/640?wx_fmt=jpeg&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt=""></p>
-<p>和 HashMap 非常类似，唯一的区别就是其中的核心数据如 value ，以及链表都是 volatile 修饰的，保证了获取时的可见性。</p>
-<p>原理上来说：ConcurrentHashMap 采用了分段锁技术，其中 Segment 继承于 ReentrantLock。不会像 HashTable 那样不管是 put 还是 get 操作都需要做同步处理，理论上 ConcurrentHashMap 支持 CurrencyLevel (Segment 数组数量)的线程并发。每当一个线程占用锁访问一个 Segment 时，不会影响到其他的 Segment。</p>
-<p>下面也来看看核心的 put get 方法。</p>
-<pre><code>put 方法
- 1    public V put(K key, V value) {
- 2        Segment&lt;K,V&gt; s;
- 3        if (value == null)
- 4            throw new NullPointerException();
- 5        int hash = hash(key);
- 6        int j = (hash &gt;&gt;&gt; segmentShift) &amp; segmentMask;
- 7        if ((s = (Segment&lt;K,V&gt;)UNSAFE.getObject          // nonvolatile; recheck
- 8             (segments, (j &lt;&lt; SSHIFT) + SBASE)) == null) //  in ensureSegment
- 9            s = ensureSegment(j);
-10        return s.put(key, hash, value, false);
-11    }
-</code></pre>
-<p>首先是通过 key 定位到 Segment，之后在对应的 Segment 中进行具体的 put。</p>
-<pre><code> 1        final V put(K key, int hash, V value, boolean onlyIfAbsent) {
- 2            HashEntry&lt;K,V&gt; node = tryLock() ? null :
- 3                scanAndLockForPut(key, hash, value);
- 4            V oldValue;
- 5            try {
- 6                HashEntry&lt;K,V&gt;[] tab = table;
- 7                int index = (tab.length - 1) &amp; hash;
- 8                HashEntry&lt;K,V&gt; first = entryAt(tab, index);
- 9                for (HashEntry&lt;K,V&gt; e = first;;) {
-10                    if (e != null) {
-11                        K k;
-12                        if ((k = e.key) == key ||
-13                            (e.hash == hash &amp;&amp; key.equals(k))) {
-14                            oldValue = e.value;
-15                            if (!onlyIfAbsent) {
-16                                e.value = value;
-17                                ++modCount;
-18                            }
-19                            break;
-20                        }
-21                        e = e.next;
-22                    }
-23                    else {
-24                        if (node != null)
-25                            node.setNext(first);
-26                        else
-27                            node = new HashEntry&lt;K,V&gt;(hash, key, value, first);
-28                        int c = count + 1;
-29                        if (c &gt; threshold &amp;&amp; tab.length &lt; MAXIMUM_CAPACITY)
-30                            rehash(node);
-31                        else
-32                            setEntryAt(tab, index, node);
-33                        ++modCount;
-34                        count = c;
-35                        oldValue = null;
-36                        break;
-37                    }
-38                }
-39            } finally {
-40                unlock();
-41            }
-42            return oldValue;
-43        }
-</code></pre>
-<p>虽然 HashEntry 中的 value 是用 volatile 关键词修饰的，但是并不能保证并发的原子性，所以 put 操作时仍然需要加锁处理。</p>
-<p>首先第一步的时候会尝试获取锁，如果获取失败肯定就有其他线程存在竞争，则利用 scanAndLockForPut() 自旋获取锁。<br>
-<img src="https://mmbiz.qpic.cn/mmbiz_jpg/csD7FygBVl2YrHfgckicQvCZFaT240KJuQahXKiaeuX1t5Xn8vqMhDpCic05KvuyvN5lrrK17BlDiaE2Qrh4aw9KAQ/640?wx_fmt=jpeg&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt=""></p>
-<ol>
-<li>尝试自旋获取锁。</li>
-<li>如果重试的次数达到了 MAX_SCAN_RETRIES 则改为阻塞锁获取，保证能获取成功。<br>
-<img src="https://mmbiz.qpic.cn/mmbiz_jpg/csD7FygBVl2YrHfgckicQvCZFaT240KJu5DphFu4lllNoynBAIK4Xzl4ZgTneCUkHYfibBIwFIamnYOGATYUpC5A/640?wx_fmt=jpeg&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt=""></li>
-</ol>
-<p>再结合图看看 put 的流程。<br>
-1.将当前 Segment 中的 table 通过 key 的 hashcode 定位到 HashEntry。<br>
-2. 遍历该 HashEntry，如果不为空则判断传入的 key 和当前遍历的 key 是否相等，相等则覆盖旧的 value。<br>
-3. 不为空则需要新建一个 HashEntry 并加入到 Segment 中，同时会先判断是否需要扩容。<br>
-4.最后会解除在 1 中所获取当前 Segment 的锁。</p>
-<p>get 方法</p>
-<pre><code> 1    public V get(Object key) {
- 2        Segment&lt;K,V&gt; s; // manually integrate access methods to reduce overhead
- 3        HashEntry&lt;K,V&gt;[] tab;
- 4        int h = hash(key);
- 5        long u = (((h &gt;&gt;&gt; segmentShift) &amp; segmentMask) &lt;&lt; SSHIFT) + SBASE;
- 6        if ((s = (Segment&lt;K,V&gt;)UNSAFE.getObjectVolatile(segments, u)) != null &amp;&amp;
- 7            (tab = s.table) != null) {
- 8            for (HashEntry&lt;K,V&gt; e = (HashEntry&lt;K,V&gt;) UNSAFE.getObjectVolatile
- 9                     (tab, ((long)(((tab.length - 1) &amp; h)) &lt;&lt; TSHIFT) + TBASE);
-10                 e != null; e = e.next) {
-11                K k;
-12                if ((k = e.key) == key || (e.hash == h &amp;&amp; key.equals(k)))
-13                    return e.value;
-14            }
-15        }
-16        return null;
-17    }
-</code></pre>
-<p>get 逻辑比较简单：</p>
-<p>只需要将 Key 通过 Hash 之后定位到具体的 Segment ，再通过一次 Hash 定位到具体的元素上。</p>
-<p>由于 HashEntry 中的 value 属性是用 volatile 关键词修饰的，保证了内存可见性，所以每次获取时都是最新值。</p>
-<p>ConcurrentHashMap 的 get 方法是非常高效的，因为整个过程都不需要加锁。</p>
-<p>Base 1.8<br>
-1.7 已经解决了并发问题，并且能支持 N 个 Segment 这么多次数的并发，但依然存在 HashMap 在 1.7 版本中的问题。</p>
-<p>那就是查询遍历链表效率太低。</p>
-<p>因此 1.8 做了一些数据结构上的调整。</p>
-<p>首先来看下底层的组成结构：</p>
-<p><img src="https://mmbiz.qpic.cn/mmbiz_jpg/csD7FygBVl2YrHfgckicQvCZFaT240KJuUfRMPmJ4ib95BpUVDkecPy5kBCXxdq15XzO6MMhH5FRvsADhwFXZI5Q/640?wx_fmt=jpeg&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt=""></p>
-<p>看起来是不是和 1.8 HashMap 结构类似？</p>
-<p>其中抛弃了原有的 Segment 分段锁，而采用了 CAS + synchronized 来保证并发安全性。</p>
-<p><img src="https://mmbiz.qpic.cn/mmbiz_jpg/csD7FygBVl2YrHfgckicQvCZFaT240KJuX0QiaOcnzqugCVfdNR0KRDHlMOic8Pn7TZ0BcG8Oc1NBiaZSgVsmQGt2g/640?wx_fmt=jpeg&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt=""></p>
-<p>也将 1.7 中存放数据的 HashEntry 改为 Node，但作用都是相同的。</p>
-<p>其中的 val next 都用了 volatile 修饰，保证了可见性。</p>
-<p>put 方法<br>
-重点来看看 put 函数：</p>
-<p><img src="https://mmbiz.qpic.cn/mmbiz_jpg/csD7FygBVl2YrHfgckicQvCZFaT240KJu606XAOtEmOlp5WZyCNUL2PklOSq1SgbWtoNy06MpyVW3euNqibLRibWg/640?wx_fmt=jpeg&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt=""></p>
-<p>根据 key 计算出 hashcode 。</p>
-<p>判断是否需要进行初始化。</p>
-<p>f 即为当前 key 定位出的 Node，如果为空表示当前位置可以写入数据，利用 CAS 尝试写入，失败则自旋保证成功。</p>
-<p>如果当前位置的 hashcode == MOVED == -1,则需要进行扩容。</p>
-<p>如果都不满足，则利用 synchronized 锁写入数据。</p>
-<p>如果数量大于 TREEIFY_THRESHOLD 则要转换为红黑树。</p>
-<p>get 方法</p>
-<p><img src="https://mmbiz.qpic.cn/mmbiz_jpg/csD7FygBVl2YrHfgckicQvCZFaT240KJuKGCGoSfbyPIEV7gea97OXFVVicDU4qYicxprd6xJjeLcfjQUTgBIqBaA/640?wx_fmt=jpeg&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt=""></p>
-<p>根据计算出来的 hashcode 寻址，如果就在桶上那么直接返回值。</p>
-<p>如果是红黑树那就按照树的方式获取值。</p>
-<p>就不满足那就按照链表的方式遍历获取值。</p>
-<p>1.8 在 1.7 的数据结构上做了大的改动，采用红黑树之后可以保证查询效率（O(logn)），甚至取消了 ReentrantLock 改为了 synchronized，这样可以看出在新版的 JDK 中对 synchronized 优化是很到位的。</p>
-<p>总结<br>
-看完了整个 HashMap 和 ConcurrentHashMap 在 1.7 和 1.8 中不同的实现方式相信大家对他们的理解应该会更加到位。</p>
-<p>其实这块也是面试的重点内容，通常的套路是：</p>
-<p>谈谈你理解的 HashMap，讲讲其中的 get put 过程。</p>
-<p>1.8 做了什么优化？</p>
-<p>是线程安全的嘛？</p>
-<p>不安全会导致哪些问题？</p>
-<p>如何解决？有没有线程安全的并发容器？</p>
-<p>ConcurrentHashMap 是如何实现的？ 1.7、1.8 实现有何不同？为什么这么做？</p>
-<p>这一串问题相信大家仔细看完都能怼回面试官</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[maven-发布自己的maven构件到中央仓库]]></title>
-        <id>https://caijh.github.io//post/maven-fa-bu-zi-ji-de-maven-gou-jian-dao-zhong-yang-cang-ku</id>
-        <link href="https://caijh.github.io//post/maven-fa-bu-zi-ji-de-maven-gou-jian-dao-zhong-yang-cang-ku">
-        </link>
-        <updated>2019-07-02T14:42:43.000Z</updated>
-        <summary type="html"><![CDATA[<p>发布自己的jar包到中央仓库的好处：</p>
-<ol>
-<li>省去自建maven私服</li>
-<li>方便自己或者别个在他处引用jar包</li>
-</ol>
-]]></summary>
-        <content type="html"><![CDATA[<p>发布自己的jar包到中央仓库的好处：</p>
-<ol>
-<li>省去自建maven私服</li>
-<li>方便自己或者别个在他处引用jar包</li>
-</ol>
-<!-- more -->
-<h2 id="注册-sonatype的jira-帐号">注册 sonatype的Jira 帐号</h2>
-<p>注册地址: https://issues.sonatype.org/secure/Signup!default.jspa<br>
-注册很简单,重要的是邮箱地址一定要正确,issue有任何变动都会通过邮件通知.</p>
-<h2 id="登录jira">登录Jira</h2>
-<p>注册完成后就登录: https://issues.sonatype.org/login.jsp</p>
-<h2 id="创建一个-issue">创建一个 Issue</h2>
-<p>创建地址: https://issues.sonatype.org/secure/CreateIssue.jspa?issuetype=21&amp;pid=10134</p>
-<h2 id="使用-gpg-生成密钥对">使用 GPG 生成密钥对</h2>
-<ol>
-<li>
-<p>查看gpg安装版本</p>
-<pre><code>gpg --version
-</code></pre>
-</li>
-<li>
-<p>生成密钥对</p>
-</li>
-<li>
-<p>查看公钥</p>
-<pre><code>gpg --list-keys
-</code></pre>
-</li>
-<li>
-<p>将公钥发布到 PGP 密钥服务器</p>
-<pre><code>gpg --keyserver hkp://pool.sks-keyservers.net --send-keys 你的公钥指纹
-</code></pre>
-</li>
-</ol>
-<h2 id="修改maven的settingxml文件">修改maven的setting.xml文件</h2>
-<pre><code>&lt;server&gt;
-      &lt;id&gt;oss&lt;/id&gt;
-      &lt;username&gt;sonatype.org的用户名&lt;/username&gt;
-      &lt;password&gt;sonatype.org的密码&lt;/password&gt;
-    &lt;/server&gt;
-    
-&lt;profile&gt;
-       &lt;id&gt;gpg&lt;/id&gt;
-       &lt;properties&gt;
-          &lt;gpg.executable&gt;gpg&lt;/gpg.executable&gt;
-          &lt;gpg.keyname&gt;公钥&lt;/gpg.keyname&gt;
-          &lt;gpg.passphrase&gt;gpg的passphrase&lt;/gpg.passphrase&gt;
-       &lt;/properties&gt;
-    &lt;/profile&gt;
-    
-&lt;activeProfiles&gt;
-    &lt;activeProfile&gt;gpg&lt;/activeProfile&gt;
-  &lt;/activeProfiles&gt;
-</code></pre>
-<h2 id="修改pomxml文件">修改pom.xml文件</h2>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot;
-         xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-         xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;&gt;
-    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
-
-    &lt;parent&gt;
-        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-        &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;
-        &lt;version&gt;2.0.2.RELEASE&lt;/version&gt;
-        &lt;relativePath/&gt; &lt;!-- lookup parent from repository --&gt;
-    &lt;/parent&gt;
-
-    &lt;groupId&gt;com.github.caijh&lt;/groupId&gt;
-    &lt;artifactId&gt;service-parent&lt;/artifactId&gt;
-    &lt;version&gt;1.0.0-SNAPSHOT&lt;/version&gt;
-    &lt;packaging&gt;pom&lt;/packaging&gt;
-
-    &lt;properties&gt;
-        &lt;!-- 文件拷贝时的编码 --&gt;
-        &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;
-        &lt;project.reporting.outputEncoding&gt;UTF-8&lt;/project.reporting.outputEncoding&gt;
-        &lt;!-- 编译时的编码 --&gt;
-        &lt;maven.compiler.encoding&gt;UTF-8&lt;/maven.compiler.encoding&gt;
-        &lt;java.version&gt;1.8&lt;/java.version&gt;
-        &lt;spring-cloud.version&gt;Finchley.RELEASE&lt;/spring-cloud.version&gt;
-    &lt;/properties&gt;
-
-    &lt;licenses&gt;
-        &lt;license&gt;
-            &lt;name&gt;The Apache Software License, Version 2.0&lt;/name&gt;
-            &lt;url&gt;http://www.apache.org/licenses/LICENSE-2.0.txt&lt;/url&gt;
-        &lt;/license&gt;
-    &lt;/licenses&gt;
-    &lt;developers&gt;
-        &lt;developer&gt;
-            &lt;name&gt;caijunhui&lt;/name&gt;
-            &lt;email&gt;caiqizhe@gmail.com&lt;/email&gt;
-        &lt;/developer&gt;
-    &lt;/developers&gt;
-    &lt;scm&gt;
-        &lt;connection&gt;scm:git:git@github.com:caijh/service-parent.git&lt;/connection&gt;
-        &lt;developerConnection&gt;scm:git:git@github.com:caijh/service-parent.git&lt;/developerConnection&gt;
-        &lt;url&gt;git@github.com:caijh/service-parent.git&lt;/url&gt;
-    &lt;/scm&gt;
-
-    &lt;dependencies&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;javax.xml.bind&lt;/groupId&gt;
-            &lt;artifactId&gt;jaxb-api&lt;/artifactId&gt;
-            &lt;version&gt;2.3.1&lt;/version&gt;
-        &lt;/dependency&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;com.sun.xml.bind&lt;/groupId&gt;
-            &lt;artifactId&gt;jaxb-core&lt;/artifactId&gt;
-            &lt;version&gt;2.3.0&lt;/version&gt;
-        &lt;/dependency&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;com.sun.xml.bind&lt;/groupId&gt;
-            &lt;artifactId&gt;jaxb-impl&lt;/artifactId&gt;
-            &lt;version&gt;2.3.1&lt;/version&gt;
-        &lt;/dependency&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;javax.activation&lt;/groupId&gt;
-            &lt;artifactId&gt;activation&lt;/artifactId&gt;
-            &lt;version&gt;1.1.1&lt;/version&gt;
-        &lt;/dependency&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;javax.inject&lt;/groupId&gt;
-            &lt;artifactId&gt;javax.inject&lt;/artifactId&gt;
-            &lt;version&gt;1&lt;/version&gt;
-        &lt;/dependency&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;org.javassist&lt;/groupId&gt;
-            &lt;artifactId&gt;javassist&lt;/artifactId&gt;
-            &lt;version&gt;3.25.0-GA&lt;/version&gt;
-        &lt;/dependency&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;org.projectlombok&lt;/groupId&gt;
-            &lt;artifactId&gt;lombok&lt;/artifactId&gt;
-        &lt;/dependency&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;com.fasterxml.jackson.core&lt;/groupId&gt;
-            &lt;artifactId&gt;jackson-core&lt;/artifactId&gt;
-        &lt;/dependency&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;com.fasterxml.jackson.core&lt;/groupId&gt;
-            &lt;artifactId&gt;jackson-annotations&lt;/artifactId&gt;
-        &lt;/dependency&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;com.fasterxml.jackson.core&lt;/groupId&gt;
-            &lt;artifactId&gt;jackson-databind&lt;/artifactId&gt;
-        &lt;/dependency&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;com.alibaba&lt;/groupId&gt;
-            &lt;artifactId&gt;fastjson&lt;/artifactId&gt;
-            &lt;version&gt;1.2.58&lt;/version&gt;
-        &lt;/dependency&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;com.google.code.findbugs&lt;/groupId&gt;
-            &lt;artifactId&gt;jsr305&lt;/artifactId&gt;
-            &lt;version&gt;3.0.2&lt;/version&gt;
-        &lt;/dependency&gt;
-
-    &lt;/dependencies&gt;
-
-    &lt;profiles&gt;
-        &lt;profile&gt;
-            &lt;id&gt;release&lt;/id&gt;
-            &lt;build&gt;
-                &lt;plugins&gt;
-                    &lt;!-- Source --&gt;
-                    &lt;plugin&gt;
-                        &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
-                        &lt;artifactId&gt;maven-source-plugin&lt;/artifactId&gt;
-                        &lt;version&gt;3.1.0&lt;/version&gt;
-                        &lt;executions&gt;
-                            &lt;execution&gt;
-                                &lt;phase&gt;package&lt;/phase&gt;
-                                &lt;goals&gt;
-                                    &lt;goal&gt;jar-no-fork&lt;/goal&gt;
-                                &lt;/goals&gt;
-                            &lt;/execution&gt;
-                        &lt;/executions&gt;
-                    &lt;/plugin&gt;
-                    &lt;!-- Javadoc --&gt;
-                    &lt;plugin&gt;
-                        &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
-                        &lt;artifactId&gt;maven-javadoc-plugin&lt;/artifactId&gt;
-                        &lt;version&gt;3.1.0&lt;/version&gt;
-                        &lt;configuration&gt;
-                            &lt;show&gt;private&lt;/show&gt;
-                            &lt;nohelp&gt;true&lt;/nohelp&gt;
-                            &lt;charset&gt;UTF-8&lt;/charset&gt;
-                            &lt;encoding&gt;UTF-8&lt;/encoding&gt;
-                            &lt;docencoding&gt;UTF-8&lt;/docencoding&gt;
-                            &lt;additionalparam&gt;-Xdoclint:none&lt;/additionalparam&gt;  &lt;!-- TODO 临时解决不规范的javadoc生成报错,后面要规范化后把这行去掉 --&gt;
-                        &lt;/configuration&gt;
-                        &lt;executions&gt;
-                            &lt;execution&gt;
-                                &lt;phase&gt;package&lt;/phase&gt;
-                                &lt;goals&gt;
-                                    &lt;goal&gt;jar&lt;/goal&gt;
-                                &lt;/goals&gt;
-                            &lt;/execution&gt;
-                        &lt;/executions&gt;
-                    &lt;/plugin&gt;
-                    &lt;!-- GPG --&gt;
-                    &lt;plugin&gt;
-                        &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
-                        &lt;artifactId&gt;maven-gpg-plugin&lt;/artifactId&gt;
-                        &lt;version&gt;1.6&lt;/version&gt;
-                        &lt;executions&gt;
-                            &lt;execution&gt;
-                                &lt;id&gt;sign-artifacts&lt;/id&gt;
-                                &lt;phase&gt;verify&lt;/phase&gt;
-                                &lt;goals&gt;
-                                    &lt;goal&gt;sign&lt;/goal&gt;
-                                &lt;/goals&gt;
-                                &lt;configuration&gt;
-                                    &lt;gpgArguments&gt;
-                                        &lt;arg&gt;--pinentry-mode&lt;/arg&gt;
-                                        &lt;arg&gt;loopback&lt;/arg&gt;
-                                    &lt;/gpgArguments&gt;
-                                &lt;/configuration&gt;
-                            &lt;/execution&gt;
-                        &lt;/executions&gt;
-                    &lt;/plugin&gt;
-                &lt;/plugins&gt;
-            &lt;/build&gt;
-            &lt;distributionManagement&gt;
-                &lt;snapshotRepository&gt;
-                    &lt;id&gt;oss&lt;/id&gt;
-                    &lt;url&gt;https://oss.sonatype.org/content/repositories/snapshots/&lt;/url&gt;
-                &lt;/snapshotRepository&gt;
-                &lt;repository&gt;
-                    &lt;id&gt;oss&lt;/id&gt;
-                    &lt;url&gt;https://oss.sonatype.org/service/local/staging/deploy/maven2/&lt;/url&gt;
-                &lt;/repository&gt;
-            &lt;/distributionManagement&gt;
-        &lt;/profile&gt;
-    &lt;/profiles&gt;
-
-
-&lt;/project&gt;
-</code></pre>
-<h2 id="发布到oss中">发布到OSS中</h2>
-<pre><code>mvn clean deploy -P release
-</code></pre>
-<h2 id="遇到的问题">遇到的问题</h2>
-<ol>
-<li>
-<p>maven-source-plugin等插件not found</p>
-</li>
-<li>
-<p>execute gobal gpg error, 加入以下配置解决</p>
-<configuration>
-          <gpgArguments>
-                    <arg>--pinentry-mode</arg>
-                    <arg>loopback</arg>
-                    </gpgArguments>
-</configuration></li>
-</ol>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[源码阅读-HashMap的实现原理]]></title>
-        <id>https://caijh.github.io//post/yuan-ma-yue-du-hashmap-de-shi-xian-yuan-li</id>
-        <link href="https://caijh.github.io//post/yuan-ma-yue-du-hashmap-de-shi-xian-yuan-li">
-        </link>
-        <updated>2019-07-01T09:38:57.000Z</updated>
-        <summary type="html"><![CDATA[<blockquote>
-<p>原文链接：https://blog.csdn.net/fenglibing/article/details/91565912</p>
-</blockquote>
-<h3 id="hashmap的类图">HashMap的类图</h3>
-<p><img src="https://caijh.github.io//post-images/1561974106214.png" alt=""></p>
-<p>HashMap是Java开发当中使用得非常多的一种数据结构，因为其可以快速的定位到需要查找到数据，其最快的速度可以达到O(1)，最差的时候也可以达到O(n)。本文以Java8中的HashMap做为分析原型，因为不同的JDK版本中的HashMap，可能存在着底层实现上的不一样。</p>
-]]></summary>
-        <content type="html"><![CDATA[<blockquote>
-<p>原文链接：https://blog.csdn.net/fenglibing/article/details/91565912</p>
-</blockquote>
-<h3 id="hashmap的类图">HashMap的类图</h3>
-<p><img src="https://caijh.github.io//post-images/1561974106214.png" alt=""></p>
-<p>HashMap是Java开发当中使用得非常多的一种数据结构，因为其可以快速的定位到需要查找到数据，其最快的速度可以达到O(1)，最差的时候也可以达到O(n)。本文以Java8中的HashMap做为分析原型，因为不同的JDK版本中的HashMap，可能存在着底层实现上的不一样。</p>
-<!-- more -->
-<p>HashMap是通过数组存储所有的数据，每个元素所存放数组的下标，是根据该存储元素的key的Hash值与该数组的长度减去1做与运算，如下所示：</p>
-<pre><code>index = (length_of_array - 1) &amp; hash_of_the_key;
-</code></pre>
-<p>数组中存放元素的数据结构使用了Node和TreeNode两种数据结构，在单个Hash值对应的存储元素小于8个时，默认值为Node的单向链表形式存储，当单个Hash值存储的元素大于8个时，其会使用TreeNode的数据结构存储。</p>
-<p>因为在单个Hash值对应的元素小于等于8个时，其查询时间最差为O(8)，但是当单个Hash值对应的元素大于8个时，再通过Node的单向链表的方式进行查询，速度上就会变得更慢了；这个时候HashMap就会将Node的普通节点转为TreeNode（红黑树）进行存储，这是由于TreeNode占用的空间大小约为常规节点的两倍，但是其查询速度可以得到保证，这个是通过空间换时间了。当TreeNode中包括的元素变得比较少时，为了存储空间的占用，也会转换为Node节点单向链表的方式实现，它们之间可以互相转换的。</p>
-<h4 id="node">Node：</h4>
-<pre><code>static class Node&lt;K,V&gt; implements Map.Entry&lt;K,V&gt; {
-        final int hash;
-        final K key;
-        V value;
-        Node&lt;K,V&gt; next;
-
-        Node(int hash, K key, V value, Node&lt;K,V&gt; next) {
-            this.hash = hash;
-            this.key = key;
-            this.value = value;
-            this.next = next;
-        }
-        ......
-}
-</code></pre>
-<p>可以看到每个Node中包括了4个属性，分别为：</p>
-<pre><code>hash值：当前Node的Hash值
-key：当前Node的key
-value:当前Node的value
-next:表示指向下一个Node的指针，相同hash值的Node，通过next进行遍历查找
-</code></pre>
-<h4 id="treenode">TreeNode：</h4>
-<pre><code>static final class TreeNode&lt;K,V&gt; extends LinkedHashMap.Entry&lt;K,V&gt; {
-        TreeNode&lt;K,V&gt; parent;  // red-black tree links
-        TreeNode&lt;K,V&gt; left;
-        TreeNode&lt;K,V&gt; right;
-        TreeNode&lt;K,V&gt; prev;    // needed to unlink next upon deletion
-        boolean red;
-        TreeNode(int hash, K key, V val, Node&lt;K,V&gt; next) {
-            super(hash, key, val, next);
-        }
-        ......
-}
-</code></pre>
-<p>可以看到TreeNode使用的是红黑树（Red Black Tree）的数据结构，红黑树是一种自平衡二叉查找树，在进行插入和删除操作时通过特定操作保持二叉查找树的平衡，从而获得较高的查找性能，即使在最坏情况运行时间也是非常良好的，并且在实践中是非常高效的，它可以在O(log n)时间内做查找、插入和删除等操作，这里的n 是树中元素的数目。</p>
-<p>以下是一张关于HashMap存储结构的示意图：</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/5833578-bba5d27f64076c52?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
-<h4 id="写入数据一切皆在注释中">写入数据（一切皆在注释中）</h4>
-<p>其方法如下：</p>
-<pre><code>//写入数据
-public V put(K key, V value) {
-	//首先根据hash方法，获取对应key的hash值，计算方法见后面
-    return putVal(hash(key), key, value, false, true);
-}
-
-final V putVal(int hash, K key, V value, boolean onlyIfAbsent,boolean evict) {
-    Node&lt;K,V&gt;[] tab; Node&lt;K,V&gt; p; int n, i;
-	//判断用户存放元素的数组是否为空
-    if ((tab = table) == null || (n = tab.length) == 0)
-        //为空则进行初使化，并将初使化后的数组赋值给变量tab，数组的长值赋值给变量n
-        n = (tab = resize()).length;
-	//判断根据hash值与数组长度减1求与得到的下标，
-	//从数组中获取元素并将其赋值给变量p(后续该变量p可以继续使用)，并判断该元素是否存在
-    if ((p = tab[i = (n - 1) &amp; hash]) == null)
-        //如果不存在则创建一个新的节点，并将其放到数组对应的下标中
-        tab[i] = newNode(hash, key, value, null);
-    else {//根据数组的下标取到了元素，并且该元素p且不为空，下面要判断p元素的类型是Node还是TreeNode
-        Node&lt;K,V&gt; e; K k;
-        //判断该数组对应下标取到的第一值是不是与正在存入值的hash值相同、
-        //key相等（可能是对象，也可能是字符串），如果相等，则将取第一个值赋值给变量e
-        if (p.hash == hash &amp;&amp;
-            ((k = p.key) == key || (key != null &amp;&amp; key.equals(k))))
-            e = p;
-        //判断取的对象是不是TreeNode，如果是则执行TreeNode的put方法
-        else if (p instanceof TreeNode)
-            e = ((TreeNode&lt;K,V&gt;)p).putTreeVal(this, tab, hash, key, value);
-        else {//是普通的Node节点，
-        	//根据next属性对元素p执行单向链表的遍历
-            for (int binCount = 0; ; ++binCount) {
-                //如果被遍历的元素最后的next为空，表示后面没有节点了，则将新节点与当前节点的next属性建立关系
-                if ((e = p.next) == null) {
-                	//做为当前节点的后面的一个节点
-                    p.next = newNode(hash, key, value, null);
-                	//判断当前节点的单向链接的数量（8个）是不是已经达到了需要将其转换为TreeNode了
-                    if (binCount &gt;= TREEIFY_THRESHOLD - 1) // -1 for 1st
-                        //如果是则将当前数组下标对应的元素转换为TreeNode
-                        treeifyBin(tab, hash);
-                    break;
-                }
-                //判断待插入的元素的hash值与key是否与单向链表中的某个元素的hash值与key是相同的，如果是则退出
-                if (e.hash == hash &amp;&amp;
-                    ((k = e.key) == key || (key != null &amp;&amp; key.equals(k))))
-                    break;
-                p = e;
-            }
-        }
-        //判断是否找到了与待插入元素的hash值与key值都相同的元素
-        if (e != null) { // existing mapping for key
-            V oldValue = e.value;
-        	//判断是否要将旧值替换为新值
-            if (!onlyIfAbsent || oldValue == null)
-                //满足于未指定不替换或旧值为空的情况，执行将旧值替换为新值
-                e.value = value;
-            afterNodeAccess(e);
-            return oldValue;
-        }
-    }
-    ++modCount;
-    if (++size &gt; threshold)
-        resize();
-    afterNodeInsertion(evict);
-    return null;
-}
-</code></pre>
-<p>Hash值的计算方法：</p>
-<pre><code>// 计算指定key的hash值，原理是将key的hash code与hash code无符号向右移16位的值，执行异或运算。
-// 在Java中整型为4个字节32位，无符号向右移16位，表示将高16位移到低16位上，然后再执行异或运行，也 
-// 就是将hash code的高16位与低16位进行异或运行。
-// 小于等于65535的数，其高16位全部都为0，因而将小于等于65535的值向右无符号移16位，则该数就变成了 
-// 32位都是0，由于任何数与0进行异或都等于本身，因而hash code小于等于65535的key，其得到的hash值 
-// 就等于其本身的hash code。
-static final int hash(Object key) {
-    int h;
-    return (key == null) ? 0 : (h = key.hashCode()) ^ (h &gt;&gt;&gt; 16);
-}
-</code></pre>
-<h4 id="读取数据一切皆在注释中">读取数据（一切皆在注释中）</h4>
-<pre><code>public V get(Object key) {
-        Node&lt;K,V&gt; e;
-        //根据Key获取元素
-        if ((e = getNode(hash(key), key)) == null)
-            return null;
-        if (accessOrder)
-            afterNodeAccess(e);
-        return e.value;
-    }
-
-    final Node&lt;K,V&gt; getNode(int hash, Object key) {
-        Node&lt;K,V&gt;[] tab; Node&lt;K,V&gt; first, e; int n; K k;
-        //if语句的第一个判断条件
-        if ((tab = table) != null //将数组赋值给变量tab，将判断是否为null
-            &amp;&amp; (n = tab.length) &gt; 0 //将数组的长值赋值给变量n
-            &amp;&amp; (first = tab[(n - 1) &amp; hash]) != null) {//判断根据hash和数组长度减1的与运算，计算出来的的数组下标的第一个元素是不是为空
-        	//判断第一个元素是否要找的元素，大部份情况下只要hash值太集中，或者元素不是很多，第一个元素往往都是需要的最终元素
-            if (first.hash == hash &amp;&amp; // always check first node
-                ((k = first.key) == key || (key != null &amp;&amp; key.equals(k))))
-                //第一个元素就是要找的元素，因为hash值和key都相等，直接返回
-                return first;
-            if ((e = first.next) != null) {//如果第一元素不是要找到的元，则判断其next指向是否还有元素
-                //有元素，判断其是否是TreeNode
-                if (first instanceof TreeNode)
-                	//是TreeNode则根据TreeNode的方式获取数据
-                    return ((TreeNode&lt;K,V&gt;)first).getTreeNode(hash, key);
-                do {//是Node单向链表，则通过next循环匹配，找到就退出，否则直到匹配完最后一个元素才退出
-                    if (e.hash == hash &amp;&amp;
-                        ((k = e.key) == key || (key != null &amp;&amp; key.equals(k))))
-                        return e;
-                } while ((e = e.next) != null);
-            }
-        }
-        //没有找到则返回null
-        return null;
-    }
-</code></pre>
 ]]></content>
     </entry>
 </feed>

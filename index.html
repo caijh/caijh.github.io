@@ -7,7 +7,7 @@
 <meta name="description" content="搬砖大佬">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<link rel="shortcut icon" href="https://caijh.github.io//favicon.ico?v=1563162508788">
+<link rel="shortcut icon" href="https://caijh.github.io//favicon.ico?v=1563422978529">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 <link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
@@ -83,12 +83,105 @@
           
   <article class="article">
     <h2 class="article-title">
+      <a href="https://caijh.github.io//post/redis-huan-cun-wen-ti">Redis - 缓存问题</a>
+    </h2>
+    <p class="article-meta">
+      2019-07-18
+      
+    </p>
+    <p class="text-lead">
+      <h3 id="缓存穿透">缓存穿透</h3>
+<blockquote>
+<p>什么是缓存穿透？<br>
+缓存穿透是指查询一个一定不在缓存中存在的key. 由于key不存在，每次都会去查询数据库，如果对于这个key的请求很多的话，可能会把数据库搞垮。</p>
+</blockquote>
+<p>解决方案：</p>
+<ol>
+<li>布隆过滤器</li>
+<li>将查询数据库的空结果也缓存起来，设置一个较短的过期时间。</li>
+</ol>
+<h3 id="缓存雪崩">缓存雪崩</h3>
+<blockquote>
+<p>什么是缓存雪崩？<br>
+对于多个key的查询，全部请求都走数据库了。有两种情况：一种是redis挂掉，别一个情况是一段时间内那些key都失效了。<br>
+对于第一种情况要保证redis的的高可性，对于第二种情况可以为key设置不同的随随机过期时间。</p>
+</blockquote>
+<h3 id="缓存数据一致性">缓存数据一致性</h3>
+<ol>
+<li>写数据库也写缓存，保证了数据一致性；但是难保证数据库与redis的事务</li>
+<li>写数据库，直接删缓存；读缓存发现没有，从数据库读取并保存缓存；带来问题是并发问题。</li>
+<li>应该根据不同的业务，来处理缓存的生成。</li>
+</ol>
+
+    </p>
+    <div class="row">
+      <a href="https://caijh.github.io//post/redis-huan-cun-wen-ti" class="readmore-link">
+        <button>
+          Read More
+        </button>
+      </a>
+    </div>
+  </article>
+
+  <article class="article">
+    <h2 class="article-title">
+      <a href="https://caijh.github.io//post/redis-shu-ju-tao-tai-ce-lue">Redis - 数据淘汰策略</a>
+    </h2>
+    <p class="article-meta">
+      2019-07-18
+      
+    </p>
+    <p class="text-lead">
+      <ul>
+<li>volatile-lru：从已设置过期时间的数据集（server.db[i].expires）中挑选最近最少使用的数据淘汰</li>
+<li>volatile-ttl：从已设置过期时间的数据集（server.db[i].expires）中挑选将要过期的数据淘汰</li>
+<li>volatile-random：从已设置过期时间的数据集（server.db[i].expires）中任意选择数据淘汰</li>
+<li>allkeys-lru：从数据集（server.db[i].dict）中挑选最近最少使用的数据淘汰</li>
+<li>allkeys-random：从数据集（server.db[i].dict）中任意选择数据淘汰</li>
+<li>no-enviction（驱逐）：禁止驱逐数据，返回错误</li>
+</ul>
+
+    </p>
+    <div class="row">
+      <a href="https://caijh.github.io//post/redis-shu-ju-tao-tai-ce-lue" class="readmore-link">
+        <button>
+          Read More
+        </button>
+      </a>
+    </div>
+  </article>
+
+  <article class="article">
+    <h2 class="article-title">
+      <a href="https://caijh.github.io//post/vagrant-shi-yong">Vagrant - 使用</a>
+    </h2>
+    <p class="article-meta">
+      2019-07-17
+      
+    </p>
+    <p class="text-lead">
+      <p>Vagrant是用来管理虚拟机的，如VirtualBox、VMware、AWS等，主要好处是可以提供一个可配置、可移植和复用的软件环境，可以使用shell、chef、puppet等工具部署。所以vagrant不能单独使用，如果你用它来管理自己的开发环境的话，必须在自己的电脑里安装了虚拟机软件，我使用的是virtualbox。</p>
+<p>Vagrant提供一个命令行工具vagrant，通过这个命令行工具可以直接启动一个虚拟机，当然你需要提前定义一个Vagrantfile文件，这有点类似Dockerfile之于docker了。</p>
+<p>跟docker类比这来看vagrant就比较好理解了，vagrant也是用来提供一致性环境的，vagrant本身也提供一个镜像源，使用vagrant init hashicorp/precise64就可以初始化一个Ubuntu 12.04的镜像。</p>
+
+    </p>
+    <div class="row">
+      <a href="https://caijh.github.io//post/vagrant-shi-yong" class="readmore-link">
+        <button>
+          Read More
+        </button>
+      </a>
+    </div>
+  </article>
+
+  <article class="article">
+    <h2 class="article-title">
       <a href="https://caijh.github.io//post/redis-guo-qi-shan-chu-ce-lue">Redis - 过期删除策略</a>
     </h2>
     <p class="article-meta">
       2019-07-15
       
-        <a href="https://caijh.github.io//tag/6w7rEzKhc" class="badge secondary">
+        <a href="https://caijh.github.io//tag/6w7rEzKhc" class="badge success">
           Redis
         </a>
       
@@ -166,7 +259,7 @@ AQS内部有一个state状态记录当前线程的加锁次数，还有一个exc
     <p class="article-meta">
       2019-07-13
       
-        <a href="https://caijh.github.io//tag/nHOjalh2s" class="badge success">
+        <a href="https://caijh.github.io//tag/nHOjalh2s" class="badge warning">
           Spring Cloud
         </a>
       
@@ -267,7 +360,7 @@ kafka集群中一个broker负责一部分partition，在kafka集群中，每个P
     <p class="article-meta">
       2019-07-06
       
-        <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge success">
+        <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge ">
           源代码
         </a>
       
@@ -279,97 +372,6 @@ kafka集群中一个broker负责一部分partition，在kafka集群中，每个P
     </p>
     <div class="row">
       <a href="https://caijh.github.io//post/yuan-ma-yue-du-tomcat" class="readmore-link">
-        <button>
-          Read More
-        </button>
-      </a>
-    </div>
-  </article>
-
-  <article class="article">
-    <h2 class="article-title">
-      <a href="https://caijh.github.io//post/yuan-ma-yue-du-hashmap-concurrenthashmap">源码阅读-HashMap ConcurrentHashMap</a>
-    </h2>
-    <p class="article-meta">
-      2019-07-03
-      
-        <a href="https://caijh.github.io//tag/kmQV6iHOM" class="badge warning">
-          面试
-        </a>
-      
-        <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge ">
-          源代码
-        </a>
-      
-    </p>
-    <p class="text-lead">
-      <p>搬砖自 https://mp.weixin.qq.com/s/DTzd3jdtnnveffL-zcpmyg</p>
-<p>前言<br>
-Map 这样的 Key Value 在软件开发中是非常经典的结构，常用于在内存中存放数据。</p>
-<p>本篇主要想讨论 ConcurrentHashMap 这样一个并发容器，在正式开始之前我觉得有必要谈谈 HashMap，没有它就不会有后面的 ConcurrentHashMap。</p>
-
-    </p>
-    <div class="row">
-      <a href="https://caijh.github.io//post/yuan-ma-yue-du-hashmap-concurrenthashmap" class="readmore-link">
-        <button>
-          Read More
-        </button>
-      </a>
-    </div>
-  </article>
-
-  <article class="article">
-    <h2 class="article-title">
-      <a href="https://caijh.github.io//post/maven-fa-bu-zi-ji-de-maven-gou-jian-dao-zhong-yang-cang-ku">maven-发布自己的maven构件到中央仓库</a>
-    </h2>
-    <p class="article-meta">
-      2019-07-02
-      
-        <a href="https://caijh.github.io//tag/hm42pTrhV" class="badge ">
-          Maven
-        </a>
-      
-    </p>
-    <p class="text-lead">
-      <p>发布自己的jar包到中央仓库的好处：</p>
-<ol>
-<li>省去自建maven私服</li>
-<li>方便自己或者别个在他处引用jar包</li>
-</ol>
-
-    </p>
-    <div class="row">
-      <a href="https://caijh.github.io//post/maven-fa-bu-zi-ji-de-maven-gou-jian-dao-zhong-yang-cang-ku" class="readmore-link">
-        <button>
-          Read More
-        </button>
-      </a>
-    </div>
-  </article>
-
-  <article class="article">
-    <h2 class="article-title">
-      <a href="https://caijh.github.io//post/yuan-ma-yue-du-hashmap-de-shi-xian-yuan-li">源码阅读-HashMap的实现原理</a>
-    </h2>
-    <p class="article-meta">
-      2019-07-01
-      
-        <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge secondary">
-          源代码
-        </a>
-      
-    </p>
-    <p class="text-lead">
-      <blockquote>
-<p>原文链接：https://blog.csdn.net/fenglibing/article/details/91565912</p>
-</blockquote>
-<h3 id="hashmap的类图">HashMap的类图</h3>
-<p><img src="https://caijh.github.io//post-images/1561974106214.png" alt=""></p>
-<p>HashMap是Java开发当中使用得非常多的一种数据结构，因为其可以快速的定位到需要查找到数据，其最快的速度可以达到O(1)，最差的时候也可以达到O(n)。本文以Java8中的HashMap做为分析原型，因为不同的JDK版本中的HashMap，可能存在着底层实现上的不一样。</p>
-
-    </p>
-    <div class="row">
-      <a href="https://caijh.github.io//post/yuan-ma-yue-du-hashmap-de-shi-xian-yuan-li" class="readmore-link">
         <button>
           Read More
         </button>
@@ -393,7 +395,7 @@ Map 这样的 Key Value 在软件开发中是非常经典的结构，常用于�
       
       <div class="sm-12 md-4 col sidebar">
   <div class="paper info-container">
-    <img src="https://caijh.github.io//images/avatar.png?v=1563162508788" class="no-responsive avatar">
+    <img src="https://caijh.github.io//images/avatar.png?v=1563422978529" class="no-responsive avatar">
     <div class="text-muted">搬砖大佬</div>
     <div class="social-container">
       
@@ -415,6 +417,24 @@ Map 这样的 Key Value 在软件开发中是非常经典的结构，常用于�
     </div>
     <div class="row">
       <ul>
+        
+          
+            <li>
+              <a href="https://caijh.github.io//post/redis-huan-cun-wen-ti">Redis - 缓存问题</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://caijh.github.io//post/redis-shu-ju-tao-tai-ce-lue">Redis - 数据淘汰策略</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://caijh.github.io//post/vagrant-shi-yong">Vagrant - 使用</a>
+            </li>
+          
         
           
             <li>
@@ -459,21 +479,9 @@ Map 这样的 Key Value 在软件开发中是非常经典的结构，常用于�
           
         
           
-            <li>
-              <a href="https://caijh.github.io//post/yuan-ma-yue-du-hashmap-concurrenthashmap">源码阅读-HashMap ConcurrentHashMap</a>
-            </li>
-          
         
           
-            <li>
-              <a href="https://caijh.github.io//post/maven-fa-bu-zi-ji-de-maven-gou-jian-dao-zhong-yang-cang-ku">maven-发布自己的maven构件到中央仓库</a>
-            </li>
-          
         
-          
-            <li>
-              <a href="https://caijh.github.io//post/yuan-ma-yue-du-hashmap-de-shi-xian-yuan-li">源码阅读-HashMap的实现原理</a>
-            </li>
           
         
           
@@ -537,11 +545,11 @@ Map 这样的 Key Value 在软件开发中是非常经典的结构，常用于�
     </div>
     <div class="row">
       
-        <a href="https://caijh.github.io//tag/6w7rEzKhc" class="badge secondary">
+        <a href="https://caijh.github.io//tag/6w7rEzKhc" class="badge warning">
           Redis
         </a>
       
-        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge ">
+        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge secondary">
           MySQL
         </a>
       
@@ -549,7 +557,7 @@ Map 这样的 Key Value 在软件开发中是非常经典的结构，常用于�
           源代码
         </a>
       
-        <a href="https://caijh.github.io//tag/nHOjalh2s" class="badge warning">
+        <a href="https://caijh.github.io//tag/nHOjalh2s" class="badge secondary">
           Spring Cloud
         </a>
       
@@ -557,15 +565,15 @@ Map 这样的 Key Value 在软件开发中是非常经典的结构，常用于�
           Java
         </a>
       
-        <a href="https://caijh.github.io//tag/kmQV6iHOM" class="badge ">
+        <a href="https://caijh.github.io//tag/kmQV6iHOM" class="badge warning">
           面试
         </a>
       
-        <a href="https://caijh.github.io//tag/hm42pTrhV" class="badge secondary">
+        <a href="https://caijh.github.io//tag/hm42pTrhV" class="badge ">
           Maven
         </a>
       
-        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge ">
+        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge warning">
           设计模式
         </a>
       
