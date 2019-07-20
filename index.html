@@ -7,7 +7,7 @@
 <meta name="description" content="搬砖小弟">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<link rel="shortcut icon" href="https://caijh.github.io//favicon.ico?v=1563438702420">
+<link rel="shortcut icon" href="https://caijh.github.io//favicon.ico?v=1563633893687">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 <link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
@@ -81,6 +81,50 @@
       <div class="sm-12 md-8 col">
         <div class="paper">
           
+  <article class="article">
+    <h2 class="article-title">
+      <a href="https://caijh.github.io//post/springboot-qi-dong-yuan-li">SpringBoot - 启动原理</a>
+    </h2>
+    <p class="article-meta">
+      2019-07-20
+      
+        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge secondary">
+          Java
+        </a>
+      
+    </p>
+    <p class="text-lead">
+      <p>SpringBoot应用启动类一般如下：</p>
+<pre><code>@SpringBootApplication
+public class SampleRabbitmqApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(SampleRabbitmqApplication.class, args);
+    }
+
+}
+</code></pre>
+<h1 id="springbootapplication">@SpringBootApplication</h1>
+<p>@SpringBootApplication这个组合注解包含了三个注解 ：</p>
+<ul>
+<li>@SpringBootConfiguration</li>
+<li>@EnableAutoConfiguration</li>
+<li>@ComponentScan</li>
+</ul>
+<p>@SpringBootConfiguration实际上应用@Configuration， 任何注解了Configuration了java类都是一个JavaConfig配置类。<br>
+@ComponentScan的功能是自动扫描并加载符合条件的组件（如@Component和@Repository）,最终将这些bean加载IoC容器中。<br>
+@EnableAutoConfiguration借助@Import收集和注册特定场景相关的bean定义。</p>
+
+    </p>
+    <div class="row">
+      <a href="https://caijh.github.io//post/springboot-qi-dong-yuan-li" class="readmore-link">
+        <button>
+          Read More
+        </button>
+      </a>
+    </div>
+  </article>
+
   <article class="article">
     <h2 class="article-title">
       <a href="https://caijh.github.io//post/redis-bian-yi-chun-jing-ban">Redis - 编译纯净版</a>
@@ -228,7 +272,7 @@
     <p class="article-meta">
       2019-07-15
       
-        <a href="https://caijh.github.io//tag/6w7rEzKhc" class="badge ">
+        <a href="https://caijh.github.io//tag/6w7rEzKhc" class="badge secondary">
           Redis
         </a>
       
@@ -253,7 +297,7 @@
     <p class="article-meta">
       2019-07-14
       
-        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge warning">
+        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge success">
           MySQL
         </a>
       
@@ -277,7 +321,7 @@
     <p class="article-meta">
       2019-07-14
       
-        <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge warning">
+        <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge secondary">
           源代码
         </a>
       
@@ -306,7 +350,7 @@ AQS内部有一个state状态记录当前线程的加锁次数，还有一个exc
     <p class="article-meta">
       2019-07-13
       
-        <a href="https://caijh.github.io//tag/nHOjalh2s" class="badge ">
+        <a href="https://caijh.github.io//tag/nHOjalh2s" class="badge secondary">
           Spring Cloud
         </a>
       
@@ -320,57 +364,6 @@ Hystrix默认的超时时间是1秒，如果超过这个时间尚未响应，将
     </p>
     <div class="row">
       <a href="https://caijh.github.io//post/spring-cloud-ru-he-jie-jue-feignribbon-di-yi-ci-qing-qiu-shi-bai-de-wen-ti" class="readmore-link">
-        <button>
-          Read More
-        </button>
-      </a>
-    </div>
-  </article>
-
-  <article class="article">
-    <h2 class="article-title">
-      <a href="https://caijh.github.io//post/java-xian-cheng-chi">Java - 线程池</a>
-    </h2>
-    <p class="article-meta">
-      2019-07-08
-      
-        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge secondary">
-          Java
-        </a>
-      
-    </p>
-    <p class="text-lead">
-      <h4 id="threadpoolexecutor的重要参数">ThreadPoolExecutor的重要参数</h4>
-<ul>
-<li>corePoolSize：核心线程数<br>
-核心线程会一直存活，及时没有任务需要执行<br>
-当线程数小于核心线程数时，即使有线程空闲，线程池也会优先创建新线程处理<br>
-设置allowCoreThreadTimeout=true（默认false）时，核心线程会超时关闭</li>
-<li>queueCapacity：任务队列容量（阻塞队列）<br>
-当核心线程数达到最大时，新任务会放在队列中排队等待执行</li>
-<li>maxPoolSize：最大线程数<br>
-当线程数&gt;=corePoolSize，且任务队列已满时。线程池会创建新线程来处理任务<br>
-当线程数=maxPoolSize，且任务队列已满时，线程池会拒绝处理任务而抛出异常</li>
-<li>keepAliveTime：线程空闲时间<br>
-当线程空闲时间达到keepAliveTime时，线程会退出，直到线程数量=corePoolSize<br>
-如果allowCoreThreadTimeout=true，则会直到线程数量=0</li>
-<li>allowCoreThreadTimeout：允许核心线程超时</li>
-<li>rejectedExecutionHandler：任务拒绝处理器<br>
-两种情况会拒绝处理任务：<br>
-当线程数已经达到maxPoolSize，切队列已满，会拒绝新任务<br>
-当线程池被调用shutdown()后，会等待线程池里的任务执行完毕，再shutdown。如果在调用shutdown()和线程池真正shutdown之间提交任务，会拒绝新任务<br>
-线程池会调用rejectedExecutionHandler来处理这个任务。如果没有设置默认是AbortPolicy，会抛出异常<br>
-ThreadPoolExecutor类有几个内部实现类来处理这类情况：<br>
-AbortPolicy 丢弃任务，抛运行时异常<br>
-CallerRunsPolicy 执行任务<br>
-DiscardPolicy 忽视，什么都不会发生<br>
-DiscardOldestPolicy 从队列中踢出最先进入队列（最后一个执行）的任务<br>
-实现RejectedExecutionHandler接口，可自定义处理器</li>
-</ul>
-
-    </p>
-    <div class="row">
-      <a href="https://caijh.github.io//post/java-xian-cheng-chi" class="readmore-link">
         <button>
           Read More
         </button>
@@ -394,7 +387,7 @@ DiscardOldestPolicy 从队列中踢出最先进入队列（最后一个执行）
       
       <div class="sm-12 md-4 col sidebar">
   <div class="paper info-container">
-    <img src="https://caijh.github.io//images/avatar.png?v=1563438702420" class="no-responsive avatar">
+    <img src="https://caijh.github.io//images/avatar.png?v=1563633893687" class="no-responsive avatar">
     <div class="text-muted">搬砖小弟</div>
     <div class="social-container">
       
@@ -416,6 +409,12 @@ DiscardOldestPolicy 从队列中踢出最先进入队列（最后一个执行）
     </div>
     <div class="row">
       <ul>
+        
+          
+            <li>
+              <a href="https://caijh.github.io//post/springboot-qi-dong-yuan-li">SpringBoot - 启动原理</a>
+            </li>
+          
         
           
             <li>
@@ -471,10 +470,6 @@ DiscardOldestPolicy 从队列中踢出最先进入队列（最后一个执行）
             </li>
           
         
-          
-            <li>
-              <a href="https://caijh.github.io//post/java-xian-cheng-chi">Java - 线程池</a>
-            </li>
           
         
           
@@ -548,24 +543,24 @@ DiscardOldestPolicy 从队列中踢出最先进入队列（最后一个执行）
     </div>
     <div class="row">
       
-        <a href="https://caijh.github.io//tag/6w7rEzKhc" class="badge secondary">
+        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge warning">
+          Java
+        </a>
+      
+        <a href="https://caijh.github.io//tag/6w7rEzKhc" class="badge warning">
           Redis
         </a>
       
-        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge success">
+        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge ">
           MySQL
         </a>
       
-        <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge ">
+        <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge warning">
           源代码
         </a>
       
-        <a href="https://caijh.github.io//tag/nHOjalh2s" class="badge ">
+        <a href="https://caijh.github.io//tag/nHOjalh2s" class="badge warning">
           Spring Cloud
-        </a>
-      
-        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge secondary">
-          Java
         </a>
       
         <a href="https://caijh.github.io//tag/kmQV6iHOM" class="badge secondary">
@@ -576,7 +571,7 @@ DiscardOldestPolicy 从队列中踢出最先进入队列（最后一个执行）
           Maven
         </a>
       
-        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge secondary">
+        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge warning">
           设计模式
         </a>
       

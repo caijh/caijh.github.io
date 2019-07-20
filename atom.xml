@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://caijh.github.io/</id>
     <title>John&apos;s Blog</title>
-    <updated>2019-07-18T08:31:45.892Z</updated>
+    <updated>2019-07-20T14:44:59.402Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://caijh.github.io/"/>
     <link rel="self" href="https://caijh.github.io//atom.xml"/>
@@ -10,6 +10,134 @@
     <logo>https://caijh.github.io//images/avatar.png</logo>
     <icon>https://caijh.github.io//favicon.ico</icon>
     <rights>All rights reserved 2019, John&apos;s Blog</rights>
+    <entry>
+        <title type="html"><![CDATA[SpringBoot - 启动原理]]></title>
+        <id>https://caijh.github.io//post/springboot-qi-dong-yuan-li</id>
+        <link href="https://caijh.github.io//post/springboot-qi-dong-yuan-li">
+        </link>
+        <updated>2019-07-20T03:41:54.000Z</updated>
+        <summary type="html"><![CDATA[<p>SpringBoot应用启动类一般如下：</p>
+<pre><code>@SpringBootApplication
+public class SampleRabbitmqApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(SampleRabbitmqApplication.class, args);
+    }
+
+}
+</code></pre>
+<h1 id="springbootapplication">@SpringBootApplication</h1>
+<p>@SpringBootApplication这个组合注解包含了三个注解 ：</p>
+<ul>
+<li>@SpringBootConfiguration</li>
+<li>@EnableAutoConfiguration</li>
+<li>@ComponentScan</li>
+</ul>
+<p>@SpringBootConfiguration实际上应用@Configuration， 任何注解了Configuration了java类都是一个JavaConfig配置类。<br>
+@ComponentScan的功能是自动扫描并加载符合条件的组件（如@Component和@Repository）,最终将这些bean加载IoC容器中。<br>
+@EnableAutoConfiguration借助@Import收集和注册特定场景相关的bean定义。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>SpringBoot应用启动类一般如下：</p>
+<pre><code>@SpringBootApplication
+public class SampleRabbitmqApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(SampleRabbitmqApplication.class, args);
+    }
+
+}
+</code></pre>
+<h1 id="springbootapplication">@SpringBootApplication</h1>
+<p>@SpringBootApplication这个组合注解包含了三个注解 ：</p>
+<ul>
+<li>@SpringBootConfiguration</li>
+<li>@EnableAutoConfiguration</li>
+<li>@ComponentScan</li>
+</ul>
+<p>@SpringBootConfiguration实际上应用@Configuration， 任何注解了Configuration了java类都是一个JavaConfig配置类。<br>
+@ComponentScan的功能是自动扫描并加载符合条件的组件（如@Component和@Repository）,最终将这些bean加载IoC容器中。<br>
+@EnableAutoConfiguration借助@Import收集和注册特定场景相关的bean定义。</p>
+<!-- more -->
+<pre><code>@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+@Inherited
+@AutoConfigurationPackage
+@Import(AutoConfigurationImportSelector.class)
+public @interface EnableAutoConfiguration {
+
+	String ENABLED_OVERRIDE_PROPERTY = &quot;spring.boot.enableautoconfiguration&quot;;
+
+	/**
+	 * Exclude specific auto-configuration classes such that they will never be applied.
+	 * @return the classes to exclude
+	 */
+	Class&lt;?&gt;[] exclude() default {};
+
+	/**
+	 * Exclude specific auto-configuration class names such that they will never be
+	 * applied.
+	 * @return the class names to exclude
+	 * @since 1.3.0
+	 */
+	String[] excludeName() default {};
+
+}
+</code></pre>
+<p>@Import(AutoConfigurationImportSelector.class)中借助AutoConfigurationImportSelector可以帮助SpringBoot应用将所有符合@Configuration配置都加载到当SpringBoot创建IoC容器中。AutoConfigurationImportSelector使用SpringFactoriesLoader从META-INF/spring.factories加载配置。</p>
+<h4 id="springapplicationrun">SpringApplication.run</h4>
+<pre><code>public ConfigurableApplicationContext run(String... args) {
+		StopWatch stopWatch = new StopWatch();
+		stopWatch.start();
+		ConfigurableApplicationContext context = null;
+		Collection&lt;SpringBootExceptionReporter&gt; exceptionReporters = new ArrayList&lt;&gt;();
+		configureHeadlessProperty();
+		SpringApplicationRunListeners listeners = getRunListeners(args);
+		listeners.starting();
+		try {
+			ApplicationArguments applicationArguments = new DefaultApplicationArguments(args);
+			ConfigurableEnvironment environment = prepareEnvironment(listeners, applicationArguments);
+			configureIgnoreBeanInfo(environment);
+			Banner printedBanner = printBanner(environment);
+			context = createApplicationContext();
+			exceptionReporters = getSpringFactoriesInstances(SpringBootExceptionReporter.class,
+					new Class[] { ConfigurableApplicationContext.class }, context);
+			prepareContext(context, environment, listeners, applicationArguments, printedBanner);
+			refreshContext(context);
+			afterRefresh(context, applicationArguments);
+			stopWatch.stop();
+			if (this.logStartupInfo) {
+				new StartupInfoLogger(this.mainApplicationClass).logStarted(getApplicationLog(), stopWatch);
+			}
+			listeners.started(context);
+			callRunners(context, applicationArguments);
+		}
+		catch (Throwable ex) {
+			handleRunFailure(context, ex, exceptionReporters, listeners);
+			throw new IllegalStateException(ex);
+		}
+
+		try {
+			listeners.running(context);
+		}
+		catch (Throwable ex) {
+			handleRunFailure(context, ex, exceptionReporters, null);
+			throw new IllegalStateException(ex);
+		}
+		return context;
+	}
+</code></pre>
+<ol>
+<li>创建SpringApplicationRunListeners, 获取SpringFactoriesInstances实例</li>
+<li>准备环境变量</li>
+<li>是否打印banner</li>
+<li>创建ApplicationContext,servelt环境创建AnnotationConfigServletWebServerApplicationContext， reactive环境创建AnnotationConfigReactiveWebServerApplicationContext， 否则创建AnnotationConfigApplicationContext</li>
+<li>prepareContext, 主要是ApplicationContextInitializer的初始化</li>
+<li>refreshContext 调用ApplicationContext的refresh()方法</li>
+<li>afterRefresh, 空方法</li>
+</ol>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Redis - 编译纯净版]]></title>
         <id>https://caijh.github.io//post/redis-bian-yi-chun-jing-ban</id>
@@ -523,114 +651,6 @@ class FooConfiguration {
     enabled: true
     clients: client1, client2, client3
 </code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Java - 线程池]]></title>
-        <id>https://caijh.github.io//post/java-xian-cheng-chi</id>
-        <link href="https://caijh.github.io//post/java-xian-cheng-chi">
-        </link>
-        <updated>2019-07-08T10:49:35.000Z</updated>
-        <summary type="html"><![CDATA[<h4 id="threadpoolexecutor的重要参数">ThreadPoolExecutor的重要参数</h4>
-<ul>
-<li>corePoolSize：核心线程数<br>
-核心线程会一直存活，及时没有任务需要执行<br>
-当线程数小于核心线程数时，即使有线程空闲，线程池也会优先创建新线程处理<br>
-设置allowCoreThreadTimeout=true（默认false）时，核心线程会超时关闭</li>
-<li>queueCapacity：任务队列容量（阻塞队列）<br>
-当核心线程数达到最大时，新任务会放在队列中排队等待执行</li>
-<li>maxPoolSize：最大线程数<br>
-当线程数&gt;=corePoolSize，且任务队列已满时。线程池会创建新线程来处理任务<br>
-当线程数=maxPoolSize，且任务队列已满时，线程池会拒绝处理任务而抛出异常</li>
-<li>keepAliveTime：线程空闲时间<br>
-当线程空闲时间达到keepAliveTime时，线程会退出，直到线程数量=corePoolSize<br>
-如果allowCoreThreadTimeout=true，则会直到线程数量=0</li>
-<li>allowCoreThreadTimeout：允许核心线程超时</li>
-<li>rejectedExecutionHandler：任务拒绝处理器<br>
-两种情况会拒绝处理任务：<br>
-当线程数已经达到maxPoolSize，切队列已满，会拒绝新任务<br>
-当线程池被调用shutdown()后，会等待线程池里的任务执行完毕，再shutdown。如果在调用shutdown()和线程池真正shutdown之间提交任务，会拒绝新任务<br>
-线程池会调用rejectedExecutionHandler来处理这个任务。如果没有设置默认是AbortPolicy，会抛出异常<br>
-ThreadPoolExecutor类有几个内部实现类来处理这类情况：<br>
-AbortPolicy 丢弃任务，抛运行时异常<br>
-CallerRunsPolicy 执行任务<br>
-DiscardPolicy 忽视，什么都不会发生<br>
-DiscardOldestPolicy 从队列中踢出最先进入队列（最后一个执行）的任务<br>
-实现RejectedExecutionHandler接口，可自定义处理器</li>
-</ul>
-]]></summary>
-        <content type="html"><![CDATA[<h4 id="threadpoolexecutor的重要参数">ThreadPoolExecutor的重要参数</h4>
-<ul>
-<li>corePoolSize：核心线程数<br>
-核心线程会一直存活，及时没有任务需要执行<br>
-当线程数小于核心线程数时，即使有线程空闲，线程池也会优先创建新线程处理<br>
-设置allowCoreThreadTimeout=true（默认false）时，核心线程会超时关闭</li>
-<li>queueCapacity：任务队列容量（阻塞队列）<br>
-当核心线程数达到最大时，新任务会放在队列中排队等待执行</li>
-<li>maxPoolSize：最大线程数<br>
-当线程数&gt;=corePoolSize，且任务队列已满时。线程池会创建新线程来处理任务<br>
-当线程数=maxPoolSize，且任务队列已满时，线程池会拒绝处理任务而抛出异常</li>
-<li>keepAliveTime：线程空闲时间<br>
-当线程空闲时间达到keepAliveTime时，线程会退出，直到线程数量=corePoolSize<br>
-如果allowCoreThreadTimeout=true，则会直到线程数量=0</li>
-<li>allowCoreThreadTimeout：允许核心线程超时</li>
-<li>rejectedExecutionHandler：任务拒绝处理器<br>
-两种情况会拒绝处理任务：<br>
-当线程数已经达到maxPoolSize，切队列已满，会拒绝新任务<br>
-当线程池被调用shutdown()后，会等待线程池里的任务执行完毕，再shutdown。如果在调用shutdown()和线程池真正shutdown之间提交任务，会拒绝新任务<br>
-线程池会调用rejectedExecutionHandler来处理这个任务。如果没有设置默认是AbortPolicy，会抛出异常<br>
-ThreadPoolExecutor类有几个内部实现类来处理这类情况：<br>
-AbortPolicy 丢弃任务，抛运行时异常<br>
-CallerRunsPolicy 执行任务<br>
-DiscardPolicy 忽视，什么都不会发生<br>
-DiscardOldestPolicy 从队列中踢出最先进入队列（最后一个执行）的任务<br>
-实现RejectedExecutionHandler接口，可自定义处理器</li>
-</ul>
-<!-- more -->
-<h4 id="threadpoolexecutor执行顺序">ThreadPoolExecutor执行顺序：</h4>
-<pre><code> 线程池按以下行为执行任务
-</code></pre>
-<ol>
-<li>当线程数小于核心线程数时，创建线程。</li>
-<li>当线程数大于等于核心线程数，且任务队列未满时，将任务放入任务队列。</li>
-<li>当线程数大于等于核心线程数，且任务队列已满<br>
-3.1 若线程数小于最大线程数，创建线程<br>
-3.2 若线程数等于最大线程数，抛出异常，拒绝任务</li>
-</ol>
-<p>三、如何设置参数</p>
-<ul>
-<li>默认值<br>
-corePoolSize=1<br>
-queueCapacity=Integer.MAX_VALUE<br>
-maxPoolSize=Integer.MAX_VALUE<br>
-keepAliveTime=60s<br>
-allowCoreThreadTimeout=false<br>
-rejectedExecutionHandler=AbortPolicy()</li>
-</ul>
-<blockquote>
-<p>如何来设置?</p>
-</blockquote>
-<ol>
-<li>需要根据几个值来决定<br>
-tasks ：每秒的任务数，假设为500~1000<br>
-taskcost：每个任务花费时间，假设为0.1s<br>
-responsetime：系统允许容忍的最大响应时间，假设为1s</li>
-<li>做几个计算</li>
-</ol>
-<ul>
-<li>corePoolSize = 每秒需要多少个线程处理？<br>
-threadcount = tasks/(1/taskcost) =tasks*taskcout =  (500~1000)*0.1 = 50~100 个线程。corePoolSize设置应该大于50<br>
-根据8020原则，如果80%的每秒任务数小于800，那么corePoolSize设置为80即可</li>
-<li>queueCapacity = (coreSizePool/taskcost)<em>responsetime<br>
-计算可得 queueCapacity = 80/0.1</em>1 = 800。意思是队列里的线程可以等待1s，超过了的需要新开线程来执行<br>
-切记不能设置为Integer.MAX_VALUE，这样队列会很大，线程数只会保持在corePoolSize大小，当任务陡增时，不能新开线程来执行，响应时间会随之陡增。</li>
-<li>maxPoolSize = (max(tasks)- queueCapacity)/(1/taskcost) + corePoolSize<br>
-计算可得 maxPoolSize = (1000-800)/10 +80 = 100<br>
-（最大任务数-队列容量）/每个线程每秒处理能力 = 最大线程数</li>
-<li>rejectedExecutionHandler：根据具体情况来决定，任务不重要可丢弃，任务重要则要利用一些缓冲机制来处理</li>
-<li>keepAliveTime和allowCoreThreadTimeout采用默认通常能满足<br>
-以上都是理想值，实际情况下要根据机器性能来决定。如果在未达到最大线程数的情况机器cpu load已经满了，则需要通过升级硬件（呵呵）和优化代码，降低taskcost来处理。</li>
-</ul>
 ]]></content>
     </entry>
 </feed>

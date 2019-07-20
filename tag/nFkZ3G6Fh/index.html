@@ -7,7 +7,7 @@
 <meta name="description" content="搬砖小弟">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<link rel="shortcut icon" href="https://caijh.github.io//favicon.ico?v=1563438702420">
+<link rel="shortcut icon" href="https://caijh.github.io//favicon.ico?v=1563633893687">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 <link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
@@ -83,12 +83,56 @@
           
   <article class="article">
     <h2 class="article-title">
+      <a href="https://caijh.github.io//post/springboot-qi-dong-yuan-li">SpringBoot - 启动原理</a>
+    </h2>
+    <p class="article-meta">
+      2019-07-20
+      
+        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge ">
+          Java
+        </a>
+      
+    </p>
+    <p class="text-lead">
+      <p>SpringBoot应用启动类一般如下：</p>
+<pre><code>@SpringBootApplication
+public class SampleRabbitmqApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(SampleRabbitmqApplication.class, args);
+    }
+
+}
+</code></pre>
+<h1 id="springbootapplication">@SpringBootApplication</h1>
+<p>@SpringBootApplication这个组合注解包含了三个注解 ：</p>
+<ul>
+<li>@SpringBootConfiguration</li>
+<li>@EnableAutoConfiguration</li>
+<li>@ComponentScan</li>
+</ul>
+<p>@SpringBootConfiguration实际上应用@Configuration， 任何注解了Configuration了java类都是一个JavaConfig配置类。<br>
+@ComponentScan的功能是自动扫描并加载符合条件的组件（如@Component和@Repository）,最终将这些bean加载IoC容器中。<br>
+@EnableAutoConfiguration借助@Import收集和注册特定场景相关的bean定义。</p>
+
+    </p>
+    <div class="row">
+      <a href="https://caijh.github.io//post/springboot-qi-dong-yuan-li" class="readmore-link">
+        <button>
+          Read More
+        </button>
+      </a>
+    </div>
+  </article>
+
+  <article class="article">
+    <h2 class="article-title">
       <a href="https://caijh.github.io//post/java-xian-cheng-chi">Java - 线程池</a>
     </h2>
     <p class="article-meta">
       2019-07-08
       
-        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge success">
+        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge warning">
           Java
         </a>
       
@@ -139,7 +183,7 @@ DiscardOldestPolicy 从队列中踢出最先进入队列（最后一个执行）
     <p class="article-meta">
       2019-06-24
       
-        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge ">
+        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge warning">
           Java
         </a>
       
@@ -180,7 +224,7 @@ DiscardOldestPolicy 从队列中踢出最先进入队列（最后一个执行）
       </div>
       <div class="sm-12 md-4 col sidebar">
   <div class="paper info-container">
-    <img src="https://caijh.github.io//images/avatar.png?v=1563438702420" class="no-responsive avatar">
+    <img src="https://caijh.github.io//images/avatar.png?v=1563633893687" class="no-responsive avatar">
     <div class="text-muted">搬砖小弟</div>
     <div class="social-container">
       
@@ -202,6 +246,12 @@ DiscardOldestPolicy 从队列中踢出最先进入队列（最后一个执行）
     </div>
     <div class="row">
       <ul>
+        
+          
+            <li>
+              <a href="https://caijh.github.io//post/springboot-qi-dong-yuan-li">SpringBoot - 启动原理</a>
+            </li>
+          
         
           
             <li>
@@ -257,10 +307,6 @@ DiscardOldestPolicy 从队列中踢出最先进入队列（最后一个执行）
             </li>
           
         
-          
-            <li>
-              <a href="https://caijh.github.io//post/java-xian-cheng-chi">Java - 线程池</a>
-            </li>
           
         
           
@@ -334,11 +380,15 @@ DiscardOldestPolicy 从队列中踢出最先进入队列（最后一个执行）
     </div>
     <div class="row">
       
-        <a href="https://caijh.github.io//tag/6w7rEzKhc" class="badge secondary">
+        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge secondary">
+          Java
+        </a>
+      
+        <a href="https://caijh.github.io//tag/6w7rEzKhc" class="badge warning">
           Redis
         </a>
       
-        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge warning">
+        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge ">
           MySQL
         </a>
       
@@ -350,19 +400,15 @@ DiscardOldestPolicy 从队列中踢出最先进入队列（最后一个执行）
           Spring Cloud
         </a>
       
-        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge secondary">
-          Java
-        </a>
-      
-        <a href="https://caijh.github.io//tag/kmQV6iHOM" class="badge secondary">
+        <a href="https://caijh.github.io//tag/kmQV6iHOM" class="badge success">
           面试
         </a>
       
-        <a href="https://caijh.github.io//tag/hm42pTrhV" class="badge warning">
+        <a href="https://caijh.github.io//tag/hm42pTrhV" class="badge success">
           Maven
         </a>
       
-        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge ">
+        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge secondary">
           设计模式
         </a>
       
