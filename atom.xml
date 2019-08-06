@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://caijh.github.io/</id>
     <title>John&apos;s Blog</title>
-    <updated>2019-07-20T14:44:59.402Z</updated>
+    <updated>2019-08-06T03:36:59.742Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://caijh.github.io/"/>
     <link rel="self" href="https://caijh.github.io//atom.xml"/>
@@ -10,6 +10,41 @@
     <logo>https://caijh.github.io//images/avatar.png</logo>
     <icon>https://caijh.github.io//favicon.ico</icon>
     <rights>All rights reserved 2019, John&apos;s Blog</rights>
+    <entry>
+        <title type="html"><![CDATA[Maven - 怎么样skip test]]></title>
+        <id>https://caijh.github.io//post/maven-zen-me-yang-skip-test</id>
+        <link href="https://caijh.github.io//post/maven-zen-me-yang-skip-test">
+        </link>
+        <updated>2019-08-06T03:20:36.000Z</updated>
+        <summary type="html"><![CDATA[<h3 id="maven-参数设置">Maven 参数设置</h3>
+<ul>
+<li>使用参数-Dmaven.test.skip=true</li>
+<li>在pom.xml中定义参数<br>
+<code>&lt;properties&gt; &lt;maven.test.skip&gt;true&lt;/maven.test.skip&gt; &lt;/properties&gt;</code></li>
+</ul>
+]]></summary>
+        <content type="html"><![CDATA[<h3 id="maven-参数设置">Maven 参数设置</h3>
+<ul>
+<li>使用参数-Dmaven.test.skip=true</li>
+<li>在pom.xml中定义参数<br>
+<code>&lt;properties&gt; &lt;maven.test.skip&gt;true&lt;/maven.test.skip&gt; &lt;/properties&gt;</code></li>
+</ul>
+<!-- more -->
+<h3 id="maven-surefire-plugin">Maven Surefire Plugin</h3>
+<pre><code>mvn package -DskipTests
+</code></pre>
+<p>or</p>
+<pre><code>&lt;plugin&gt;
+    &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+    &lt;artifactId&gt;maven-surefire-plugin&lt;/artifactId&gt;
+    &lt;version&gt;3.0.0-M1&lt;/version&gt;
+    &lt;configuration&gt;
+        &lt;skipTests&gt;true&lt;/skipTests&gt;
+    &lt;/configuration&gt;
+&lt;/plugin&gt;
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[SpringBoot - 启动原理]]></title>
         <id>https://caijh.github.io//post/springboot-qi-dong-yuan-li</id>
@@ -603,54 +638,6 @@ AQS内部有一个state状态记录当前线程的加锁次数，还有一个exc
     }
 </code></pre>
 <p>hasQueuedPredecessors看等待队列中是否有线程在排队。</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Spring Cloud - 如何解决Feign/Ribbon第一次请求失败的问题]]></title>
-        <id>https://caijh.github.io//post/spring-cloud-ru-he-jie-jue-feignribbon-di-yi-ci-qing-qiu-shi-bai-de-wen-ti</id>
-        <link href="https://caijh.github.io//post/spring-cloud-ru-he-jie-jue-feignribbon-di-yi-ci-qing-qiu-shi-bai-de-wen-ti">
-        </link>
-        <updated>2019-07-13T14:43:38.000Z</updated>
-        <summary type="html"><![CDATA[<blockquote>
-<p>造成该问题的原因？<br>
-Hystrix默认的超时时间是1秒，如果超过这个时间尚未响应，将会进入fallback代码。而首次请求往往会比较慢（由于Ribbon是懒加载的，在首次请求时，才会开始初始化相关类），这个响应时间可能就大于1秒了。</p>
-</blockquote>
-]]></summary>
-        <content type="html"><![CDATA[<blockquote>
-<p>造成该问题的原因？<br>
-Hystrix默认的超时时间是1秒，如果超过这个时间尚未响应，将会进入fallback代码。而首次请求往往会比较慢（由于Ribbon是懒加载的，在首次请求时，才会开始初始化相关类），这个响应时间可能就大于1秒了。</p>
-</blockquote>
-<!-- more -->
-<h4 id="1-将hystrix的超时设长">1. 将Hystrix的超时设长</h4>
-<pre><code>hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds: 5000
-</code></pre>
-<h4 id="2-禁用hystrix超时">2. 禁用Hystrix超时</h4>
-<pre><code>hystrix.command.default.execution.timeout.enabled: false
-</code></pre>
-<h4 id="3-为feign禁用hystrix">3. 为Feign禁用Hystrix</h4>
-<p>全局禁用</p>
-<pre><code>feign.hystrix.enabled: false
-</code></pre>
-<p>局部禁用</p>
-<pre><code>@FeignClient(name = &quot;microservice-provider-user&quot;)
-public interface UserFeignClient {
-  @GetMapping(&quot;/users/{id}&quot;)
-  User findById(@PathVariable(&quot;id&quot;) Long id);
-}
-class FooConfiguration {
-  @Bean
-  @Scope(&quot;prototype&quot;)
-  public Feign.Builder feignBuilder(){
-    return Feign.builder();
-  }
-}
-</code></pre>
-<h4 id="4-ribbon配置饥饿加载">4. Ribbon配置饥饿加载</h4>
-<pre><code>ribbon:
-  eager-load:
-    enabled: true
-    clients: client1, client2, client3
-</code></pre>
 ]]></content>
     </entry>
 </feed>
