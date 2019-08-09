@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>设计模式-建造者模式 | John&#39;s Blog</title>
+<title>docker | John&#39;s Blog</title>
 <meta name="description" content="搬砖小弟">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -15,12 +15,6 @@
 <link rel="stylesheet" href="https://caijh.github.io//styles/main.css">
 
 
-  
-
-  
-    <link rel="stylesheet" href="https://unpkg.com/disqusjs@1.1/dist/disqusjs.css" />
-  
-
 <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
 
 
@@ -29,7 +23,6 @@
 
   </head>
   <body>
-  
     <nav class="navbar border fixed split-nav">
   <div class="nav-brand">
     <h3><a href="https://caijh.github.io/">John&#39;s Blog</a></h3>
@@ -86,114 +79,40 @@
     <div id="top" class="row site">
       <div class="sm-12 md-8 col">
         <div class="paper">
-          <article class="article">
-            <h1>设计模式-建造者模式</h1>
-            <p class="article-meta">
-              2019-06-24
-              
-                <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge ">
-                  设计模式
-                </a>
-              
-            </p>
-            
-            <div class="post-content">
-              <h4 id="定义">定义</h4>
-<blockquote>
-<p>Separate the construction of a complex object from its representation so that the same construction process can create different representations.（将一个复杂对象的构建与它的表示分离，使得同样的构建过程可以创建不同的表示。）</p>
-</blockquote>
-<h4 id="uml">UML</h4>
-<p><img src="https://caijh.github.io//post-images/1561388283844.png" alt=""></p>
-<!-- more -->
-<h4 id="建造者模式的优点">建造者模式的优点</h4>
-<ul>
-<li>封装性<br>
-使用建造者模式可以使客户端不必知道产品内部组成的细节</li>
-<li>建造者独立，容易扩展</li>
-<li>便于控制细节风险<br>
-由于具体的建造者是独立的，因此可以对建造过程逐步细化，而不对其他的模块产生任何影响。</li>
-</ul>
-<h4 id="建造者模式使用场景">建造者模式使用场景</h4>
-<ul>
-<li>相同的方法，不同的执行顺序，产生不同的事件结果时，可以采用建造者模式。</li>
-<li>多个部件或零件，都可以装配到一个对象中，但是产生的运行结果又不相同时，则可以使用该模式。</li>
-<li>产品类非常复杂，或者产品类中的调用顺序不同产生了不同的效能，这个时候使用建造者模式非常合适。</li>
-<li>在对象创建过程中会使用到系统中的一些其他对象，这些对象在产品对象的创建过程中不易得到时，也可以采用建造者模式封装该对象的创建过程。该种场景只能是一个补偿方法，因为一个对象不容易获得，而在设计阶段竟然没有发觉，而要通过创建者模式柔化创建过程，本身已经违反设计的最初目标。</li>
-</ul>
-<h4 id="代码实现">代码实现</h4>
-<pre><code>public class Product {
-     public void doSomething(){
-             //独立业务处理
-     }
-}
-public abstract class Builder {    
-     //设置产品的不同部分，以获得不同的产品
-     public abstract void setPart();
-     //建造产品
-     public abstract Product buildProduct();
-}
-public class ConcreteBuilder extends Builder {
-     private Product product = new Product();
-     //设置产品零件
-     public void setPart(){
-             /*
-              * 产品类内的逻辑处理
-              */
-     }  
-     //组建一个产品
-     public Product buildProduct() {
-             return product;
-     }
-}
-public class Director {
-     private Builder builder = new ConcreteBuilder();
-     //构建不同的产品
-     public Product getAProduct(){
-             builder.setPart();
-             /*
-              * 设置不同的零件，产生不同的产品
-              */
-             return builder.buildProduct();
-     }
-}
-</code></pre>
-<h4 id="jdk中的建造者模式">JDK中的建造者模式</h4>
-<ul>
-<li>java.lang.StringBuilder#append() (unsynchronized)</li>
-<li>java.lang.StringBuilder#append() (unsynchronized)</li>
-<li>java.nio.ByteBuffer#put()(alsoonCharBuffer,ShortBuffer,IntBuffer,LongBuffer,FloatBufferandDoubleBuffer)</li>
-<li>javax.swing.GroupLayout.Group#addComponent()</li>
-<li>All implementations of java.lang.Appendable</li>
-</ul>
+          <h2 class="current-tag">标签: docker</h2>
+          
+  <article class="article">
+    <h2 class="article-title">
+      <a href="https://caijh.github.io//post/k8s-an-zhuang-kube-dns-cha-jian">k8s - 安装kube-dns插件</a>
+    </h2>
+    <p class="article-meta">
+      2019-08-09
+      
+        <a href="https://caijh.github.io//tag/Juj0cbeuP" class="badge warning">
+          docker
+        </a>
+      
+    </p>
+    <p class="text-lead">
+      
+    </p>
+    <div class="row">
+      <a href="https://caijh.github.io//post/k8s-an-zhuang-kube-dns-cha-jian" class="readmore-link">
+        <button>
+          Read More
+        </button>
+      </a>
+    </div>
+  </article>
 
-            </div>
-          </article>
-        </div>
-        <div class="paper" data-aos="fade-in">
-          
-            <div class="next-post">
-              <div class="next">
-                下一篇
-              </div>
-              <a href="https://caijh.github.io//post/she-ji-mo-shi-mo-ban-fang-fa-mo-shi">
-                <h3 class="post-title">
-                  设计模式-模板方法模式
-                </h3>
-              </a>
-            </div>
-          
-        </div>
-        
-          
 
-          
-            <div class="paper" data-aos="fade-in">
-              <div id="disqus_thread"></div>
-            </div>
-          
-        
+        </div>
+        <div class="row flex-edges">
+  
+  
+</div>
+
       </div>
-
       <div class="sm-12 md-4 col sidebar">
   <div class="paper info-container">
     <img src="https://caijh.github.io//images/avatar.png?v=1565334903700" class="no-responsive avatar">
@@ -356,23 +275,23 @@ public class Director {
     </div>
     <div class="row">
       
-        <a href="https://caijh.github.io//tag/Juj0cbeuP" class="badge secondary">
+        <a href="https://caijh.github.io//tag/Juj0cbeuP" class="badge success">
           docker
         </a>
       
-        <a href="https://caijh.github.io//tag/hm42pTrhV" class="badge success">
+        <a href="https://caijh.github.io//tag/hm42pTrhV" class="badge warning">
           Maven
         </a>
       
-        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge success">
+        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge ">
           Java
         </a>
       
-        <a href="https://caijh.github.io//tag/6w7rEzKhc" class="badge warning">
+        <a href="https://caijh.github.io//tag/6w7rEzKhc" class="badge secondary">
           Redis
         </a>
       
-        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge success">
+        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge secondary">
           MySQL
         </a>
       
@@ -380,15 +299,15 @@ public class Director {
           源代码
         </a>
       
-        <a href="https://caijh.github.io//tag/nHOjalh2s" class="badge warning">
+        <a href="https://caijh.github.io//tag/nHOjalh2s" class="badge secondary">
           Spring Cloud
         </a>
       
-        <a href="https://caijh.github.io//tag/kmQV6iHOM" class="badge success">
+        <a href="https://caijh.github.io//tag/kmQV6iHOM" class="badge ">
           面试
         </a>
       
-        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge ">
+        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge success">
           设计模式
         </a>
       
@@ -398,7 +317,6 @@ public class Director {
     Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://caijh.github.io//atom.xml" target="_blank">RSS</a>
   </div>
 </div>
-
 
     </div>
 
@@ -411,26 +329,6 @@ AOS.init();
 hljs.initHighlightingOnLoad()
 
 </script>
-
-
-
-  
-
-  
-    <script src="https://unpkg.com/disqusjs@1.1/dist/disqus.js"></script>
-    <script>
-
-    var options = {
-      shortname: 'caijh',
-      apikey: 'lO2xchFAyPIP4VOKbgm796D9jIvqLVziAqLHOPnOZySwUlyWXAhgwrIbPQ16AyUX',
-    }
-    if ('https://disqus.skk.moe/disqus/') {
-      options.api = 'https://disqus.skk.moe/disqus/'
-    }
-    var dsqjs = new DisqusJS(options)
-
-    </script>
-  
 
 
 

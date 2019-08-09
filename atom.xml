@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://caijh.github.io/</id>
     <title>John&apos;s Blog</title>
-    <updated>2019-08-06T03:36:59.742Z</updated>
+    <updated>2019-08-09T07:15:10.665Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://caijh.github.io/"/>
     <link rel="self" href="https://caijh.github.io//atom.xml"/>
@@ -10,6 +10,294 @@
     <logo>https://caijh.github.io//images/avatar.png</logo>
     <icon>https://caijh.github.io//favicon.ico</icon>
     <rights>All rights reserved 2019, John&apos;s Blog</rights>
+    <entry>
+        <title type="html"><![CDATA[k8s - 安装kube-dns插件]]></title>
+        <id>https://caijh.github.io//post/k8s-an-zhuang-kube-dns-cha-jian</id>
+        <link href="https://caijh.github.io//post/k8s-an-zhuang-kube-dns-cha-jian">
+        </link>
+        <updated>2019-08-09T07:11:13.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="kubernetes-安装kube-dns插件">Kubernetes - 安装kube-dns插件</h1>
+<p>k8s 版本: 1.5.2</p>
+<ol>
+<li>下载yaml文件，根据实际情况修改文件</li>
+<li>kubectl creata -f yaml</li>
+<li>重启node</li>
+<li>测试</li>
+</ol>
+<h2 id="下载所需的文件">下载所需的文件</h2>
+<p>主要有yaml文件和yaml文件要使用到的镜像， 镜像因为gfw的问题，要拉到本地再上传到服务器，或者使用docker 私有这仓库。</p>
+<p>skydns-rc.yaml文件如下, 修改domain参数，增加<strong>kube-master-url</strong>参数</p>
+<pre><code># Copyright 2016 The Kubernetes Authors.
+#
+# Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# TODO - At some point, we need to rename all skydns-*.yaml.* files to kubedns-*.yaml.*
+# Should keep target in cluster/addons/dns-horizontal-autoscaler/dns-horizontal-autoscaler.yaml
+# in sync with this file.
+
+# __MACHINE_GENERATED_WARNING__
+
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: kube-dns
+  namespace: kube-system
+  labels:
+    k8s-app: kube-dns
+    kubernetes.io/cluster-service: &quot;true&quot;
+spec:
+  # replicas: not specified here:
+  # 1. In order to make Addon Manager do not reconcile this replicas parameter.
+  # 2. Default is 1.
+  # 3. Will be tuned in real time if DNS horizontal auto-scaling is turned on.
+  strategy:
+    rollingUpdate:
+      maxSurge: 10%
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      k8s-app: kube-dns
+  template:
+    metadata:
+      labels:
+        k8s-app: kube-dns
+      annotations:
+        scheduler.alpha.kubernetes.io/critical-pod: ''
+        scheduler.alpha.kubernetes.io/tolerations: '[{&quot;key&quot;:&quot;CriticalAddonsOnly&quot;, &quot;operator&quot;:&quot;Exists&quot;}]'
+    spec:
+      containers:
+      - name: kubedns
+        image: gcr.io/google_containers/kubedns-amd64:1.9
+        imagePullPolicy: IfNotPresent
+        resources:
+          # TODO: Set memory limits when we've profiled the container for large
+          # clusters, then set request = limit to keep this container in
+          # guaranteed class. Currently, this container falls into the
+          # &quot;burstable&quot; category so the kubelet doesn't backoff from restarting it.
+          limits:
+            memory: 170Mi
+          requests:
+            cpu: 100m
+            memory: 70Mi
+        livenessProbe:
+          httpGet:
+            path: /healthz-kubedns
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 60
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 5
+        readinessProbe:
+          httpGet:
+            path: /readiness
+            port: 8081
+            scheme: HTTP
+          # we poll on pod startup for the Kubernetes master service and
+          # only setup the /readiness HTTP server once that's available.
+          initialDelaySeconds: 3
+          timeoutSeconds: 5
+        args:
+        - --domain=cluster.local.
+        - --dns-port=10053
+        - --config-map=kube-dns
+        - --kube-master-url=http://10.36.10.18:8080
+        # This should be set to v=2 only after the new image (cut from 1.5) has
+        # been released, otherwise we will flood the logs.
+        - --v=0
+        # __PILLAR__FEDERATIONS__DOMAIN__MAP__
+        env:
+        - name: PROMETHEUS_PORT
+          value: &quot;10055&quot;
+        ports:
+        - containerPort: 10053
+          name: dns-local
+          protocol: UDP
+        - containerPort: 10053
+          name: dns-tcp-local
+          protocol: TCP
+        - containerPort: 10055
+          name: metrics
+          protocol: TCP
+      - name: dnsmasq
+        image: gcr.io/google_containers/kube-dnsmasq-amd64:1.4
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          httpGet:
+            path: /healthz-dnsmasq
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 60
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 5
+        args:
+        - --cache-size=1000
+        - --no-resolv
+        - --server=127.0.0.1#10053
+        - --log-facility=-
+        ports:
+        - containerPort: 53
+          name: dns
+          protocol: UDP
+        - containerPort: 53
+          name: dns-tcp
+          protocol: TCP
+        # see: https://github.com/kubernetes/kubernetes/issues/29055 for details
+        resources:
+          requests:
+            cpu: 150m
+            memory: 10Mi
+      - name: dnsmasq-metrics
+        image: gcr.io/google_containers/dnsmasq-metrics-amd64:1.0
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          httpGet:
+            path: /metrics
+            port: 10054
+            scheme: HTTP
+          initialDelaySeconds: 60
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 5
+        args:
+        - --v=2
+        - --logtostderr
+        ports:
+        - containerPort: 10054
+          name: metrics
+          protocol: TCP
+        resources:
+          requests:
+            memory: 10Mi
+      - name: healthz
+        image: gcr.io/google_containers/exechealthz-amd64:1.2
+        imagePullPolicy: IfNotPresent
+        resources:
+          limits:
+            memory: 50Mi
+          requests:
+            cpu: 10m
+            # Note that this container shouldn't really need 50Mi of memory. The
+            # limits are set higher than expected pending investigation on #29688.
+            # The extra memory was stolen from the kubedns container to keep the
+            # net memory requested by the pod constant.
+            memory: 50Mi
+        args:
+        - --cmd=nslookup kubernetes.default.svc.cluster.local 127.0.0.1 &gt;/dev/null
+        - --url=/healthz-dnsmasq
+        - --cmd=nslookup kubernetes.default.svc.cluster.local 127.0.0.1:10053 &gt;/dev/null
+        - --url=/healthz-kubedns
+        - --port=8080
+        - --quiet
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+      dnsPolicy: Default  # Don't use cluster DNS.
+
+</code></pre>
+<p>skydns-svc.yaml文件如下：</p>
+<pre><code># Copyright 2016 The Kubernetes Authors.
+#
+# Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# TODO - At some point, we need to rename all skydns-*.yaml.* files to kubedns-*.yaml.*
+
+# __MACHINE_GENERATED_WARNING__
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: kube-dns
+  namespace: kube-system
+  labels:
+    k8s-app: kube-dns
+    kubernetes.io/cluster-service: &quot;true&quot;
+    kubernetes.io/name: &quot;KubeDNS&quot;
+spec:
+  selector:
+    k8s-app: kube-dns
+  clusterIP: 10.36.10.2
+  ports:
+  - name: dns
+    port: 53
+    protocol: UDP
+  - name: dns-tcp
+    port: 53
+    protocol: TCP
+
+</code></pre>
+<p>修改ClusterIP参数为dns指定一个集群ip</p>
+<h2 id="创建dns">创建dns</h2>
+<pre><code>kubectl create -f skydns-rc.yaml
+kubectl create -f skydns-svc.yaml
+</code></pre>
+<h2 id="重启k8s-nodes">重启k8s Nodes</h2>
+<ol>
+<li>修改各node节点上的/etc/kubernetes/kubelet配置文件</li>
+</ol>
+<pre><code>KUBELET_ARGS=&quot;--cluster_dns=10.36.10.2 --cluster_domain=cluster.local&quot;
+</code></pre>
+<p>--cluster_dns为指定的ip,</p>
+<ol start="2">
+<li>
+<p>重启node</p>
+<pre><code>for SERVICES in kube-proxy kubelet flanneld docker; do
+    systemctl stop $SERVICES
+done
+
+iptables --flush
+iptables -tnat --flush
+
+for SERVICES in kube-proxy kubelet flanneld docker; do
+    systemctl restart $SERVICES
+    systemctl enable $SERVICES
+    systemctl status $SERVICES
+done
+</code></pre>
+</li>
+</ol>
+<h2 id="测试">测试</h2>
+<p>添加一个busybox的pod用于测试，busybox.yaml如下</p>
+<pre><code>apiVersion: v1
+kind: Pod
+metadata:
+  name: busybox
+spec:
+  containers:
+  - image: googlecontainer/busybox
+    imagePullPolicy: IfNotPresent
+    command:
+      - sleep
+      - &quot;3600&quot;
+    name: busybox
+  restartPolicy: Always
+</code></pre>
+<pre><code>kubectl exec -ti busybox -- nslookup kubernetes
+</code></pre>
+<p><img src="https://caijh.github.io//post-images/1565334765466.png" alt=""></p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Maven - 怎么样skip test]]></title>
         <id>https://caijh.github.io//post/maven-zen-me-yang-skip-test</id>
@@ -555,89 +843,6 @@ $ vagrant up // 启动
 <p>表示返回结果的行数占需要读取行数的百分比, 值越大越好</p>
 </li>
 </ol>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[源码阅读 - AbstractQueuedSynchronizer]]></title>
-        <id>https://caijh.github.io//post/yuan-dai-ma-abstractqueuedsynchronizer</id>
-        <link href="https://caijh.github.io//post/yuan-dai-ma-abstractqueuedsynchronizer">
-        </link>
-        <updated>2019-07-14T10:38:40.000Z</updated>
-        <summary type="html"><![CDATA[<blockquote>
-<p>AbstractQueuedSynchronizer, 简称AQS, 是Java 并发包的基础类，并发包中的很多api都是基于AQS来实现加锁与释放锁等功能。</p>
-</blockquote>
-<p>例如ReentrantLock内部拥有一个继承于AbstractQueuedSynchronizer的Sync类实现加锁与释放锁。<br>
-AQS内部有一个state状态记录当前线程的加锁次数，还有一个exclusiveOwnerThread变量记录了独占的线程。</p>
-]]></summary>
-        <content type="html"><![CDATA[<blockquote>
-<p>AbstractQueuedSynchronizer, 简称AQS, 是Java 并发包的基础类，并发包中的很多api都是基于AQS来实现加锁与释放锁等功能。</p>
-</blockquote>
-<p>例如ReentrantLock内部拥有一个继承于AbstractQueuedSynchronizer的Sync类实现加锁与释放锁。<br>
-AQS内部有一个state状态记录当前线程的加锁次数，还有一个exclusiveOwnerThread变量记录了独占的线程。</p>
-<!-- more -->
-<pre><code>
-    /**
-     * Creates an instance of {@code ReentrantLock} with the
-     * given fairness policy.
-     *
-     * @param fair {@code true} if this lock should use a fair ordering policy
-     */
-    public ReentrantLock(boolean fair) {
-        sync = fair ? new FairSync() : new NonfairSync();
-    }
-</code></pre>
-<p>ReentrantLock可以是公平的也可以不非公平的。</p>
-<pre><code>/**
-     * Acquires in exclusive mode, ignoring interrupts.  Implemented
-     * by invoking at least once {@link #tryAcquire},
-     * returning on success.  Otherwise the thread is queued, possibly
-     * repeatedly blocking and unblocking, invoking {@link
-     * #tryAcquire} until success.  This method can be used
-     * to implement method {@link Lock#lock}.
-     *
-     * @param arg the acquire argument.  This value is conveyed to
-     *        {@link #tryAcquire} but is otherwise uninterpreted and
-     *        can represent anything you like.
-     */
-    public final void acquire(int arg) {
-        if (!tryAcquire(arg) &amp;&amp;
-            acquireQueued(addWaiter(Node.EXCLUSIVE), arg))
-            selfInterrupt();
-    }
-</code></pre>
-<p>AQS中的加锁，申请不到锁，加入等待队列。</p>
-<pre><code>/**
-     * Sync object for fair locks
-     */
-    static final class FairSync extends Sync {
-        private static final long serialVersionUID = -3000897897090466540L;
-        /**
-         * Fair version of tryAcquire.  Don't grant access unless
-         * recursive call or no waiters or is first.
-         */
-        @ReservedStackAccess
-        protected final boolean tryAcquire(int acquires) {
-            final Thread current = Thread.currentThread();
-            int c = getState();
-            if (c == 0) {
-                if (!hasQueuedPredecessors() &amp;&amp;
-                    compareAndSetState(0, acquires)) {
-                    setExclusiveOwnerThread(current);
-                    return true;
-                }
-            }
-            else if (current == getExclusiveOwnerThread()) {
-                int nextc = c + acquires;
-                if (nextc &lt; 0)
-                    throw new Error(&quot;Maximum lock count exceeded&quot;);
-                setState(nextc);
-                return true;
-            }
-            return false;
-        }
-    }
-</code></pre>
-<p>hasQueuedPredecessors看等待队列中是否有线程在排队。</p>
 ]]></content>
     </entry>
 </feed>
