@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://caijh.github.io/</id>
     <title>John&apos;s Blog</title>
-    <updated>2019-08-09T07:15:10.665Z</updated>
+    <updated>2019-08-12T07:57:06.049Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://caijh.github.io/"/>
     <link rel="self" href="https://caijh.github.io//atom.xml"/>
@@ -334,6 +334,72 @@ spec:
 ]]></content>
     </entry>
     <entry>
+        <title type="html"><![CDATA[k8s - 基本概念]]></title>
+        <id>https://caijh.github.io//post/k8s-ji-ben-gai-nian</id>
+        <link href="https://caijh.github.io//post/k8s-ji-ben-gai-nian">
+        </link>
+        <updated>2019-08-06T02:57:14.000Z</updated>
+        <summary type="html"><![CDATA[<h2 id="pod">Pod</h2>
+<p>Pod是一个或多个若干相关容器的组合，Pod包含的容器运行在同一台宿主机上，这些容器使用相同的网络命名空间、IP地址和端口，相互之间能通过localhost来发现和通信。另外，这些容器还可共享一块存储卷空间。在Kubernetes中创建、调度和管理的最小单位是Pod，而不是容器，Pod通过提供更高层次的抽象，提供了更加灵活的部署和管理模式。</p>
+<p>Pod是Kubernetes的基本操作单元，也是应用运行的载体。</p>
+<p>Pod是容器的集合，容器是真正的执行体。相比原生的容器接口，Pod提供了更高层次的抽象，但是Pod的设计并不是为了运行同一个应用的多个实例，而是运行一个应用多个紧密联系的程序。而每个程序运行在单独的容器中，以Pod的形式组合成一个应用。</p>
+<h2 id="replication-controller">Replication Controller</h2>
+<p>Replication Controller用来控制管理Pod副本（Replica，或者称为实例），Replication Controller确保任何时候Kubernetes集群中有指定数量的Pod副本在运行。如果少于指定数量的Pod副本，Replication Controller会启动新的Pod副本，反之会杀死多余的副本以保证数量不变。另外，Replication Controller是弹性伸缩、滚动升级的实现核心。</p>
+<p>注：官方建议使用Deployment代替</p>
+<h2 id="service">Service</h2>
+<p>Service是真实应用服务的抽象，定义了Pod的逻辑集合和访问这个Pod集合的策略。Service将代理Pod对外表现为一个单一访问接口，外部不需要了解后端Pod如何运行，这给扩展和维护带来很多好处，提供了一套简化的服务代理和发现机制。</p>
+<h2 id="label">Label</h2>
+<p>Label是用于区分Pod、Service、Replication Controller的Key/Value对，实际上，Kubernetes中的任意API对象都可以通过Label进行标识。每个API对象可以有多个Label，但是每个Label的Key只能对应一个Value。Label是Service和Replication Controller运行的基础，它们都通过Label来关联Pod.</p>
+<h2 id="master">Master</h2>
+<p>Kubernetes里的Master指的是集群控制节点，每个Kubernetes集群里需要有一个Master节点来负责整个集群的管理和控制，基本上Kubernetes所有的控制命令都是发给它，它来负责具体的执行过程.</p>
+<p>在Master运行的组件有：</p>
+<ul>
+<li>kube-apiserver, 提供了HTTP Rest接口的关键服务进程，是Kubernetes里所有资源的增、删、改、查等操作的唯一入口，也是集群控制的入口进程.</li>
+<li>etcd, 强一致性高可用的key-value存储系统，kubernetes用来存储集群的数据。</li>
+<li>Kube-scheduler，负责资源调度（Pod调度）的进程，为新建的Pod分配Node。</li>
+<li>Kube-controller-manager，Kubernetes里所有资源对象的自动化控制中心，负责执行各种控制器。</li>
+</ul>
+<h2 id="node">Node</h2>
+<p>Kubernetes属于主从分布式集群架构，Kubernetes Node（简称为Node，早期版本叫作Minion）运行并管理容器。Node作为Kubernetes的操作单元，用来分配给Pod（或者说容器）进行绑定，Pod最终运行在Node上，Node可以认为是Pod的宿主机。</p>
+<p>Node节点上运行的组件有：</p>
+<ul>
+<li>kubelet, 负责Pod对应的容器的创建、启停等任务，同时与Master节点密切协作，实现集群管理的基本功能。</li>
+<li>Kube-proxy, 实现Kubernetes Service的通信与负载均衡机制的重要组件。</li>
+<li>container runtime, 负责运行容器。</li>
+</ul>
+]]></summary>
+        <content type="html"><![CDATA[<h2 id="pod">Pod</h2>
+<p>Pod是一个或多个若干相关容器的组合，Pod包含的容器运行在同一台宿主机上，这些容器使用相同的网络命名空间、IP地址和端口，相互之间能通过localhost来发现和通信。另外，这些容器还可共享一块存储卷空间。在Kubernetes中创建、调度和管理的最小单位是Pod，而不是容器，Pod通过提供更高层次的抽象，提供了更加灵活的部署和管理模式。</p>
+<p>Pod是Kubernetes的基本操作单元，也是应用运行的载体。</p>
+<p>Pod是容器的集合，容器是真正的执行体。相比原生的容器接口，Pod提供了更高层次的抽象，但是Pod的设计并不是为了运行同一个应用的多个实例，而是运行一个应用多个紧密联系的程序。而每个程序运行在单独的容器中，以Pod的形式组合成一个应用。</p>
+<h2 id="replication-controller">Replication Controller</h2>
+<p>Replication Controller用来控制管理Pod副本（Replica，或者称为实例），Replication Controller确保任何时候Kubernetes集群中有指定数量的Pod副本在运行。如果少于指定数量的Pod副本，Replication Controller会启动新的Pod副本，反之会杀死多余的副本以保证数量不变。另外，Replication Controller是弹性伸缩、滚动升级的实现核心。</p>
+<p>注：官方建议使用Deployment代替</p>
+<h2 id="service">Service</h2>
+<p>Service是真实应用服务的抽象，定义了Pod的逻辑集合和访问这个Pod集合的策略。Service将代理Pod对外表现为一个单一访问接口，外部不需要了解后端Pod如何运行，这给扩展和维护带来很多好处，提供了一套简化的服务代理和发现机制。</p>
+<h2 id="label">Label</h2>
+<p>Label是用于区分Pod、Service、Replication Controller的Key/Value对，实际上，Kubernetes中的任意API对象都可以通过Label进行标识。每个API对象可以有多个Label，但是每个Label的Key只能对应一个Value。Label是Service和Replication Controller运行的基础，它们都通过Label来关联Pod.</p>
+<h2 id="master">Master</h2>
+<p>Kubernetes里的Master指的是集群控制节点，每个Kubernetes集群里需要有一个Master节点来负责整个集群的管理和控制，基本上Kubernetes所有的控制命令都是发给它，它来负责具体的执行过程.</p>
+<p>在Master运行的组件有：</p>
+<ul>
+<li>kube-apiserver, 提供了HTTP Rest接口的关键服务进程，是Kubernetes里所有资源的增、删、改、查等操作的唯一入口，也是集群控制的入口进程.</li>
+<li>etcd, 强一致性高可用的key-value存储系统，kubernetes用来存储集群的数据。</li>
+<li>Kube-scheduler，负责资源调度（Pod调度）的进程，为新建的Pod分配Node。</li>
+<li>Kube-controller-manager，Kubernetes里所有资源对象的自动化控制中心，负责执行各种控制器。</li>
+</ul>
+<h2 id="node">Node</h2>
+<p>Kubernetes属于主从分布式集群架构，Kubernetes Node（简称为Node，早期版本叫作Minion）运行并管理容器。Node作为Kubernetes的操作单元，用来分配给Pod（或者说容器）进行绑定，Pod最终运行在Node上，Node可以认为是Pod的宿主机。</p>
+<p>Node节点上运行的组件有：</p>
+<ul>
+<li>kubelet, 负责Pod对应的容器的创建、启停等任务，同时与Master节点密切协作，实现集群管理的基本功能。</li>
+<li>Kube-proxy, 实现Kubernetes Service的通信与负载均衡机制的重要组件。</li>
+<li>container runtime, 负责运行容器。</li>
+</ul>
+<!-- more -->
+]]></content>
+    </entry>
+    <entry>
         <title type="html"><![CDATA[SpringBoot - 启动原理]]></title>
         <id>https://caijh.github.io//post/springboot-qi-dong-yuan-li</id>
         <link href="https://caijh.github.io//post/springboot-qi-dong-yuan-li">
@@ -657,191 +723,6 @@ $ vagrant up // 启动
 <li>减少对CPU的占用</li>
 <li>克服懒汉式删除的缺点<br>
 缺点：获取的key可以已经是过期的</li>
-</ol>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[MySQL - explain详解]]></title>
-        <id>https://caijh.github.io//post/mysql-explain-xiang-jie</id>
-        <link href="https://caijh.github.io//post/mysql-explain-xiang-jie">
-        </link>
-        <updated>2019-07-14T15:23:40.000Z</updated>
-        <content type="html"><![CDATA[<h5 id="explain详解">Explain详解</h5>
-<ol>
-<li>
-<p>ID列</p>
-<p>ID值不同时, 执行计划由ID大的向ID小读; ID值相同时, 执行计划由上到下读</p>
-</li>
-<li>
-<p>SELECT_TYPE列</p>
-<table>
-<thead>
-<tr>
-<th>值</th>
-<th style="text-align:left">含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>SIMPLE</td>
-<td style="text-align:left">不包含子查询或UNION操作的查询</td>
-</tr>
-<tr>
-<td>PRIMARY</td>
-<td style="text-align:left">查询中如果包含了子查询,那么最外层的查询会被标为primary</td>
-</tr>
-<tr>
-<td>SUBQUERY</td>
-<td style="text-align:left">select列表中的子查询</td>
-</tr>
-<tr>
-<td>dependent subquery</td>
-<td style="text-align:left">依赖外部结果的子查询</td>
-</tr>
-<tr>
-<td>Union</td>
-<td style="text-align:left">Union操作的第二个表之后的查询值为union</td>
-</tr>
-<tr>
-<td>Dependent union</td>
-<td style="text-align:left">当union作为子查询, 第二或第二个后的查询select_type</td>
-</tr>
-<tr>
-<td>Union result</td>
-<td style="text-align:left">union产生的结果集</td>
-</tr>
-<tr>
-<td>Derived</td>
-<td style="text-align:left">出现在from子句中的子查询</td>
-</tr>
-</tbody>
-</table>
-</li>
-<li>
-<p>table列</p>
-<p>表的名称或者表的别名.</p>
-<p>unionM,N 由ID为M,N查询union产生的结果集</p>
-<p>derivedN or subqueryN 表示由ID为N的查询产生结果集</p>
-</li>
-<li>
-<p>partition列</p>
-<p>对于分区表, 显示查询的分区id; 非分区表显示NULL</p>
-</li>
-<li>
-<p>Type列</p>
-<p>查询中使用了联结的类型</p>
-<table>
-<thead>
-<tr>
-<th>值</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>System</td>
-<td>这是const联接类型中的一个特例, 当查询的表中只在一行显示</td>
-</tr>
-<tr>
-<td>const</td>
-<td>表中有且只有一个匹配的行时使用, 如主键或者唯一索引的查询</td>
-</tr>
-<tr>
-<td>eq_ref</td>
-<td>唯一索引或主键查找, 对于每个索引键, 表中只有一条记录与之匹配</td>
-</tr>
-<tr>
-<td>ref</td>
-<td>非唯一索引查找, 返回匹配某个单独值的所有行</td>
-</tr>
-<tr>
-<td>ref_or_null</td>
-<td>类似于ref类型的查询, 但是附加了对NULL值列的查询</td>
-</tr>
-<tr>
-<td>index_merge</td>
-<td>表示使用了索引合并</td>
-</tr>
-<tr>
-<td>range</td>
-<td>索引范围</td>
-</tr>
-<tr>
-<td>index</td>
-<td>Full index Scan全索引扫描,</td>
-</tr>
-<tr>
-<td>all</td>
-<td>全表扫描</td>
-</tr>
-</tbody>
-</table>
-</li>
-<li>
-<p>Extra列</p>
-<table>
-<thead>
-<tr>
-<th>值</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Distinct</td>
-<td>优化distinct操作, 找到第一匹配的元组后暂停找同样值的动作</td>
-</tr>
-<tr>
-<td>Not Exists</td>
-<td>使用Not Exists来优化查询</td>
-</tr>
-<tr>
-<td>Using filesort</td>
-<td>使用额外操作进行排序</td>
-</tr>
-<tr>
-<td>Using index</td>
-<td>使用了覆盖索引进行查询</td>
-</tr>
-<tr>
-<td>Using temporary</td>
-<td>需要使用临时表处理查询</td>
-</tr>
-<tr>
-<td>Using where</td>
-<td>需要在服务层使用where条件过滤</td>
-</tr>
-<tr>
-<td>select tables optimized away</td>
-<td>直接通过索引来获得数据, 不用访问表</td>
-</tr>
-</tbody>
-</table>
-</li>
-<li>
-<p>possible_keys 列</p>
-<p>指出MySQL能使用哪些索引来优化查询, 查询列所涉及的列上的索引都会被列出, 但不一定会被使用.</p>
-</li>
-<li>
-<p>Key列</p>
-<p>查询优化器优化查询实际所使用索引列</p>
-</li>
-<li>
-<p>Key_len列</p>
-<p>表示索引字段的最大可能长度</p>
-</li>
-<li>
-<p>ref列</p>
-<p>表示哪些列或常量被用于查询索引列上的值</p>
-</li>
-<li>
-<p>rows列</p>
-<p>表示MySQL通过索引统计信息, 估算的需要读取的行数, 是一个统计抽样结果, 并不十分准确</p>
-</li>
-<li>
-<p>filtered列</p>
-<p>表示返回结果的行数占需要读取行数的百分比, 值越大越好</p>
-</li>
 </ol>
 ]]></content>
     </entry>
