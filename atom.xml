@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://caijh.github.io/</id>
     <title>John&apos;s Blog</title>
-    <updated>2019-08-29T07:06:27.341Z</updated>
+    <updated>2019-08-30T01:07:18.118Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://caijh.github.io/"/>
     <link rel="self" href="https://caijh.github.io//atom.xml"/>
@@ -10,6 +10,278 @@
     <logo>https://caijh.github.io//images/avatar.png</logo>
     <icon>https://caijh.github.io//favicon.ico</icon>
     <rights>All rights reserved 2019, John&apos;s Blog</rights>
+    <entry>
+        <title type="html"><![CDATA[kubernetes - 部署rabbitmq集群]]></title>
+        <id>https://caijh.github.io//post/kubernetes-bu-shu-rabbitmq-ji-qun</id>
+        <link href="https://caijh.github.io//post/kubernetes-bu-shu-rabbitmq-ji-qun">
+        </link>
+        <updated>2019-08-30T01:05:56.000Z</updated>
+        <summary type="html"><![CDATA[<hr>
+<p>author: caijunhui<br>
+date: 2019-08-29</p>
+<hr>
+<p>本文介绍如何在k8s环境下部署rabbitmq</p>
+<p>镜像使用rabbitmq:3.7-management-alpine，从3.7.0开始rabbitmq使用了peer discovery， 不使用autoscale。</p>
+]]></summary>
+        <content type="html"><![CDATA[<hr>
+<p>author: caijunhui<br>
+date: 2019-08-29</p>
+<hr>
+<p>本文介绍如何在k8s环境下部署rabbitmq</p>
+<p>镜像使用rabbitmq:3.7-management-alpine，从3.7.0开始rabbitmq使用了peer discovery， 不使用autoscale。</p>
+<!-- more -->
+<ol>
+<li>
+<p>创建rabbitmq的namespce</p>
+<pre><code class="language-yaml">apiVersion: v1
+kind: Namespace
+metadata:
+  name: rabbitmq
+</code></pre>
+</li>
+<li>
+<p>rdbc</p>
+<pre><code class="language-yaml">---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: rabbitmq 
+  namespace: rabbitmq 
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: Role
+metadata:
+  name: endpoint-reader
+  namespace: rabbitmq 
+rules:
+- apiGroups: [&quot;&quot;]
+  resources: [&quot;endpoints&quot;]
+  verbs: [&quot;get&quot;]
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: endpoint-reader
+  namespace: rabbitmq
+subjects:
+- kind: ServiceAccount
+  name: rabbitmq
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: endpoint-reader
+</code></pre>
+</li>
+<li>
+<p>rabbitmq数据持久化</p>
+<pre><code class="language-yaml">apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: rabbitmq-pvc
+  namespace: rabbitmq
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:  
+    requests:
+      storage: 5Gi
+  storageClassName: managed-nfs-storage
+</code></pre>
+</li>
+<li>
+<p>Deploy</p>
+<pre><code class="language-yaml"># NodePort Servce，以便通过集群节点访问rabbitmq
+kind: Service
+apiVersion: v1
+metadata:
+  namespace: rabbitmq
+  name: rabbitmq-svc
+  labels:
+    app: rabbitmq
+    type: LoadBalancer  
+spec:
+  type: NodePort
+  ports:
+   - name: rabbitmq-mgmt-port
+     protocol: TCP
+     port: 15672
+     targetPort: 15672
+     nodePort: 31672
+   - name: rabbitmq-amqp-port
+     protocol: TCP
+     port: 5672
+     targetPort: 5672
+     nodePort: 30672
+  selector:
+    app: rabbitmq
+    
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbitmq
+  namespace: rabbitmq
+  labels:
+    app: rabbitmq
+spec:
+  clusterIP: None
+  #用Headless Service去做Pod的hostname访问，需要等Pod和Service都启动后才能访问，而readiness探针还没等DNS正常就去探查服务是否可用，所以才会误认为服务不可达，最终无法启动Pod。解决办法是给Headless Service设置publishNotReadyAddresses: true
+  publishNotReadyAddresses: true
+  ports:
+  - port: 5672
+    protocol: TCP
+    name: amqp
+  - port: 4369
+    name: epmd
+  - port: 15672
+    protocol: TCP
+    name: http
+  selector:
+    app: rabbitmq
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rabbitmq-cm
+  namespace: rabbitmq
+data:
+  enabled_plugins: |
+      [rabbitmq_management,rabbitmq_peer_discovery_k8s].
+  rabbitmq.conf: |
+      ## Cluster formation. See https://www.rabbitmq.com/cluster-formation.html to learn more.
+      cluster_formation.peer_discovery_backend  = rabbit_peer_discovery_k8s
+      cluster_formation.k8s.host = kubernetes.default.svc.cluster.local
+      # 必须设置service_name，否则Pod无法正常启动，这里设置后可以不设置statefulset下env中的K8S_SERVICE_NAME变量
+      cluster_formation.k8s.service_name = rabbitmq
+      # 必须设置hostname_suffix，否则节点不能成为集群
+      cluster_formation.k8s.hostname_suffix = .rabbitmq.rabbitmq.svc.cluster.local
+      ## Should RabbitMQ node name be computed from the pod's hostname or IP address?
+      ## IP addresses are not stable, so using [stable] hostnames is recommended when possible.
+      ## Set to &quot;hostname&quot; to use pod hostnames.
+      ## When this value is changed, so should the variable used to set the RABBITMQ_NODENAME
+      ## environment variable.
+      ## hostname or ip
+      cluster_formation.k8s.address_type = hostname
+      ## How often should node cleanup checks run?
+      cluster_formation.node_cleanup.interval = 30
+      cluster_formation.randomized_startup_delay_range.min = 0
+      cluster_formation.randomized_startup_delay_range.max = 2
+      ## Set to false if automatic removal of unknown/absent nodes
+      ## is desired. This can be dangerous, see
+      ##  * https://www.rabbitmq.com/cluster-formation.html#node-health-checks-and-cleanup
+      ##  * https://groups.google.com/forum/#!msg/rabbitmq-users/wuOfzEywHXo/k8z_HWIkBgAJ
+      cluster_formation.node_cleanup.only_log_warning = true
+      cluster_partition_handling = autoheal
+      ## See https://www.rabbitmq.com/ha.html#master-migration-data-locality
+      queue_master_locator=min-masters
+      ## See https://www.rabbitmq.com/access-control.html#loopback-users
+      loopback_users.guest = false
+   
+---
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: rabbitmq
+  namespace: rabbitmq
+spec:
+  serviceName: rabbitmq
+  selector:
+    matchLabels:
+      app: rabbitmq
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: rabbitmq
+      annotations:
+              scheduler.alpha.kubernetes.io/affinity: &gt;
+                  {
+                    &quot;podAntiAffinity&quot;: {
+                      &quot;requiredDuringSchedulingIgnoredDuringExecution&quot;: [{
+                        &quot;labelSelector&quot;: {
+                          &quot;matchExpressions&quot;: [{
+                            &quot;key&quot;: &quot;app&quot;,
+                            &quot;operator&quot;: &quot;In&quot;,
+                            &quot;values&quot;: [&quot;rabbitmq&quot;]
+                          }]
+                        },
+                        &quot;topologyKey&quot;: &quot;kubernetes.io/hostname&quot;
+                      }]
+                    }
+                  }
+    spec:
+      serviceAccountName: rabbitmq
+      terminationGracePeriodSeconds: 10
+      containers:        
+      - name: rabbitmq-k8s
+        image: rabbitmq:3.7-management-alpine
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+          - name: config-volume
+            mountPath: /etc/rabbitmq
+          - name: rabbitmq-data
+          	mountPath: /var/lib/rabbitmq/data
+        ports:
+          - name: http
+            protocol: TCP
+            containerPort: 15672
+          - name: amqp
+            protocol: TCP
+            containerPort: 5672
+          - containerPort: 4369
+          - containerPort: 25672
+        livenessProbe:
+          exec:
+            command: [&quot;rabbitmqctl&quot;, &quot;status&quot;]
+          initialDelaySeconds: 60
+          # See https://www.rabbitmq.com/monitoring.html for monitoring frequency recommendations.
+          periodSeconds: 60
+          timeoutSeconds: 15
+        readinessProbe:
+          exec:
+            command: [&quot;rabbitmqctl&quot;, &quot;status&quot;]
+          initialDelaySeconds: 20
+          periodSeconds: 60
+          timeoutSeconds: 10
+        env:
+          - name: MY_POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: MY_POD_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+          - name: RABBITMQ_USE_LONGNAME
+            value: &quot;true&quot;
+          # - name: K8S_SERVICE_NAME
+          #  value: &quot;rabbitmq&quot;
+          # See a note on cluster_formation.k8s.address_type in the config file section
+          - name: RABBITMQ_NODENAME
+            value: &quot;rabbit@$(MY_POD_NAME).rabbitmq.rabbitmq.svc.cluster.local&quot;
+          - name: RABBITMQ_ERLANG_COOKIE
+            value: &quot;Zk93VStwK0g3ZE5KNkxlT0lRQ0V2S3BTNXBockk0UU9QeVNrSXdRSGM0RT0K&quot;
+          #  valueFrom:
+          #    secretKeyRef:
+          #      name: erlang.cookie
+          #      key: erlang.cookie 
+      volumes:
+        - name: config-volume
+          configMap:
+            name: rabbitmq-cm
+            items:
+            - key: rabbitmq.conf
+              path: rabbitmq.conf
+            - key: enabled_plugins
+              path: enabled_plugins
+        - name: rabbitmq-data
+        	persistentVolumeClaim:
+            claimName: rabbitmq-pvc
+</code></pre>
+</li>
+</ol>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Linux - 安装nfs]]></title>
         <id>https://caijh.github.io//post/linux-an-zhuang-nfs</id>
@@ -713,29 +985,6 @@ $ cd redis-5.0.5
 <li>redis检测到内存的使用达到上限</li>
 <li>redis自身执行指令时</li>
 </ol>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Vagrant - 使用]]></title>
-        <id>https://caijh.github.io//post/vagrant-shi-yong</id>
-        <link href="https://caijh.github.io//post/vagrant-shi-yong">
-        </link>
-        <updated>2019-07-17T14:11:55.000Z</updated>
-        <summary type="html"><![CDATA[<p>Vagrant是用来管理虚拟机的，如VirtualBox、VMware、AWS等，主要好处是可以提供一个可配置、可移植和复用的软件环境，可以使用shell、chef、puppet等工具部署。所以vagrant不能单独使用，如果你用它来管理自己的开发环境的话，必须在自己的电脑里安装了虚拟机软件，我使用的是virtualbox。</p>
-<p>Vagrant提供一个命令行工具vagrant，通过这个命令行工具可以直接启动一个虚拟机，当然你需要提前定义一个Vagrantfile文件，这有点类似Dockerfile之于docker了。</p>
-<p>跟docker类比这来看vagrant就比较好理解了，vagrant也是用来提供一致性环境的，vagrant本身也提供一个镜像源，使用vagrant init hashicorp/precise64就可以初始化一个Ubuntu 12.04的镜像。</p>
-]]></summary>
-        <content type="html"><![CDATA[<p>Vagrant是用来管理虚拟机的，如VirtualBox、VMware、AWS等，主要好处是可以提供一个可配置、可移植和复用的软件环境，可以使用shell、chef、puppet等工具部署。所以vagrant不能单独使用，如果你用它来管理自己的开发环境的话，必须在自己的电脑里安装了虚拟机软件，我使用的是virtualbox。</p>
-<p>Vagrant提供一个命令行工具vagrant，通过这个命令行工具可以直接启动一个虚拟机，当然你需要提前定义一个Vagrantfile文件，这有点类似Dockerfile之于docker了。</p>
-<p>跟docker类比这来看vagrant就比较好理解了，vagrant也是用来提供一致性环境的，vagrant本身也提供一个镜像源，使用vagrant init hashicorp/precise64就可以初始化一个Ubuntu 12.04的镜像。</p>
-<!-- more -->
-<h3 id="启动并运行">启动并运行</h3>
-<pre><code>$ vagrant init hashicorp/precise64
-$ vagrant up // 启动
-</code></pre>
-<p>先在目录生成一个Vagrantfile文件, 下载系统并启动。</p>
-<h3 id="进入虚拟机">进入虚拟机</h3>
-<p>vagrant up</p>
 ]]></content>
     </entry>
 </feed>

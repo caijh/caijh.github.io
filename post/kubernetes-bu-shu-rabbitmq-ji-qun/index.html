@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>kubernetes - 部署rabbitmq集群 | John&#39;s Blog</title>
+<meta name="description" content="搬砖小弟">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="shortcut icon" href="https://caijh.github.io//favicon.ico?v=1567127232973">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://caijh.github.io//styles/main.css">
+
+
+  
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/disqusjs@1.1/dist/disqusjs.css" />
+  
+
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
+  </head>
+  <body>
+  
+    <nav class="navbar border fixed split-nav">
+  <div class="nav-brand">
+    <h3><a href="https://caijh.github.io/">John&#39;s Blog</a></h3>
+  </div>
+  <div class="collapsible">
+    <input id="collapsible1" type="checkbox" name="collapsible1">
+    <button>
+      <label for="collapsible1">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+      </label>
+    </button>
+    <div class="collapsible-body">
+      <ul class="inline">
+        
+          <li>
+            
+              <a href="/" class="menu">
+                首页
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/archives" class="menu">
+                归档
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/tags" class="menu">
+                标签
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/post/about" class="menu">
+                关于
+              </a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div id="top" class="row site">
+      <div class="sm-12 md-8 col">
+        <div class="paper">
+          <article class="article">
+            <h1>kubernetes - 部署rabbitmq集群</h1>
+            <p class="article-meta">
+              2019-08-30
+              
+            </p>
+            
+            <div class="post-content">
+              <hr>
+<p>author: caijunhui<br>
+date: 2019-08-29</p>
+<hr>
+<p>本文介绍如何在k8s环境下部署rabbitmq</p>
+<p>镜像使用rabbitmq:3.7-management-alpine，从3.7.0开始rabbitmq使用了peer discovery， 不使用autoscale。</p>
+<!-- more -->
+<ol>
+<li>
+<p>创建rabbitmq的namespce</p>
+<pre><code class="language-yaml">apiVersion: v1
+kind: Namespace
+metadata:
+  name: rabbitmq
+</code></pre>
+</li>
+<li>
+<p>rdbc</p>
+<pre><code class="language-yaml">---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: rabbitmq 
+  namespace: rabbitmq 
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: Role
+metadata:
+  name: endpoint-reader
+  namespace: rabbitmq 
+rules:
+- apiGroups: [&quot;&quot;]
+  resources: [&quot;endpoints&quot;]
+  verbs: [&quot;get&quot;]
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: endpoint-reader
+  namespace: rabbitmq
+subjects:
+- kind: ServiceAccount
+  name: rabbitmq
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: endpoint-reader
+</code></pre>
+</li>
+<li>
+<p>rabbitmq数据持久化</p>
+<pre><code class="language-yaml">apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: rabbitmq-pvc
+  namespace: rabbitmq
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:  
+    requests:
+      storage: 5Gi
+  storageClassName: managed-nfs-storage
+</code></pre>
+</li>
+<li>
+<p>Deploy</p>
+<pre><code class="language-yaml"># NodePort Servce，以便通过集群节点访问rabbitmq
+kind: Service
+apiVersion: v1
+metadata:
+  namespace: rabbitmq
+  name: rabbitmq-svc
+  labels:
+    app: rabbitmq
+    type: LoadBalancer  
+spec:
+  type: NodePort
+  ports:
+   - name: rabbitmq-mgmt-port
+     protocol: TCP
+     port: 15672
+     targetPort: 15672
+     nodePort: 31672
+   - name: rabbitmq-amqp-port
+     protocol: TCP
+     port: 5672
+     targetPort: 5672
+     nodePort: 30672
+  selector:
+    app: rabbitmq
+    
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbitmq
+  namespace: rabbitmq
+  labels:
+    app: rabbitmq
+spec:
+  clusterIP: None
+  #用Headless Service去做Pod的hostname访问，需要等Pod和Service都启动后才能访问，而readiness探针还没等DNS正常就去探查服务是否可用，所以才会误认为服务不可达，最终无法启动Pod。解决办法是给Headless Service设置publishNotReadyAddresses: true
+  publishNotReadyAddresses: true
+  ports:
+  - port: 5672
+    protocol: TCP
+    name: amqp
+  - port: 4369
+    name: epmd
+  - port: 15672
+    protocol: TCP
+    name: http
+  selector:
+    app: rabbitmq
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rabbitmq-cm
+  namespace: rabbitmq
+data:
+  enabled_plugins: |
+      [rabbitmq_management,rabbitmq_peer_discovery_k8s].
+  rabbitmq.conf: |
+      ## Cluster formation. See https://www.rabbitmq.com/cluster-formation.html to learn more.
+      cluster_formation.peer_discovery_backend  = rabbit_peer_discovery_k8s
+      cluster_formation.k8s.host = kubernetes.default.svc.cluster.local
+      # 必须设置service_name，否则Pod无法正常启动，这里设置后可以不设置statefulset下env中的K8S_SERVICE_NAME变量
+      cluster_formation.k8s.service_name = rabbitmq
+      # 必须设置hostname_suffix，否则节点不能成为集群
+      cluster_formation.k8s.hostname_suffix = .rabbitmq.rabbitmq.svc.cluster.local
+      ## Should RabbitMQ node name be computed from the pod's hostname or IP address?
+      ## IP addresses are not stable, so using [stable] hostnames is recommended when possible.
+      ## Set to &quot;hostname&quot; to use pod hostnames.
+      ## When this value is changed, so should the variable used to set the RABBITMQ_NODENAME
+      ## environment variable.
+      ## hostname or ip
+      cluster_formation.k8s.address_type = hostname
+      ## How often should node cleanup checks run?
+      cluster_formation.node_cleanup.interval = 30
+      cluster_formation.randomized_startup_delay_range.min = 0
+      cluster_formation.randomized_startup_delay_range.max = 2
+      ## Set to false if automatic removal of unknown/absent nodes
+      ## is desired. This can be dangerous, see
+      ##  * https://www.rabbitmq.com/cluster-formation.html#node-health-checks-and-cleanup
+      ##  * https://groups.google.com/forum/#!msg/rabbitmq-users/wuOfzEywHXo/k8z_HWIkBgAJ
+      cluster_formation.node_cleanup.only_log_warning = true
+      cluster_partition_handling = autoheal
+      ## See https://www.rabbitmq.com/ha.html#master-migration-data-locality
+      queue_master_locator=min-masters
+      ## See https://www.rabbitmq.com/access-control.html#loopback-users
+      loopback_users.guest = false
+   
+---
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: rabbitmq
+  namespace: rabbitmq
+spec:
+  serviceName: rabbitmq
+  selector:
+    matchLabels:
+      app: rabbitmq
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: rabbitmq
+      annotations:
+              scheduler.alpha.kubernetes.io/affinity: &gt;
+                  {
+                    &quot;podAntiAffinity&quot;: {
+                      &quot;requiredDuringSchedulingIgnoredDuringExecution&quot;: [{
+                        &quot;labelSelector&quot;: {
+                          &quot;matchExpressions&quot;: [{
+                            &quot;key&quot;: &quot;app&quot;,
+                            &quot;operator&quot;: &quot;In&quot;,
+                            &quot;values&quot;: [&quot;rabbitmq&quot;]
+                          }]
+                        },
+                        &quot;topologyKey&quot;: &quot;kubernetes.io/hostname&quot;
+                      }]
+                    }
+                  }
+    spec:
+      serviceAccountName: rabbitmq
+      terminationGracePeriodSeconds: 10
+      containers:        
+      - name: rabbitmq-k8s
+        image: rabbitmq:3.7-management-alpine
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+          - name: config-volume
+            mountPath: /etc/rabbitmq
+          - name: rabbitmq-data
+          	mountPath: /var/lib/rabbitmq/data
+        ports:
+          - name: http
+            protocol: TCP
+            containerPort: 15672
+          - name: amqp
+            protocol: TCP
+            containerPort: 5672
+          - containerPort: 4369
+          - containerPort: 25672
+        livenessProbe:
+          exec:
+            command: [&quot;rabbitmqctl&quot;, &quot;status&quot;]
+          initialDelaySeconds: 60
+          # See https://www.rabbitmq.com/monitoring.html for monitoring frequency recommendations.
+          periodSeconds: 60
+          timeoutSeconds: 15
+        readinessProbe:
+          exec:
+            command: [&quot;rabbitmqctl&quot;, &quot;status&quot;]
+          initialDelaySeconds: 20
+          periodSeconds: 60
+          timeoutSeconds: 10
+        env:
+          - name: MY_POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: MY_POD_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+          - name: RABBITMQ_USE_LONGNAME
+            value: &quot;true&quot;
+          # - name: K8S_SERVICE_NAME
+          #  value: &quot;rabbitmq&quot;
+          # See a note on cluster_formation.k8s.address_type in the config file section
+          - name: RABBITMQ_NODENAME
+            value: &quot;rabbit@$(MY_POD_NAME).rabbitmq.rabbitmq.svc.cluster.local&quot;
+          - name: RABBITMQ_ERLANG_COOKIE
+            value: &quot;Zk93VStwK0g3ZE5KNkxlT0lRQ0V2S3BTNXBockk0UU9QeVNrSXdRSGM0RT0K&quot;
+          #  valueFrom:
+          #    secretKeyRef:
+          #      name: erlang.cookie
+          #      key: erlang.cookie 
+      volumes:
+        - name: config-volume
+          configMap:
+            name: rabbitmq-cm
+            items:
+            - key: rabbitmq.conf
+              path: rabbitmq.conf
+            - key: enabled_plugins
+              path: enabled_plugins
+        - name: rabbitmq-data
+        	persistentVolumeClaim:
+            claimName: rabbitmq-pvc
+</code></pre>
+</li>
+</ol>
+
+            </div>
+          </article>
+        </div>
+        <div class="paper" data-aos="fade-in">
+          
+            <div class="next-post">
+              <div class="next">
+                下一篇
+              </div>
+              <a href="https://caijh.github.io//post/linux-an-zhuang-nfs">
+                <h3 class="post-title">
+                  Linux - 安装nfs
+                </h3>
+              </a>
+            </div>
+          
+        </div>
+        
+          
+
+          
+            <div class="paper" data-aos="fade-in">
+              <div id="disqus_thread"></div>
+            </div>
+          
+        
+      </div>
+
+      <div class="sm-12 md-4 col sidebar">
+  <div class="paper info-container">
+    <img src="https://caijh.github.io//images/avatar.png?v=1567127232973" class="no-responsive avatar">
+    <div class="text-muted">搬砖小弟</div>
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      最新文章
+    </div>
+    <div class="row">
+      <ul>
+        
+          
+            <li>
+              <a href="https://caijh.github.io//post/kubernetes-bu-shu-rabbitmq-ji-qun">kubernetes - 部署rabbitmq集群</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://caijh.github.io//post/linux-an-zhuang-nfs">Linux - 安装nfs</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://caijh.github.io//post/k8s-an-zhuang-kube-dns-cha-jian">k8s - 安装kube-dns插件</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://caijh.github.io//post/maven-zen-me-yang-skip-test">Maven - 怎么样skip test</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://caijh.github.io//post/k8s-ji-ben-gai-nian">k8s - 基本概念</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://caijh.github.io//post/springboot-qi-dong-yuan-li">SpringBoot - 启动原理</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://caijh.github.io//post/redis-bian-yi-chun-jing-ban">Redis - 编译纯净版</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://caijh.github.io//post/redis-ru-he-fang-wen-da-liang-shu-ju">Redis - 如何访问大量数据</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://caijh.github.io//post/redis-huan-cun-wen-ti">Redis - 缓存问题</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://caijh.github.io//post/redis-shu-ju-tao-tai-ce-lue">Redis - 数据淘汰策略</a>
+            </li>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      </ul>
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      标签列表
+    </div>
+    <div class="row">
+      
+        <a href="https://caijh.github.io//tag/Juj0cbeuP" class="badge warning">
+          docker
+        </a>
+      
+        <a href="https://caijh.github.io//tag/hm42pTrhV" class="badge secondary">
+          Maven
+        </a>
+      
+        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge secondary">
+          Java
+        </a>
+      
+        <a href="https://caijh.github.io//tag/6w7rEzKhc" class="badge secondary">
+          Redis
+        </a>
+      
+        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge ">
+          MySQL
+        </a>
+      
+        <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge warning">
+          源代码
+        </a>
+      
+        <a href="https://caijh.github.io//tag/nHOjalh2s" class="badge success">
+          Spring Cloud
+        </a>
+      
+        <a href="https://caijh.github.io//tag/kmQV6iHOM" class="badge ">
+          面试
+        </a>
+      
+        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge ">
+          设计模式
+        </a>
+      
+    </div>
+  </div>
+  <div class="paper">
+    Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://caijh.github.io//atom.xml" target="_blank">RSS</a>
+  </div>
+</div>
+
+
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<script type="application/javascript">
+
+AOS.init();
+
+hljs.initHighlightingOnLoad()
+
+</script>
+
+
+
+  
+
+  
+    <script src="https://unpkg.com/disqusjs@1.1/dist/disqus.js"></script>
+    <script>
+
+    var options = {
+      shortname: 'caijh',
+      apikey: 'lO2xchFAyPIP4VOKbgm796D9jIvqLVziAqLHOPnOZySwUlyWXAhgwrIbPQ16AyUX',
+    }
+    if ('https://disqus.skk.moe/disqus/') {
+      options.api = 'https://disqus.skk.moe/disqus/'
+    }
+    var dsqjs = new DisqusJS(options)
+
+    </script>
+  
+
+
+
+
+  </body>
+</html>
