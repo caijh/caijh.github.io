@@ -1,84 +1,100 @@
-<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
-    <id>https://caijh.github.io/</id>
-    <title>John&apos;s Blog</title>
-    <updated>2019-11-04T07:07:29.990Z</updated>
-    <generator>https://github.com/jpmonette/feed</generator>
-    <link rel="alternate" href="https://caijh.github.io/"/>
-    <link rel="self" href="https://caijh.github.io//atom.xml"/>
-    <subtitle>搬砖小弟</subtitle>
-    <logo>https://caijh.github.io//images/avatar.png</logo>
-    <icon>https://caijh.github.io//favicon.ico</icon>
-    <rights>All rights reserved 2019, John&apos;s Blog</rights>
-    <entry>
-        <title type="html"><![CDATA[Spring Cloud - Eureka]]></title>
-        <id>https://caijh.github.io//post/spring-cloud-eureka</id>
-        <link href="https://caijh.github.io//post/spring-cloud-eureka">
-        </link>
-        <updated>2019-11-04T07:00:32.000Z</updated>
-        <summary type="html"><![CDATA[<blockquote>
-<p>是由Netflix开源的基于REST的服务治理组件，包含了eureka server 和eureka client。从2012年9月在GitHub上发布1.1.2版本以来，至今已经发布了231次，最新版本为2018年8月份发布的1.9.4版本。期间有进行2.x版本的开发，不过由于各种原因内部已经冻结开发，目前还是以1.x版本为主。Spring Cloud Netflix Eureka是Pivotal公司为了将Netflix Eureka整合于Spring Cloud生态系统提供的版本。</p>
-</blockquote>
-<h1 id="eureka快速入门">Eureka快速入门</h1>
-<p><strong>Eureka Server</strong></p>
-<ol>
-<li>
-<p>引入依赖</p>
-<pre><code>        &lt;dependency&gt;
-            &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
-            &lt;artifactId&gt;spring-cloud-starter-netflix-eureka-server&lt;/artifactId&gt;
-        &lt;/dependency&gt;
-</code></pre>
-</li>
-<li>
-<p>主应用类上添加**@EnableEurekaServer**</p>
-</li>
-<li>
-<p>配置eureka</p>
-<pre><code>eureka:
-  client:
-    register-with-eureka: true
-    fetch-registry: true
-    service-url:
-      defaultZone: ${EUREKA_SERVER_ADDRESS:http://localhost:8761/eureka/}
-  server:
-    peer-node-read-timeout-ms: 5000
-</code></pre>
-</li>
-<li>
-<p>启动</p>
-<p>![image-20191024165113212](Spring Cloud - 服务注册中心eureka/image-20191024165113212.png)</p>
-</li>
-</ol>
-<p><strong>Eureka Client</strong></p>
-<ol>
-<li>
-<p>引入客户端依赖</p>
-<pre><code>        &lt;dependency&gt;
-            &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
-            &lt;artifactId&gt;spring-cloud-starter-netflix-eureka-client&lt;/artifactId&gt;
-        &lt;/dependency&gt;
-</code></pre>
-</li>
-<li>
-<p>主应用类添加**@EnableDiscoveryClient**</p>
-</li>
-<li>
-<p>配置</p>
-<pre><code>eureka:
-  instance:
-    prefer-ip-address: true
-  client:
-    service-url:
-      defaultZone: ${EUREKA_SERVER_ADDRESS:http://localhost:8761/eureka/}
-</code></pre>
-</li>
-<li>
-<p>启动客户端</p>
-</li>
-</ol>
-]]></summary>
-        <content type="html"><![CDATA[<blockquote>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>Spring Cloud - Eureka | John&#39;s Blog</title>
+<meta name="description" content="搬砖小弟">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="shortcut icon" href="https://caijh.github.io//favicon.ico?v=1572851237552">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://caijh.github.io//styles/main.css">
+
+
+  
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/disqusjs@1.1/dist/disqusjs.css" />
+  
+
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
+  </head>
+  <body>
+  
+    <nav class="navbar border fixed split-nav">
+  <div class="nav-brand">
+    <h3><a href="https://caijh.github.io/">John&#39;s Blog</a></h3>
+  </div>
+  <div class="collapsible">
+    <input id="collapsible1" type="checkbox" name="collapsible1">
+    <button>
+      <label for="collapsible1">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+      </label>
+    </button>
+    <div class="collapsible-body">
+      <ul class="inline">
+        
+          <li>
+            
+              <a href="/" class="menu">
+                首页
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/archives" class="menu">
+                归档
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/tags" class="menu">
+                标签
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/post/about" class="menu">
+                关于
+              </a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div id="top" class="row site">
+      <div class="sm-12 md-8 col">
+        <div class="paper">
+          <article class="article">
+            <h1>Spring Cloud - Eureka</h1>
+            <p class="article-meta">
+              2019-11-04
+              
+            </p>
+            
+            <div class="post-content">
+              <blockquote>
 <p>是由Netflix开源的基于REST的服务治理组件，包含了eureka server 和eureka client。从2012年9月在GitHub上发布1.1.2版本以来，至今已经发布了231次，最新版本为2018年8月份发布的1.9.4版本。期间有进行2.x版本的开发，不过由于各种原因内部已经冻结开发，目前还是以1.x版本为主。Spring Cloud Netflix Eureka是Pivotal公司为了将Netflix Eureka整合于Spring Cloud生态系统提供的版本。</p>
 </blockquote>
 <h1 id="eureka快速入门">Eureka快速入门</h1>
@@ -1252,949 +1268,283 @@ spec:
 <p>http://ip:port/service-registry</p>
 </li>
 </ol>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[kubernetes - 部署rabbitmq集群]]></title>
-        <id>https://caijh.github.io//post/kubernetes-bu-shu-rabbitmq-ji-qun</id>
-        <link href="https://caijh.github.io//post/kubernetes-bu-shu-rabbitmq-ji-qun">
-        </link>
-        <updated>2019-08-30T01:05:56.000Z</updated>
-        <summary type="html"><![CDATA[<hr>
-<p>author: caijunhui<br>
-date: 2019-08-29</p>
-<hr>
-<p>本文介绍如何在k8s环境下部署rabbitmq</p>
-<p>镜像使用rabbitmq:3.7-management-alpine，从3.7.0开始rabbitmq使用了peer discovery， 不使用autoscale。</p>
-]]></summary>
-        <content type="html"><![CDATA[<hr>
-<p>author: caijunhui<br>
-date: 2019-08-29</p>
-<hr>
-<p>本文介绍如何在k8s环境下部署rabbitmq</p>
-<p>镜像使用rabbitmq:3.7-management-alpine，从3.7.0开始rabbitmq使用了peer discovery， 不使用autoscale。</p>
-<!-- more -->
-<ol>
-<li>
-<p>创建rabbitmq的namespce</p>
-<pre><code class="language-yaml">apiVersion: v1
-kind: Namespace
-metadata:
-  name: rabbitmq
-</code></pre>
-</li>
-<li>
-<p>rdbc</p>
-<pre><code class="language-yaml">---
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: rabbitmq 
-  namespace: rabbitmq 
----
-apiVersion: rbac.authorization.k8s.io/v1beta1
-kind: Role
-metadata:
-  name: endpoint-reader
-  namespace: rabbitmq 
-rules:
-- apiGroups: [&quot;&quot;]
-  resources: [&quot;endpoints&quot;]
-  verbs: [&quot;get&quot;]
----
-kind: RoleBinding
-apiVersion: rbac.authorization.k8s.io/v1beta1
-metadata:
-  name: endpoint-reader
-  namespace: rabbitmq
-subjects:
-- kind: ServiceAccount
-  name: rabbitmq
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: Role
-  name: endpoint-reader
-</code></pre>
-</li>
-<li>
-<p>rabbitmq数据持久化</p>
-<pre><code class="language-yaml">apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: rabbitmq-pvc
-  namespace: rabbitmq
-spec:
-  accessModes:
-    - ReadWriteMany
-  resources:  
-    requests:
-      storage: 5Gi
-  storageClassName: managed-nfs-storage
-</code></pre>
-</li>
-<li>
-<p>Deploy</p>
-<pre><code class="language-yaml"># NodePort Servce，以便通过集群节点访问rabbitmq
-kind: Service
-apiVersion: v1
-metadata:
-  namespace: rabbitmq
-  name: rabbitmq-svc
-  labels:
-    app: rabbitmq
-    type: LoadBalancer  
-spec:
-  type: NodePort
-  ports:
-   - name: rabbitmq-mgmt-port
-     protocol: TCP
-     port: 15672
-     targetPort: 15672
-     nodePort: 31672
-   - name: rabbitmq-amqp-port
-     protocol: TCP
-     port: 5672
-     targetPort: 5672
-     nodePort: 30672
-  selector:
-    app: rabbitmq
-    
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: rabbitmq
-  namespace: rabbitmq
-  labels:
-    app: rabbitmq
-spec:
-  clusterIP: None
-  #用Headless Service去做Pod的hostname访问，需要等Pod和Service都启动后才能访问，而readiness探针还没等DNS正常就去探查服务是否可用，所以才会误认为服务不可达，最终无法启动Pod。解决办法是给Headless Service设置publishNotReadyAddresses: true
-  publishNotReadyAddresses: true
-  ports:
-  - port: 5672
-    protocol: TCP
-    name: amqp
-  - port: 4369
-    name: epmd
-  - port: 15672
-    protocol: TCP
-    name: http
-  selector:
-    app: rabbitmq
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: rabbitmq-cm
-  namespace: rabbitmq
-data:
-  enabled_plugins: |
-      [rabbitmq_management,rabbitmq_peer_discovery_k8s].
-  rabbitmq.conf: |
-      ## Cluster formation. See https://www.rabbitmq.com/cluster-formation.html to learn more.
-      cluster_formation.peer_discovery_backend  = rabbit_peer_discovery_k8s
-      cluster_formation.k8s.host = kubernetes.default.svc.cluster.local
-      # 必须设置service_name，否则Pod无法正常启动，这里设置后可以不设置statefulset下env中的K8S_SERVICE_NAME变量
-      cluster_formation.k8s.service_name = rabbitmq
-      # 必须设置hostname_suffix，否则节点不能成为集群
-      cluster_formation.k8s.hostname_suffix = .rabbitmq.rabbitmq.svc.cluster.local
-      ## Should RabbitMQ node name be computed from the pod's hostname or IP address?
-      ## IP addresses are not stable, so using [stable] hostnames is recommended when possible.
-      ## Set to &quot;hostname&quot; to use pod hostnames.
-      ## When this value is changed, so should the variable used to set the RABBITMQ_NODENAME
-      ## environment variable.
-      ## hostname or ip
-      cluster_formation.k8s.address_type = hostname
-      ## How often should node cleanup checks run?
-      cluster_formation.node_cleanup.interval = 30
-      cluster_formation.randomized_startup_delay_range.min = 0
-      cluster_formation.randomized_startup_delay_range.max = 2
-      ## Set to false if automatic removal of unknown/absent nodes
-      ## is desired. This can be dangerous, see
-      ##  * https://www.rabbitmq.com/cluster-formation.html#node-health-checks-and-cleanup
-      ##  * https://groups.google.com/forum/#!msg/rabbitmq-users/wuOfzEywHXo/k8z_HWIkBgAJ
-      cluster_formation.node_cleanup.only_log_warning = true
-      cluster_partition_handling = autoheal
-      ## See https://www.rabbitmq.com/ha.html#master-migration-data-locality
-      queue_master_locator=min-masters
-      ## See https://www.rabbitmq.com/access-control.html#loopback-users
-      loopback_users.guest = false
-   
----
-apiVersion: apps/v1beta1
-kind: StatefulSet
-metadata:
-  name: rabbitmq
-  namespace: rabbitmq
-spec:
-  serviceName: rabbitmq
-  selector:
-    matchLabels:
-      app: rabbitmq
-  replicas: 3
-  template:
-    metadata:
-      labels:
-        app: rabbitmq
-      annotations:
-              scheduler.alpha.kubernetes.io/affinity: &gt;
-                  {
-                    &quot;podAntiAffinity&quot;: {
-                      &quot;requiredDuringSchedulingIgnoredDuringExecution&quot;: [{
-                        &quot;labelSelector&quot;: {
-                          &quot;matchExpressions&quot;: [{
-                            &quot;key&quot;: &quot;app&quot;,
-                            &quot;operator&quot;: &quot;In&quot;,
-                            &quot;values&quot;: [&quot;rabbitmq&quot;]
-                          }]
-                        },
-                        &quot;topologyKey&quot;: &quot;kubernetes.io/hostname&quot;
-                      }]
-                    }
-                  }
-    spec:
-      serviceAccountName: rabbitmq
-      terminationGracePeriodSeconds: 10
-      containers:        
-      - name: rabbitmq-k8s
-        image: rabbitmq:3.7-management-alpine
-        imagePullPolicy: IfNotPresent
-        volumeMounts:
-          - name: config-volume
-            mountPath: /etc/rabbitmq
-          - name: rabbitmq-data
-          	mountPath: /var/lib/rabbitmq/data
-        ports:
-          - name: http
-            protocol: TCP
-            containerPort: 15672
-          - name: amqp
-            protocol: TCP
-            containerPort: 5672
-          - containerPort: 4369
-          - containerPort: 25672
-        livenessProbe:
-          exec:
-            command: [&quot;rabbitmqctl&quot;, &quot;status&quot;]
-          initialDelaySeconds: 60
-          # See https://www.rabbitmq.com/monitoring.html for monitoring frequency recommendations.
-          periodSeconds: 60
-          timeoutSeconds: 15
-        readinessProbe:
-          exec:
-            command: [&quot;rabbitmqctl&quot;, &quot;status&quot;]
-          initialDelaySeconds: 20
-          periodSeconds: 60
-          timeoutSeconds: 10
-        env:
-          - name: MY_POD_NAME
-            valueFrom:
-              fieldRef:
-                fieldPath: metadata.name
-          - name: MY_POD_IP
-            valueFrom:
-              fieldRef:
-                fieldPath: status.podIP
-          - name: RABBITMQ_USE_LONGNAME
-            value: &quot;true&quot;
-          # - name: K8S_SERVICE_NAME
-          #  value: &quot;rabbitmq&quot;
-          # See a note on cluster_formation.k8s.address_type in the config file section
-          - name: RABBITMQ_NODENAME
-            value: &quot;rabbit@$(MY_POD_NAME).rabbitmq.rabbitmq.svc.cluster.local&quot;
-          - name: RABBITMQ_ERLANG_COOKIE
-            value: &quot;Zk93VStwK0g3ZE5KNkxlT0lRQ0V2S3BTNXBockk0UU9QeVNrSXdRSGM0RT0K&quot;
-          #  valueFrom:
-          #    secretKeyRef:
-          #      name: erlang.cookie
-          #      key: erlang.cookie 
-      volumes:
-        - name: config-volume
-          configMap:
-            name: rabbitmq-cm
-            items:
-            - key: rabbitmq.conf
-              path: rabbitmq.conf
-            - key: enabled_plugins
-              path: enabled_plugins
-        - name: rabbitmq-data
-        	persistentVolumeClaim:
-            claimName: rabbitmq-pvc
-</code></pre>
-</li>
-</ol>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Linux - 安装nfs]]></title>
-        <id>https://caijh.github.io//post/linux-an-zhuang-nfs</id>
-        <link href="https://caijh.github.io//post/linux-an-zhuang-nfs">
-        </link>
-        <updated>2019-08-28T08:50:56.000Z</updated>
-        <summary type="html"><![CDATA[<p>想要k8s中使用nfs来动态提供PersistentVolume，so查下怎么搭建nfs server.<br>
-环境：<br>
-centos 7</p>
-]]></summary>
-        <content type="html"><![CDATA[<p>想要k8s中使用nfs来动态提供PersistentVolume，so查下怎么搭建nfs server.<br>
-环境：<br>
-centos 7</p>
-<!-- more -->
-<ol>
-<li>安装nfs-utils</li>
-</ol>
-<pre><code>yum install -y nfs-utils
-</code></pre>
-<ol start="2">
-<li>修改配置</li>
-</ol>
-<pre><code>mkdir /nfs
-chmod 777 /nfs
-vim /etc/exports
-/nfs   192.168.0.0/24(rw,sync,no_root_squash,no_all_squash)
-</code></pre>
-<p>常用选项：<br>
-ro：客户端挂载后，其权限为只读，默认选项；<br>
-rw:读写权限；<br>
-sync：同时将数据写入到内存与硬盘中；<br>
-async：异步，优先将数据保存到内存，然后再写入硬盘；<br>
-Secure：要求请求源的端口小于1024<br>
-用户映射：<br>
-root_squash:当NFS客户端使用root用户访问时，映射到NFS服务器的匿名用户；<br>
-no_root_squash:当NFS客户端使用root用户访问时，映射到NFS服务器的root用户；<br>
-all_squash:全部用户都映射为服务器端的匿名用户；<br>
-anonuid=UID：将客户端登录用户映射为此处指定的用户uid；<br>
-anongid=GID：将客户端登录用户映射为此处指定的用户gid<br>
-3. 启动并设置开机启动</p>
-<pre><code>sudo systemctl enable nfs
-sudo systemctl start nfs
-</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[k8s - 安装kube-dns插件]]></title>
-        <id>https://caijh.github.io//post/k8s-an-zhuang-kube-dns-cha-jian</id>
-        <link href="https://caijh.github.io//post/k8s-an-zhuang-kube-dns-cha-jian">
-        </link>
-        <updated>2019-08-09T07:11:13.000Z</updated>
-        <content type="html"><![CDATA[<h1 id="kubernetes-安装kube-dns插件">Kubernetes - 安装kube-dns插件</h1>
-<p>k8s 版本: 1.5.2</p>
-<ol>
-<li>下载yaml文件，根据实际情况修改文件</li>
-<li>kubectl creata -f yaml</li>
-<li>重启node</li>
-<li>测试</li>
-</ol>
-<h2 id="下载所需的文件">下载所需的文件</h2>
-<p>主要有yaml文件和yaml文件要使用到的镜像， 镜像因为gfw的问题，要拉到本地再上传到服务器，或者使用docker 私有这仓库。</p>
-<p>skydns-rc.yaml文件如下, 修改domain参数，增加<strong>kube-master-url</strong>参数</p>
-<pre><code># Copyright 2016 The Kubernetes Authors.
-#
-# Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
 
-# TODO - At some point, we need to rename all skydns-*.yaml.* files to kubedns-*.yaml.*
-# Should keep target in cluster/addons/dns-horizontal-autoscaler/dns-horizontal-autoscaler.yaml
-# in sync with this file.
+            </div>
+          </article>
+        </div>
+        <div class="paper" data-aos="fade-in">
+          
+            <div class="next-post">
+              <div class="next">
+                下一篇
+              </div>
+              <a href="https://caijh.github.io//post/kubernetes-bu-shu-rabbitmq-ji-qun">
+                <h3 class="post-title">
+                  kubernetes - 部署rabbitmq集群
+                </h3>
+              </a>
+            </div>
+          
+        </div>
+        
+          
 
-# __MACHINE_GENERATED_WARNING__
+          
+            <div class="paper" data-aos="fade-in">
+              <div id="disqus_thread"></div>
+            </div>
+          
+        
+      </div>
 
-apiVersion: extensions/v1beta1
-kind: Deployment
-metadata:
-  name: kube-dns
-  namespace: kube-system
-  labels:
-    k8s-app: kube-dns
-    kubernetes.io/cluster-service: &quot;true&quot;
-spec:
-  # replicas: not specified here:
-  # 1. In order to make Addon Manager do not reconcile this replicas parameter.
-  # 2. Default is 1.
-  # 3. Will be tuned in real time if DNS horizontal auto-scaling is turned on.
-  strategy:
-    rollingUpdate:
-      maxSurge: 10%
-      maxUnavailable: 0
-  selector:
-    matchLabels:
-      k8s-app: kube-dns
-  template:
-    metadata:
-      labels:
-        k8s-app: kube-dns
-      annotations:
-        scheduler.alpha.kubernetes.io/critical-pod: ''
-        scheduler.alpha.kubernetes.io/tolerations: '[{&quot;key&quot;:&quot;CriticalAddonsOnly&quot;, &quot;operator&quot;:&quot;Exists&quot;}]'
-    spec:
-      containers:
-      - name: kubedns
-        image: gcr.io/google_containers/kubedns-amd64:1.9
-        imagePullPolicy: IfNotPresent
-        resources:
-          # TODO: Set memory limits when we've profiled the container for large
-          # clusters, then set request = limit to keep this container in
-          # guaranteed class. Currently, this container falls into the
-          # &quot;burstable&quot; category so the kubelet doesn't backoff from restarting it.
-          limits:
-            memory: 170Mi
-          requests:
-            cpu: 100m
-            memory: 70Mi
-        livenessProbe:
-          httpGet:
-            path: /healthz-kubedns
-            port: 8080
-            scheme: HTTP
-          initialDelaySeconds: 60
-          timeoutSeconds: 5
-          successThreshold: 1
-          failureThreshold: 5
-        readinessProbe:
-          httpGet:
-            path: /readiness
-            port: 8081
-            scheme: HTTP
-          # we poll on pod startup for the Kubernetes master service and
-          # only setup the /readiness HTTP server once that's available.
-          initialDelaySeconds: 3
-          timeoutSeconds: 5
-        args:
-        - --domain=cluster.local.
-        - --dns-port=10053
-        - --config-map=kube-dns
-        - --kube-master-url=http://10.36.10.18:8080
-        # This should be set to v=2 only after the new image (cut from 1.5) has
-        # been released, otherwise we will flood the logs.
-        - --v=0
-        # __PILLAR__FEDERATIONS__DOMAIN__MAP__
-        env:
-        - name: PROMETHEUS_PORT
-          value: &quot;10055&quot;
-        ports:
-        - containerPort: 10053
-          name: dns-local
-          protocol: UDP
-        - containerPort: 10053
-          name: dns-tcp-local
-          protocol: TCP
-        - containerPort: 10055
-          name: metrics
-          protocol: TCP
-      - name: dnsmasq
-        image: gcr.io/google_containers/kube-dnsmasq-amd64:1.4
-        imagePullPolicy: IfNotPresent
-        livenessProbe:
-          httpGet:
-            path: /healthz-dnsmasq
-            port: 8080
-            scheme: HTTP
-          initialDelaySeconds: 60
-          timeoutSeconds: 5
-          successThreshold: 1
-          failureThreshold: 5
-        args:
-        - --cache-size=1000
-        - --no-resolv
-        - --server=127.0.0.1#10053
-        - --log-facility=-
-        ports:
-        - containerPort: 53
-          name: dns
-          protocol: UDP
-        - containerPort: 53
-          name: dns-tcp
-          protocol: TCP
-        # see: https://github.com/kubernetes/kubernetes/issues/29055 for details
-        resources:
-          requests:
-            cpu: 150m
-            memory: 10Mi
-      - name: dnsmasq-metrics
-        image: gcr.io/google_containers/dnsmasq-metrics-amd64:1.0
-        imagePullPolicy: IfNotPresent
-        livenessProbe:
-          httpGet:
-            path: /metrics
-            port: 10054
-            scheme: HTTP
-          initialDelaySeconds: 60
-          timeoutSeconds: 5
-          successThreshold: 1
-          failureThreshold: 5
-        args:
-        - --v=2
-        - --logtostderr
-        ports:
-        - containerPort: 10054
-          name: metrics
-          protocol: TCP
-        resources:
-          requests:
-            memory: 10Mi
-      - name: healthz
-        image: gcr.io/google_containers/exechealthz-amd64:1.2
-        imagePullPolicy: IfNotPresent
-        resources:
-          limits:
-            memory: 50Mi
-          requests:
-            cpu: 10m
-            # Note that this container shouldn't really need 50Mi of memory. The
-            # limits are set higher than expected pending investigation on #29688.
-            # The extra memory was stolen from the kubedns container to keep the
-            # net memory requested by the pod constant.
-            memory: 50Mi
-        args:
-        - --cmd=nslookup kubernetes.default.svc.cluster.local 127.0.0.1 &gt;/dev/null
-        - --url=/healthz-dnsmasq
-        - --cmd=nslookup kubernetes.default.svc.cluster.local 127.0.0.1:10053 &gt;/dev/null
-        - --url=/healthz-kubedns
-        - --port=8080
-        - --quiet
-        ports:
-        - containerPort: 8080
-          protocol: TCP
-      dnsPolicy: Default  # Don't use cluster DNS.
+      <div class="sm-12 md-4 col sidebar">
+  <div class="paper info-container">
+    <img src="https://caijh.github.io//images/avatar.png?v=1572851237552" class="no-responsive avatar">
+    <div class="text-muted">搬砖小弟</div>
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      最新文章
+    </div>
+    <div class="row">
+      <ul>
+        
+          
+            <li>
+              <a href="https://caijh.github.io//post/spring-cloud-eureka">Spring Cloud - Eureka</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://caijh.github.io//post/kubernetes-bu-shu-rabbitmq-ji-qun">kubernetes - 部署rabbitmq集群</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://caijh.github.io//post/linux-an-zhuang-nfs">Linux - 安装nfs</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://caijh.github.io//post/k8s-an-zhuang-kube-dns-cha-jian">k8s - 安装kube-dns插件</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://caijh.github.io//post/maven-zen-me-yang-skip-test">Maven - 怎么样skip test</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://caijh.github.io//post/k8s-ji-ben-gai-nian">k8s - 基本概念</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://caijh.github.io//post/springboot-qi-dong-yuan-li">SpringBoot - 启动原理</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://caijh.github.io//post/redis-bian-yi-chun-jing-ban">Redis - 编译纯净版</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://caijh.github.io//post/redis-ru-he-fang-wen-da-liang-shu-ju">Redis - 如何访问大量数据</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://caijh.github.io//post/redis-huan-cun-wen-ti">Redis - 缓存问题</a>
+            </li>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      </ul>
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      标签列表
+    </div>
+    <div class="row">
+      
+        <a href="https://caijh.github.io//tag/Juj0cbeuP" class="badge success">
+          docker
+        </a>
+      
+        <a href="https://caijh.github.io//tag/hm42pTrhV" class="badge secondary">
+          Maven
+        </a>
+      
+        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge secondary">
+          Java
+        </a>
+      
+        <a href="https://caijh.github.io//tag/6w7rEzKhc" class="badge ">
+          Redis
+        </a>
+      
+        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge success">
+          MySQL
+        </a>
+      
+        <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge success">
+          源代码
+        </a>
+      
+        <a href="https://caijh.github.io//tag/nHOjalh2s" class="badge warning">
+          Spring Cloud
+        </a>
+      
+        <a href="https://caijh.github.io//tag/kmQV6iHOM" class="badge secondary">
+          面试
+        </a>
+      
+        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge secondary">
+          设计模式
+        </a>
+      
+    </div>
+  </div>
+  <div class="paper">
+    Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://caijh.github.io//atom.xml" target="_blank">RSS</a>
+  </div>
+</div>
 
-</code></pre>
-<p>skydns-svc.yaml文件如下：</p>
-<pre><code># Copyright 2016 The Kubernetes Authors.
-#
-# Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
 
-# TODO - At some point, we need to rename all skydns-*.yaml.* files to kubedns-*.yaml.*
+    </div>
 
-# __MACHINE_GENERATED_WARNING__
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
 
-apiVersion: v1
-kind: Service
-metadata:
-  name: kube-dns
-  namespace: kube-system
-  labels:
-    k8s-app: kube-dns
-    kubernetes.io/cluster-service: &quot;true&quot;
-    kubernetes.io/name: &quot;KubeDNS&quot;
-spec:
-  selector:
-    k8s-app: kube-dns
-  clusterIP: 10.36.10.2
-  ports:
-  - name: dns
-    port: 53
-    protocol: UDP
-  - name: dns-tcp
-    port: 53
-    protocol: TCP
+<script type="application/javascript">
 
-</code></pre>
-<p>修改ClusterIP参数为dns指定一个集群ip</p>
-<h2 id="创建dns">创建dns</h2>
-<pre><code>kubectl create -f skydns-rc.yaml
-kubectl create -f skydns-svc.yaml
-</code></pre>
-<h2 id="重启k8s-nodes">重启k8s Nodes</h2>
-<ol>
-<li>修改各node节点上的/etc/kubernetes/kubelet配置文件</li>
-</ol>
-<pre><code>KUBELET_ARGS=&quot;--cluster_dns=10.36.10.2 --cluster_domain=cluster.local&quot;
-</code></pre>
-<p>--cluster_dns为指定的ip,</p>
-<ol start="2">
-<li>
-<p>重启node</p>
-<pre><code>for SERVICES in kube-proxy kubelet flanneld docker; do
-    systemctl stop $SERVICES
-done
+AOS.init();
 
-iptables --flush
-iptables -tnat --flush
+hljs.initHighlightingOnLoad()
 
-for SERVICES in kube-proxy kubelet flanneld docker; do
-    systemctl restart $SERVICES
-    systemctl enable $SERVICES
-    systemctl status $SERVICES
-done
-</code></pre>
-</li>
-</ol>
-<h2 id="测试">测试</h2>
-<p>添加一个busybox的pod用于测试，busybox.yaml如下</p>
-<pre><code>apiVersion: v1
-kind: Pod
-metadata:
-  name: busybox
-spec:
-  containers:
-  - image: googlecontainer/busybox
-    imagePullPolicy: IfNotPresent
-    command:
-      - sleep
-      - &quot;3600&quot;
-    name: busybox
-  restartPolicy: Always
-</code></pre>
-<pre><code>kubectl exec -ti busybox -- nslookup kubernetes
-</code></pre>
-<figure data-type="image" tabindex="1"><img src="https://caijh.github.io//post-images/1565334765466.png" alt=""></figure>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Maven - 怎么样skip test]]></title>
-        <id>https://caijh.github.io//post/maven-zen-me-yang-skip-test</id>
-        <link href="https://caijh.github.io//post/maven-zen-me-yang-skip-test">
-        </link>
-        <updated>2019-08-06T03:20:36.000Z</updated>
-        <summary type="html"><![CDATA[<h3 id="maven-参数设置">Maven 参数设置</h3>
-<ul>
-<li>使用参数-Dmaven.test.skip=true</li>
-<li>在pom.xml中定义参数<br>
-<code>&lt;properties&gt; &lt;maven.test.skip&gt;true&lt;/maven.test.skip&gt; &lt;/properties&gt;</code></li>
-</ul>
-]]></summary>
-        <content type="html"><![CDATA[<h3 id="maven-参数设置">Maven 参数设置</h3>
-<ul>
-<li>使用参数-Dmaven.test.skip=true</li>
-<li>在pom.xml中定义参数<br>
-<code>&lt;properties&gt; &lt;maven.test.skip&gt;true&lt;/maven.test.skip&gt; &lt;/properties&gt;</code></li>
-</ul>
-<!-- more -->
-<h3 id="maven-surefire-plugin">Maven Surefire Plugin</h3>
-<pre><code>mvn package -DskipTests
-</code></pre>
-<p>or</p>
-<pre><code>&lt;plugin&gt;
-    &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
-    &lt;artifactId&gt;maven-surefire-plugin&lt;/artifactId&gt;
-    &lt;version&gt;3.0.0-M1&lt;/version&gt;
-    &lt;configuration&gt;
-        &lt;skipTests&gt;true&lt;/skipTests&gt;
-    &lt;/configuration&gt;
-&lt;/plugin&gt;
-</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[k8s - 基本概念]]></title>
-        <id>https://caijh.github.io//post/k8s-ji-ben-gai-nian</id>
-        <link href="https://caijh.github.io//post/k8s-ji-ben-gai-nian">
-        </link>
-        <updated>2019-08-06T02:57:14.000Z</updated>
-        <summary type="html"><![CDATA[<h2 id="pod">Pod</h2>
-<p>Pod是一个或多个若干相关容器的组合，Pod包含的容器运行在同一台宿主机上，这些容器使用相同的网络命名空间、IP地址和端口，相互之间能通过localhost来发现和通信。另外，这些容器还可共享一块存储卷空间。在Kubernetes中创建、调度和管理的最小单位是Pod，而不是容器，Pod通过提供更高层次的抽象，提供了更加灵活的部署和管理模式。</p>
-<p>Pod是Kubernetes的基本操作单元，也是应用运行的载体。</p>
-<p>Pod是容器的集合，容器是真正的执行体。相比原生的容器接口，Pod提供了更高层次的抽象，但是Pod的设计并不是为了运行同一个应用的多个实例，而是运行一个应用多个紧密联系的程序。而每个程序运行在单独的容器中，以Pod的形式组合成一个应用。</p>
-<h2 id="replication-controller">Replication Controller</h2>
-<p>Replication Controller用来控制管理Pod副本（Replica，或者称为实例），Replication Controller确保任何时候Kubernetes集群中有指定数量的Pod副本在运行。如果少于指定数量的Pod副本，Replication Controller会启动新的Pod副本，反之会杀死多余的副本以保证数量不变。另外，Replication Controller是弹性伸缩、滚动升级的实现核心。</p>
-<p>注：官方建议使用Deployment代替</p>
-<h2 id="service">Service</h2>
-<p>Service是真实应用服务的抽象，定义了Pod的逻辑集合和访问这个Pod集合的策略。Service将代理Pod对外表现为一个单一访问接口，外部不需要了解后端Pod如何运行，这给扩展和维护带来很多好处，提供了一套简化的服务代理和发现机制。</p>
-<h2 id="label">Label</h2>
-<p>Label是用于区分Pod、Service、Replication Controller的Key/Value对，实际上，Kubernetes中的任意API对象都可以通过Label进行标识。每个API对象可以有多个Label，但是每个Label的Key只能对应一个Value。Label是Service和Replication Controller运行的基础，它们都通过Label来关联Pod.</p>
-<h2 id="master">Master</h2>
-<p>Kubernetes里的Master指的是集群控制节点，每个Kubernetes集群里需要有一个Master节点来负责整个集群的管理和控制，基本上Kubernetes所有的控制命令都是发给它，它来负责具体的执行过程.</p>
-<p>在Master运行的组件有：</p>
-<ul>
-<li>kube-apiserver, 提供了HTTP Rest接口的关键服务进程，是Kubernetes里所有资源的增、删、改、查等操作的唯一入口，也是集群控制的入口进程.</li>
-<li>etcd, 强一致性高可用的key-value存储系统，kubernetes用来存储集群的数据。</li>
-<li>Kube-scheduler，负责资源调度（Pod调度）的进程，为新建的Pod分配Node。</li>
-<li>Kube-controller-manager，Kubernetes里所有资源对象的自动化控制中心，负责执行各种控制器。</li>
-</ul>
-<h2 id="node">Node</h2>
-<p>Kubernetes属于主从分布式集群架构，Kubernetes Node（简称为Node，早期版本叫作Minion）运行并管理容器。Node作为Kubernetes的操作单元，用来分配给Pod（或者说容器）进行绑定，Pod最终运行在Node上，Node可以认为是Pod的宿主机。</p>
-<p>Node节点上运行的组件有：</p>
-<ul>
-<li>kubelet, 负责Pod对应的容器的创建、启停等任务，同时与Master节点密切协作，实现集群管理的基本功能。</li>
-<li>Kube-proxy, 实现Kubernetes Service的通信与负载均衡机制的重要组件。</li>
-<li>container runtime, 负责运行容器。</li>
-</ul>
-]]></summary>
-        <content type="html"><![CDATA[<h2 id="pod">Pod</h2>
-<p>Pod是一个或多个若干相关容器的组合，Pod包含的容器运行在同一台宿主机上，这些容器使用相同的网络命名空间、IP地址和端口，相互之间能通过localhost来发现和通信。另外，这些容器还可共享一块存储卷空间。在Kubernetes中创建、调度和管理的最小单位是Pod，而不是容器，Pod通过提供更高层次的抽象，提供了更加灵活的部署和管理模式。</p>
-<p>Pod是Kubernetes的基本操作单元，也是应用运行的载体。</p>
-<p>Pod是容器的集合，容器是真正的执行体。相比原生的容器接口，Pod提供了更高层次的抽象，但是Pod的设计并不是为了运行同一个应用的多个实例，而是运行一个应用多个紧密联系的程序。而每个程序运行在单独的容器中，以Pod的形式组合成一个应用。</p>
-<h2 id="replication-controller">Replication Controller</h2>
-<p>Replication Controller用来控制管理Pod副本（Replica，或者称为实例），Replication Controller确保任何时候Kubernetes集群中有指定数量的Pod副本在运行。如果少于指定数量的Pod副本，Replication Controller会启动新的Pod副本，反之会杀死多余的副本以保证数量不变。另外，Replication Controller是弹性伸缩、滚动升级的实现核心。</p>
-<p>注：官方建议使用Deployment代替</p>
-<h2 id="service">Service</h2>
-<p>Service是真实应用服务的抽象，定义了Pod的逻辑集合和访问这个Pod集合的策略。Service将代理Pod对外表现为一个单一访问接口，外部不需要了解后端Pod如何运行，这给扩展和维护带来很多好处，提供了一套简化的服务代理和发现机制。</p>
-<h2 id="label">Label</h2>
-<p>Label是用于区分Pod、Service、Replication Controller的Key/Value对，实际上，Kubernetes中的任意API对象都可以通过Label进行标识。每个API对象可以有多个Label，但是每个Label的Key只能对应一个Value。Label是Service和Replication Controller运行的基础，它们都通过Label来关联Pod.</p>
-<h2 id="master">Master</h2>
-<p>Kubernetes里的Master指的是集群控制节点，每个Kubernetes集群里需要有一个Master节点来负责整个集群的管理和控制，基本上Kubernetes所有的控制命令都是发给它，它来负责具体的执行过程.</p>
-<p>在Master运行的组件有：</p>
-<ul>
-<li>kube-apiserver, 提供了HTTP Rest接口的关键服务进程，是Kubernetes里所有资源的增、删、改、查等操作的唯一入口，也是集群控制的入口进程.</li>
-<li>etcd, 强一致性高可用的key-value存储系统，kubernetes用来存储集群的数据。</li>
-<li>Kube-scheduler，负责资源调度（Pod调度）的进程，为新建的Pod分配Node。</li>
-<li>Kube-controller-manager，Kubernetes里所有资源对象的自动化控制中心，负责执行各种控制器。</li>
-</ul>
-<h2 id="node">Node</h2>
-<p>Kubernetes属于主从分布式集群架构，Kubernetes Node（简称为Node，早期版本叫作Minion）运行并管理容器。Node作为Kubernetes的操作单元，用来分配给Pod（或者说容器）进行绑定，Pod最终运行在Node上，Node可以认为是Pod的宿主机。</p>
-<p>Node节点上运行的组件有：</p>
-<ul>
-<li>kubelet, 负责Pod对应的容器的创建、启停等任务，同时与Master节点密切协作，实现集群管理的基本功能。</li>
-<li>Kube-proxy, 实现Kubernetes Service的通信与负载均衡机制的重要组件。</li>
-<li>container runtime, 负责运行容器。</li>
-</ul>
-<!-- more -->
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[SpringBoot - 启动原理]]></title>
-        <id>https://caijh.github.io//post/springboot-qi-dong-yuan-li</id>
-        <link href="https://caijh.github.io//post/springboot-qi-dong-yuan-li">
-        </link>
-        <updated>2019-07-20T03:41:54.000Z</updated>
-        <summary type="html"><![CDATA[<p>SpringBoot应用启动类一般如下：</p>
-<pre><code>@SpringBootApplication
-public class SampleRabbitmqApplication {
+</script>
 
-    public static void main(String[] args) {
-        SpringApplication.run(SampleRabbitmqApplication.class, args);
+
+
+  
+
+  
+    <script src="https://unpkg.com/disqusjs@1.1/dist/disqus.js"></script>
+    <script>
+
+    var options = {
+      shortname: 'caijh',
+      apikey: 'lO2xchFAyPIP4VOKbgm796D9jIvqLVziAqLHOPnOZySwUlyWXAhgwrIbPQ16AyUX',
     }
-
-}
-</code></pre>
-<h1 id="springbootapplication">@SpringBootApplication</h1>
-<p>@SpringBootApplication这个组合注解包含了三个注解 ：</p>
-<ul>
-<li>@SpringBootConfiguration</li>
-<li>@EnableAutoConfiguration</li>
-<li>@ComponentScan</li>
-</ul>
-<p>@SpringBootConfiguration实际上应用@Configuration， 任何注解了Configuration了java类都是一个JavaConfig配置类。<br>
-@ComponentScan的功能是自动扫描并加载符合条件的组件（如@Component和@Repository）,最终将这些bean加载IoC容器中。<br>
-@EnableAutoConfiguration借助@Import收集和注册特定场景相关的bean定义。</p>
-]]></summary>
-        <content type="html"><![CDATA[<p>SpringBoot应用启动类一般如下：</p>
-<pre><code>@SpringBootApplication
-public class SampleRabbitmqApplication {
-
-    public static void main(String[] args) {
-        SpringApplication.run(SampleRabbitmqApplication.class, args);
+    if ('https://disqus.skk.moe/disqus/') {
+      options.api = 'https://disqus.skk.moe/disqus/'
     }
+    var dsqjs = new DisqusJS(options)
 
-}
-</code></pre>
-<h1 id="springbootapplication">@SpringBootApplication</h1>
-<p>@SpringBootApplication这个组合注解包含了三个注解 ：</p>
-<ul>
-<li>@SpringBootConfiguration</li>
-<li>@EnableAutoConfiguration</li>
-<li>@ComponentScan</li>
-</ul>
-<p>@SpringBootConfiguration实际上应用@Configuration， 任何注解了Configuration了java类都是一个JavaConfig配置类。<br>
-@ComponentScan的功能是自动扫描并加载符合条件的组件（如@Component和@Repository）,最终将这些bean加载IoC容器中。<br>
-@EnableAutoConfiguration借助@Import收集和注册特定场景相关的bean定义。</p>
-<!-- more -->
-<pre><code>@Target(ElementType.TYPE)
-@Retention(RetentionPolicy.RUNTIME)
-@Documented
-@Inherited
-@AutoConfigurationPackage
-@Import(AutoConfigurationImportSelector.class)
-public @interface EnableAutoConfiguration {
+    </script>
+  
 
-	String ENABLED_OVERRIDE_PROPERTY = &quot;spring.boot.enableautoconfiguration&quot;;
 
-	/**
-	 * Exclude specific auto-configuration classes such that they will never be applied.
-	 * @return the classes to exclude
-	 */
-	Class&lt;?&gt;[] exclude() default {};
 
-	/**
-	 * Exclude specific auto-configuration class names such that they will never be
-	 * applied.
-	 * @return the class names to exclude
-	 * @since 1.3.0
-	 */
-	String[] excludeName() default {};
 
-}
-</code></pre>
-<p>@Import(AutoConfigurationImportSelector.class)中借助AutoConfigurationImportSelector可以帮助SpringBoot应用将所有符合@Configuration配置都加载到当SpringBoot创建IoC容器中。AutoConfigurationImportSelector使用SpringFactoriesLoader从META-INF/spring.factories加载配置。</p>
-<h4 id="springapplicationrun">SpringApplication.run</h4>
-<pre><code>public ConfigurableApplicationContext run(String... args) {
-		StopWatch stopWatch = new StopWatch();
-		stopWatch.start();
-		ConfigurableApplicationContext context = null;
-		Collection&lt;SpringBootExceptionReporter&gt; exceptionReporters = new ArrayList&lt;&gt;();
-		configureHeadlessProperty();
-		SpringApplicationRunListeners listeners = getRunListeners(args);
-		listeners.starting();
-		try {
-			ApplicationArguments applicationArguments = new DefaultApplicationArguments(args);
-			ConfigurableEnvironment environment = prepareEnvironment(listeners, applicationArguments);
-			configureIgnoreBeanInfo(environment);
-			Banner printedBanner = printBanner(environment);
-			context = createApplicationContext();
-			exceptionReporters = getSpringFactoriesInstances(SpringBootExceptionReporter.class,
-					new Class[] { ConfigurableApplicationContext.class }, context);
-			prepareContext(context, environment, listeners, applicationArguments, printedBanner);
-			refreshContext(context);
-			afterRefresh(context, applicationArguments);
-			stopWatch.stop();
-			if (this.logStartupInfo) {
-				new StartupInfoLogger(this.mainApplicationClass).logStarted(getApplicationLog(), stopWatch);
-			}
-			listeners.started(context);
-			callRunners(context, applicationArguments);
-		}
-		catch (Throwable ex) {
-			handleRunFailure(context, ex, exceptionReporters, listeners);
-			throw new IllegalStateException(ex);
-		}
-
-		try {
-			listeners.running(context);
-		}
-		catch (Throwable ex) {
-			handleRunFailure(context, ex, exceptionReporters, null);
-			throw new IllegalStateException(ex);
-		}
-		return context;
-	}
-</code></pre>
-<ol>
-<li>创建SpringApplicationRunListeners, 获取SpringFactoriesInstances实例</li>
-<li>准备环境变量</li>
-<li>是否打印banner</li>
-<li>创建ApplicationContext,servelt环境创建AnnotationConfigServletWebServerApplicationContext， reactive环境创建AnnotationConfigReactiveWebServerApplicationContext， 否则创建AnnotationConfigApplicationContext</li>
-<li>prepareContext, 主要是ApplicationContextInitializer的初始化</li>
-<li>refreshContext 调用ApplicationContext的refresh()方法</li>
-<li>afterRefresh, 空方法</li>
-</ol>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Redis - 编译纯净版]]></title>
-        <id>https://caijh.github.io//post/redis-bian-yi-chun-jing-ban</id>
-        <link href="https://caijh.github.io//post/redis-bian-yi-chun-jing-ban">
-        </link>
-        <updated>2019-07-18T07:38:08.000Z</updated>
-        <summary type="html"><![CDATA[<p>按redis官网编译的redis, 可执行文件会与源码在一起, 如果想编译纯净版可按下边的步骤。</p>
-]]></summary>
-        <content type="html"><![CDATA[<p>按redis官网编译的redis, 可执行文件会与源码在一起, 如果想编译纯净版可按下边的步骤。</p>
-<!-- more -->
-<h3 id="下载redis">下载redis</h3>
-<pre><code>$ wget http://download.redis.io/releases/redis-5.0.5.tar.gz
-$ tar xzf redis-5.0.5.tar.gz
-$ cd redis-5.0.5
-</code></pre>
-<h3 id="make-指定rpefix值">make 指定RPEFIX值</h3>
-<pre><code>make PREFIX=~/dev/redis-5.0.5 install
-</code></pre>
-<h3 id="复制配置文件到安装目录">复制配置文件到安装目录</h3>
-<pre><code>➜  redis-5.0.5 cp redis.conf ~/dev/redis-5.0.5 
-➜  redis-5.0.5 cp sentinel.conf ~/dev/redis-5.0.5
-</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Redis - 如何访问大量数据]]></title>
-        <id>https://caijh.github.io//post/redis-ru-he-fang-wen-da-liang-shu-ju</id>
-        <link href="https://caijh.github.io//post/redis-ru-he-fang-wen-da-liang-shu-ju">
-        </link>
-        <updated>2019-07-18T04:31:22.000Z</updated>
-        <summary type="html"><![CDATA[<p>众如周知，Redis中<code>keys pattern</code>命令可以返回大量数据。<br>
-非生产环境可以结合linux的管道删除相同pattern的key.</p>
-<pre><code>redis-cli keys &quot;*&quot; | xargs redis-cli del
-</code></pre>
-<p>但是生产环境一般keys会被重命名禁止在生产使用。<br>
-这时可以使用scan命令删除。</p>
-]]></summary>
-        <content type="html"><![CDATA[<p>众如周知，Redis中<code>keys pattern</code>命令可以返回大量数据。<br>
-非生产环境可以结合linux的管道删除相同pattern的key.</p>
-<pre><code>redis-cli keys &quot;*&quot; | xargs redis-cli del
-</code></pre>
-<p>但是生产环境一般keys会被重命名禁止在生产使用。<br>
-这时可以使用scan命令删除。</p>
-<!-- more -->
-<p>scan的特点：</p>
-<ul>
-<li>复杂度虽然也是 O(n)，但是它是通过游标分步进行的，不会阻塞线程</li>
-<li>提供 count 参数，不是结果数量，是Redis单次遍历字典槽位数量(约等于)</li>
-<li>同 keys 一样，它也提供模式匹配功能;</li>
-<li>服务器不需要为游标保存状态，游标的唯一状态就是 scan 返回给客户端的游标整数;</li>
-<li>返回的结果可能会有重复，需要客户端去重复，这点非常重要;</li>
-<li>单次返回的结果是空的并不意味着遍历结束，而要看返回的游标值是否为零</li>
-</ul>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Redis - 缓存问题]]></title>
-        <id>https://caijh.github.io//post/redis-huan-cun-wen-ti</id>
-        <link href="https://caijh.github.io//post/redis-huan-cun-wen-ti">
-        </link>
-        <updated>2019-07-18T03:42:55.000Z</updated>
-        <summary type="html"><![CDATA[<h3 id="缓存穿透">缓存穿透</h3>
-<blockquote>
-<p>什么是缓存穿透？<br>
-缓存穿透是指查询一个一定不在缓存中存在的key. 由于key不存在，每次都会去查询数据库，如果对于这个key的请求很多的话，可能会把数据库搞垮。</p>
-</blockquote>
-<p>解决方案：</p>
-<ol>
-<li>布隆过滤器</li>
-<li>将查询数据库的空结果也缓存起来，设置一个较短的过期时间。</li>
-</ol>
-<h3 id="缓存雪崩">缓存雪崩</h3>
-<blockquote>
-<p>什么是缓存雪崩？<br>
-对于多个key的查询，全部请求都走数据库了。有两种情况：一种是redis挂掉，别一个情况是一段时间内那些key都失效了。<br>
-对于第一种情况要保证redis的的高可性，对于第二种情况可以为key设置不同的随随机过期时间。</p>
-</blockquote>
-<h3 id="缓存数据一致性">缓存数据一致性</h3>
-<ol>
-<li>写数据库也写缓存，保证了数据一致性；但是难保证数据库与redis的事务</li>
-<li>写数据库，直接删缓存；读缓存发现没有，从数据库读取并保存缓存；带来问题是并发问题。</li>
-<li>应该根据不同的业务，来处理缓存的生成。</li>
-</ol>
-]]></summary>
-        <content type="html"><![CDATA[<h3 id="缓存穿透">缓存穿透</h3>
-<blockquote>
-<p>什么是缓存穿透？<br>
-缓存穿透是指查询一个一定不在缓存中存在的key. 由于key不存在，每次都会去查询数据库，如果对于这个key的请求很多的话，可能会把数据库搞垮。</p>
-</blockquote>
-<p>解决方案：</p>
-<ol>
-<li>布隆过滤器</li>
-<li>将查询数据库的空结果也缓存起来，设置一个较短的过期时间。</li>
-</ol>
-<h3 id="缓存雪崩">缓存雪崩</h3>
-<blockquote>
-<p>什么是缓存雪崩？<br>
-对于多个key的查询，全部请求都走数据库了。有两种情况：一种是redis挂掉，别一个情况是一段时间内那些key都失效了。<br>
-对于第一种情况要保证redis的的高可性，对于第二种情况可以为key设置不同的随随机过期时间。</p>
-</blockquote>
-<h3 id="缓存数据一致性">缓存数据一致性</h3>
-<ol>
-<li>写数据库也写缓存，保证了数据一致性；但是难保证数据库与redis的事务</li>
-<li>写数据库，直接删缓存；读缓存发现没有，从数据库读取并保存缓存；带来问题是并发问题。</li>
-<li>应该根据不同的业务，来处理缓存的生成。</li>
-</ol>
-<!-- more -->
-]]></content>
-    </entry>
-</feed>
+  </body>
+</html>

@@ -7,7 +7,7 @@
 <meta name="description" content="搬砖小弟">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<link rel="shortcut icon" href="https://caijh.github.io//favicon.ico?v=1567127232973">
+<link rel="shortcut icon" href="https://caijh.github.io//favicon.ico?v=1572851237552">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 <link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
@@ -91,11 +91,11 @@
             <p class="article-meta">
               2019-07-03
               
-                <a href="https://caijh.github.io//tag/kmQV6iHOM" class="badge secondary">
+                <a href="https://caijh.github.io//tag/kmQV6iHOM" class="badge success">
                   面试
                 </a>
               
-                <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge warning">
+                <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge success">
                   源代码
                 </a>
               
@@ -260,7 +260,7 @@ Map 这样的 Key Value 在软件开发中是非常经典的结构，常用于�
 因此 1.8 中重点优化了这个查询效率。</p>
 </blockquote>
 <p>1.8 HashMap 结构图：</p>
-<p><img src="https://mmbiz.qpic.cn/mmbiz_jpg/csD7FygBVl2YrHfgckicQvCZFaT240KJuFVB8SHEbdxmchRiakoeFXwlzQUX5ld65WsGsPGZ2n7UMWcu3y2hl1QQ/640?wx_fmt=jpeg&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt=""></p>
+<figure data-type="image" tabindex="1"><img src="https://mmbiz.qpic.cn/mmbiz_jpg/csD7FygBVl2YrHfgckicQvCZFaT240KJuFVB8SHEbdxmchRiakoeFXwlzQUX5ld65WsGsPGZ2n7UMWcu3y2hl1QQ/640?wx_fmt=jpeg&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt=""></figure>
 <p>先来看看几个核心的成员变量：</p>
 <pre><code> 1    static final int DEFAULT_INITIAL_CAPACITY = 1 &lt;&lt; 4; // aka 16
  2
@@ -520,15 +520,15 @@ Segment 是 ConcurrentHashMap 的一个内部类，主要的组成如下：
 <p>那就是查询遍历链表效率太低。</p>
 <p>因此 1.8 做了一些数据结构上的调整。</p>
 <p>首先来看下底层的组成结构：</p>
-<p><img src="https://mmbiz.qpic.cn/mmbiz_jpg/csD7FygBVl2YrHfgckicQvCZFaT240KJuUfRMPmJ4ib95BpUVDkecPy5kBCXxdq15XzO6MMhH5FRvsADhwFXZI5Q/640?wx_fmt=jpeg&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt=""></p>
+<figure data-type="image" tabindex="2"><img src="https://mmbiz.qpic.cn/mmbiz_jpg/csD7FygBVl2YrHfgckicQvCZFaT240KJuUfRMPmJ4ib95BpUVDkecPy5kBCXxdq15XzO6MMhH5FRvsADhwFXZI5Q/640?wx_fmt=jpeg&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt=""></figure>
 <p>看起来是不是和 1.8 HashMap 结构类似？</p>
 <p>其中抛弃了原有的 Segment 分段锁，而采用了 CAS + synchronized 来保证并发安全性。</p>
-<p><img src="https://mmbiz.qpic.cn/mmbiz_jpg/csD7FygBVl2YrHfgckicQvCZFaT240KJuX0QiaOcnzqugCVfdNR0KRDHlMOic8Pn7TZ0BcG8Oc1NBiaZSgVsmQGt2g/640?wx_fmt=jpeg&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt=""></p>
+<figure data-type="image" tabindex="3"><img src="https://mmbiz.qpic.cn/mmbiz_jpg/csD7FygBVl2YrHfgckicQvCZFaT240KJuX0QiaOcnzqugCVfdNR0KRDHlMOic8Pn7TZ0BcG8Oc1NBiaZSgVsmQGt2g/640?wx_fmt=jpeg&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt=""></figure>
 <p>也将 1.7 中存放数据的 HashEntry 改为 Node，但作用都是相同的。</p>
 <p>其中的 val next 都用了 volatile 修饰，保证了可见性。</p>
 <p>put 方法<br>
 重点来看看 put 函数：</p>
-<p><img src="https://mmbiz.qpic.cn/mmbiz_jpg/csD7FygBVl2YrHfgckicQvCZFaT240KJu606XAOtEmOlp5WZyCNUL2PklOSq1SgbWtoNy06MpyVW3euNqibLRibWg/640?wx_fmt=jpeg&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt=""></p>
+<figure data-type="image" tabindex="4"><img src="https://mmbiz.qpic.cn/mmbiz_jpg/csD7FygBVl2YrHfgckicQvCZFaT240KJu606XAOtEmOlp5WZyCNUL2PklOSq1SgbWtoNy06MpyVW3euNqibLRibWg/640?wx_fmt=jpeg&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt=""></figure>
 <p>根据 key 计算出 hashcode 。</p>
 <p>判断是否需要进行初始化。</p>
 <p>f 即为当前 key 定位出的 Node，如果为空表示当前位置可以写入数据，利用 CAS 尝试写入，失败则自旋保证成功。</p>
@@ -536,7 +536,7 @@ Segment 是 ConcurrentHashMap 的一个内部类，主要的组成如下：
 <p>如果都不满足，则利用 synchronized 锁写入数据。</p>
 <p>如果数量大于 TREEIFY_THRESHOLD 则要转换为红黑树。</p>
 <p>get 方法</p>
-<p><img src="https://mmbiz.qpic.cn/mmbiz_jpg/csD7FygBVl2YrHfgckicQvCZFaT240KJuKGCGoSfbyPIEV7gea97OXFVVicDU4qYicxprd6xJjeLcfjQUTgBIqBaA/640?wx_fmt=jpeg&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt=""></p>
+<figure data-type="image" tabindex="5"><img src="https://mmbiz.qpic.cn/mmbiz_jpg/csD7FygBVl2YrHfgckicQvCZFaT240KJuKGCGoSfbyPIEV7gea97OXFVVicDU4qYicxprd6xJjeLcfjQUTgBIqBaA/640?wx_fmt=jpeg&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt=""></figure>
 <p>根据计算出来的 hashcode 寻址，如果就在桶上那么直接返回值。</p>
 <p>如果是红黑树那就按照树的方式获取值。</p>
 <p>就不满足那就按照链表的方式遍历获取值。</p>
@@ -582,7 +582,7 @@ Segment 是 ConcurrentHashMap 的一个内部类，主要的组成如下：
 
       <div class="sm-12 md-4 col sidebar">
   <div class="paper info-container">
-    <img src="https://caijh.github.io//images/avatar.png?v=1567127232973" class="no-responsive avatar">
+    <img src="https://caijh.github.io//images/avatar.png?v=1572851237552" class="no-responsive avatar">
     <div class="text-muted">搬砖小弟</div>
     <div class="social-container">
       
@@ -604,6 +604,12 @@ Segment 是 ConcurrentHashMap 的一个内部类，主要的组成如下：
     </div>
     <div class="row">
       <ul>
+        
+          
+            <li>
+              <a href="https://caijh.github.io//post/spring-cloud-eureka">Spring Cloud - Eureka</a>
+            </li>
+          
         
           
             <li>
@@ -659,10 +665,6 @@ Segment 是 ConcurrentHashMap 的一个内部类，主要的组成如下：
             </li>
           
         
-          
-            <li>
-              <a href="https://caijh.github.io//post/redis-shu-ju-tao-tai-ce-lue">Redis - 数据淘汰策略</a>
-            </li>
           
         
           
@@ -752,19 +754,19 @@ Segment 是 ConcurrentHashMap 的一个内部类，主要的组成如下：
           docker
         </a>
       
-        <a href="https://caijh.github.io//tag/hm42pTrhV" class="badge secondary">
+        <a href="https://caijh.github.io//tag/hm42pTrhV" class="badge ">
           Maven
         </a>
       
-        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge success">
+        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge secondary">
           Java
         </a>
       
-        <a href="https://caijh.github.io//tag/6w7rEzKhc" class="badge secondary">
+        <a href="https://caijh.github.io//tag/6w7rEzKhc" class="badge warning">
           Redis
         </a>
       
-        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge ">
+        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge secondary">
           MySQL
         </a>
       
@@ -776,7 +778,7 @@ Segment 是 ConcurrentHashMap 的一个内部类，主要的组成如下：
           Spring Cloud
         </a>
       
-        <a href="https://caijh.github.io//tag/kmQV6iHOM" class="badge warning">
+        <a href="https://caijh.github.io//tag/kmQV6iHOM" class="badge ">
           面试
         </a>
       

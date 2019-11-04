@@ -7,7 +7,7 @@
 <meta name="description" content="搬砖小弟">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<link rel="shortcut icon" href="https://caijh.github.io//favicon.ico?v=1567127232973">
+<link rel="shortcut icon" href="https://caijh.github.io//favicon.ico?v=1572851237552">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 <link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
@@ -83,6 +83,34 @@
           
   <article class="article">
     <h2 class="article-title">
+      <a href="https://caijh.github.io//post/redis-shu-ju-tao-tai-ce-lue">Redis - 数据淘汰策略</a>
+    </h2>
+    <p class="article-meta">
+      2019-07-18
+      
+    </p>
+    <p class="text-lead">
+      <ul>
+<li>volatile-lru：从已设置过期时间的数据集（server.db[i].expires）中挑选最近最少使用的数据淘汰</li>
+<li>volatile-ttl：从已设置过期时间的数据集（server.db[i].expires）中挑选将要过期的数据淘汰</li>
+<li>volatile-random：从已设置过期时间的数据集（server.db[i].expires）中任意选择数据淘汰</li>
+<li>allkeys-lru：从数据集（server.db[i].dict）中挑选最近最少使用的数据淘汰</li>
+<li>allkeys-random：从数据集（server.db[i].dict）中任意选择数据淘汰</li>
+<li>no-enviction（驱逐）：禁止驱逐数据，返回错误</li>
+</ul>
+
+    </p>
+    <div class="row">
+      <a href="https://caijh.github.io//post/redis-shu-ju-tao-tai-ce-lue" class="readmore-link">
+        <button>
+          Read More
+        </button>
+      </a>
+    </div>
+  </article>
+
+  <article class="article">
+    <h2 class="article-title">
       <a href="https://caijh.github.io//post/vagrant-shi-yong">Vagrant - 使用</a>
     </h2>
     <p class="article-meta">
@@ -136,7 +164,7 @@
     <p class="article-meta">
       2019-07-14
       
-        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge ">
+        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge success">
           MySQL
         </a>
       
@@ -160,7 +188,7 @@
     <p class="article-meta">
       2019-07-14
       
-        <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge secondary">
+        <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge success">
           源代码
         </a>
       
@@ -189,7 +217,7 @@ AQS内部有一个state状态记录当前线程的加锁次数，还有一个exc
     <p class="article-meta">
       2019-07-13
       
-        <a href="https://caijh.github.io//tag/nHOjalh2s" class="badge ">
+        <a href="https://caijh.github.io//tag/nHOjalh2s" class="badge secondary">
           Spring Cloud
         </a>
       
@@ -290,14 +318,14 @@ kafka集群中一个broker负责一部分partition，在kafka集群中，每个P
     <p class="article-meta">
       2019-07-06
       
-        <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge success">
+        <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge ">
           源代码
         </a>
       
     </p>
     <p class="text-lead">
       <h1 id="tomcat启动过程">tomcat启动过程</h1>
-<p><img src="https://caijh.github.io//post-images/1562423239997.jpg" alt=""></p>
+<figure data-type="image" tabindex="1"><img src="https://caijh.github.io//post-images/1562423239997.jpg" alt=""></figure>
 
     </p>
     <div class="row">
@@ -316,11 +344,11 @@ kafka集群中一个broker负责一部分partition，在kafka集群中，每个P
     <p class="article-meta">
       2019-07-03
       
-        <a href="https://caijh.github.io//tag/kmQV6iHOM" class="badge secondary">
+        <a href="https://caijh.github.io//tag/kmQV6iHOM" class="badge warning">
           面试
         </a>
       
-        <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge success">
+        <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge ">
           源代码
         </a>
       
@@ -334,35 +362,6 @@ Map 这样的 Key Value 在软件开发中是非常经典的结构，常用于�
     </p>
     <div class="row">
       <a href="https://caijh.github.io//post/yuan-ma-yue-du-hashmap-concurrenthashmap" class="readmore-link">
-        <button>
-          Read More
-        </button>
-      </a>
-    </div>
-  </article>
-
-  <article class="article">
-    <h2 class="article-title">
-      <a href="https://caijh.github.io//post/maven-fa-bu-zi-ji-de-maven-gou-jian-dao-zhong-yang-cang-ku">maven-发布自己的maven构件到中央仓库</a>
-    </h2>
-    <p class="article-meta">
-      2019-07-02
-      
-        <a href="https://caijh.github.io//tag/hm42pTrhV" class="badge warning">
-          Maven
-        </a>
-      
-    </p>
-    <p class="text-lead">
-      <p>发布自己的jar包到中央仓库的好处：</p>
-<ol>
-<li>省去自建maven私服</li>
-<li>方便自己或者别个在他处引用jar包</li>
-</ol>
-
-    </p>
-    <div class="row">
-      <a href="https://caijh.github.io//post/maven-fa-bu-zi-ji-de-maven-gou-jian-dao-zhong-yang-cang-ku" class="readmore-link">
         <button>
           Read More
         </button>
@@ -390,7 +389,7 @@ Map 这样的 Key Value 在软件开发中是非常经典的结构，常用于�
       
       <div class="sm-12 md-4 col sidebar">
   <div class="paper info-container">
-    <img src="https://caijh.github.io//images/avatar.png?v=1567127232973" class="no-responsive avatar">
+    <img src="https://caijh.github.io//images/avatar.png?v=1572851237552" class="no-responsive avatar">
     <div class="text-muted">搬砖小弟</div>
     <div class="social-container">
       
@@ -412,6 +411,12 @@ Map 这样的 Key Value 在软件开发中是非常经典的结构，常用于�
     </div>
     <div class="row">
       <ul>
+        
+          
+            <li>
+              <a href="https://caijh.github.io//post/spring-cloud-eureka">Spring Cloud - Eureka</a>
+            </li>
+          
         
           
             <li>
@@ -467,10 +472,6 @@ Map 这样的 Key Value 在软件开发中是非常经典的结构，常用于�
             </li>
           
         
-          
-            <li>
-              <a href="https://caijh.github.io//post/redis-shu-ju-tao-tai-ce-lue">Redis - 数据淘汰策略</a>
-            </li>
           
         
           
@@ -572,11 +573,11 @@ Map 这样的 Key Value 在软件开发中是非常经典的结构，常用于�
           Redis
         </a>
       
-        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge success">
+        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge warning">
           MySQL
         </a>
       
-        <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge ">
+        <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge success">
           源代码
         </a>
       
@@ -584,7 +585,7 @@ Map 这样的 Key Value 在软件开发中是非常经典的结构，常用于�
           Spring Cloud
         </a>
       
-        <a href="https://caijh.github.io//tag/kmQV6iHOM" class="badge secondary">
+        <a href="https://caijh.github.io//tag/kmQV6iHOM" class="badge warning">
           面试
         </a>
       
