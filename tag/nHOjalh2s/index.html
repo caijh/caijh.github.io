@@ -7,7 +7,7 @@
 <meta name="description" content="搬砖小弟">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<link rel="shortcut icon" href="https://caijh.github.io//favicon.ico?v=1572851237552">
+<link rel="shortcut icon" href="https://caijh.github.io//favicon.ico?v=1572933709954">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 <link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
@@ -83,12 +83,97 @@
           
   <article class="article">
     <h2 class="article-title">
+      <a href="https://caijh.github.io//post/spring-cloud-eureka">Spring Cloud - Eureka</a>
+    </h2>
+    <p class="article-meta">
+      2019-11-04
+      
+        <a href="https://caijh.github.io//tag/nHOjalh2s" class="badge warning">
+          Spring Cloud
+        </a>
+      
+    </p>
+    <p class="text-lead">
+      <blockquote>
+<p>是由Netflix开源的基于REST的服务治理组件，包含了eureka server 和eureka client。从2012年9月在GitHub上发布1.1.2版本以来，至今已经发布了231次，最新版本为2018年8月份发布的1.9.4版本。期间有进行2.x版本的开发，不过由于各种原因内部已经冻结开发，目前还是以1.x版本为主。Spring Cloud Netflix Eureka是Pivotal公司为了将Netflix Eureka整合于Spring Cloud生态系统提供的版本。</p>
+</blockquote>
+<h1 id="eureka快速入门">Eureka快速入门</h1>
+<p><strong>Eureka Server</strong></p>
+<ol>
+<li>
+<p>引入依赖</p>
+<pre><code>        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-cloud-starter-netflix-eureka-server&lt;/artifactId&gt;
+        &lt;/dependency&gt;
+</code></pre>
+</li>
+<li>
+<p>主应用类上添加**@EnableEurekaServer**</p>
+</li>
+<li>
+<p>配置eureka</p>
+<pre><code>eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: ${EUREKA_SERVER_ADDRESS:http://localhost:8761/eureka/}
+  server:
+    peer-node-read-timeout-ms: 5000
+</code></pre>
+</li>
+<li>
+<p>启动</p>
+<p>![image-20191024165113212](Spring Cloud - 服务注册中心eureka/image-20191024165113212.png)</p>
+</li>
+</ol>
+<p><strong>Eureka Client</strong></p>
+<ol>
+<li>
+<p>引入客户端依赖</p>
+<pre><code>        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-cloud-starter-netflix-eureka-client&lt;/artifactId&gt;
+        &lt;/dependency&gt;
+</code></pre>
+</li>
+<li>
+<p>主应用类添加**@EnableDiscoveryClient**</p>
+</li>
+<li>
+<p>配置</p>
+<pre><code>eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: ${EUREKA_SERVER_ADDRESS:http://localhost:8761/eureka/}
+</code></pre>
+</li>
+<li>
+<p>启动客户端</p>
+</li>
+</ol>
+
+    </p>
+    <div class="row">
+      <a href="https://caijh.github.io//post/spring-cloud-eureka" class="readmore-link">
+        <button>
+          Read More
+        </button>
+      </a>
+    </div>
+  </article>
+
+  <article class="article">
+    <h2 class="article-title">
       <a href="https://caijh.github.io//post/spring-cloud-ru-he-jie-jue-feignribbon-di-yi-ci-qing-qiu-shi-bai-de-wen-ti">Spring Cloud - 如何解决Feign/Ribbon第一次请求失败的问题</a>
     </h2>
     <p class="article-meta">
       2019-07-13
       
-        <a href="https://caijh.github.io//tag/nHOjalh2s" class="badge secondary">
+        <a href="https://caijh.github.io//tag/nHOjalh2s" class="badge ">
           Spring Cloud
         </a>
       
@@ -119,7 +204,7 @@ Hystrix默认的超时时间是1秒，如果超过这个时间尚未响应，将
       </div>
       <div class="sm-12 md-4 col sidebar">
   <div class="paper info-container">
-    <img src="https://caijh.github.io//images/avatar.png?v=1572851237552" class="no-responsive avatar">
+    <img src="https://caijh.github.io//images/avatar.png?v=1572933709954" class="no-responsive avatar">
     <div class="text-muted">搬砖小弟</div>
     <div class="social-container">
       
@@ -287,39 +372,39 @@ Hystrix默认的超时时间是1秒，如果超过这个时间尚未响应，将
     </div>
     <div class="row">
       
-        <a href="https://caijh.github.io//tag/Juj0cbeuP" class="badge warning">
-          docker
-        </a>
-      
-        <a href="https://caijh.github.io//tag/hm42pTrhV" class="badge ">
-          Maven
-        </a>
-      
-        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge warning">
-          Java
-        </a>
-      
-        <a href="https://caijh.github.io//tag/6w7rEzKhc" class="badge secondary">
-          Redis
-        </a>
-      
-        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge warning">
-          MySQL
-        </a>
-      
-        <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge warning">
-          源代码
-        </a>
-      
-        <a href="https://caijh.github.io//tag/nHOjalh2s" class="badge warning">
+        <a href="https://caijh.github.io//tag/nHOjalh2s" class="badge secondary">
           Spring Cloud
         </a>
       
-        <a href="https://caijh.github.io//tag/kmQV6iHOM" class="badge warning">
+        <a href="https://caijh.github.io//tag/Juj0cbeuP" class="badge secondary">
+          docker
+        </a>
+      
+        <a href="https://caijh.github.io//tag/hm42pTrhV" class="badge warning">
+          Maven
+        </a>
+      
+        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge success">
+          Java
+        </a>
+      
+        <a href="https://caijh.github.io//tag/6w7rEzKhc" class="badge warning">
+          Redis
+        </a>
+      
+        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge ">
+          MySQL
+        </a>
+      
+        <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge ">
+          源代码
+        </a>
+      
+        <a href="https://caijh.github.io//tag/kmQV6iHOM" class="badge ">
           面试
         </a>
       
-        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge secondary">
+        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge success">
           设计模式
         </a>
       
