@@ -1,440 +1,151 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" >
+       <head>
+        <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1,initial-scale=1,user-scalable=no" />
+        <meta charset="utf-8">
+        <title>源代码 | John&#39;s Blog</title>
+        <link rel="stylesheet" href="https://caijh.github.io//styles/main.css">
+        <link rel="stylesheet" href="https://at.alicdn.com/t/font_1306644_jwtuc2zzbrd.css">
+        <link href="https://cdn.bootcss.com/animate.css/3.7.2/animate.min.css" rel="stylesheet">
+         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+        <script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
+         <script src="https://cdn.bootcss.com/highlight.js/9.15.10/highlight.min.js"></script>
+         <script >hljs.initHighlightingOnLoad();</script>
 
-<title>源代码 | John&#39;s Blog</title>
-<meta name="description" content="搬砖小弟">
+    </head>
+    <body>
+          <header class="header mdui-m-b-5">      
+            <div class="container  ">
+                <div class="index-title animated fadeInDown mdui-text-center mdui-text-color-white mdui-m-b-2" style="animation-delay: 0.2s"><a href="https://caijh.github.io/">John&#39;s Blog</a></div>
+                <div class="mdui-text-color-white animated fadeInDown mdui-text-center  mdui-m-b-3" style="animation-delay: 0.4s">搬砖小弟</div>
+           
+            <nav id="nav" class="mdui-text-center animated fadeInDown" style="animation-delay: 0.6s">
+                   
+                            <li><a href="/">首页</a>
+                                <span class="nav-style top"></span>
+                                <span class="nav-style bottom"></span>
+                                <span class="nav-style left"></span>
+                                <span class="nav-style right"></span>
+                                </li>
+                    
+                            <li><a href="/archives">归档</a>
+                                <span class="nav-style top"></span>
+                                <span class="nav-style bottom"></span>
+                                <span class="nav-style left"></span>
+                                <span class="nav-style right"></span>
+                                </li>
+                    
+                            <li><a href="/tags">标签</a>
+                                <span class="nav-style top"></span>
+                                <span class="nav-style bottom"></span>
+                                <span class="nav-style left"></span>
+                                <span class="nav-style right"></span>
+                                </li>
+                    
+                            <li><a href="/post/about">关于</a>
+                                <span class="nav-style top"></span>
+                                <span class="nav-style bottom"></span>
+                                <span class="nav-style left"></span>
+                                <span class="nav-style right"></span>
+                                </li>
+                    
+                  </nav>
+                </div>
+        </header>
+        <div class="mdui-container ">
+                <div class="mdui-row">
+                        <div class="mdui-col-md-8 mdui-col-offset-md-2 mdui-m-t-1">
+                                                         
+                               <article class="mdui-p-a-5 index-list mdui-m-b-3 animated fadeIn" style="animation-delay: 0.8s;animation-duration: 2s">
+                                    <div class="mdui-typo-body-2 mdui-m-b-1" datetime="2019-07-14 18:38:40">2019-07-14</div>
+                                    <div class="mdui-typo-headline mdui-m-b-3 index-list-title index-guo"><a href="https://caijh.github.io/post/yuan-dai-ma-abstractqueuedsynchronizer">源码阅读 - AbstractQueuedSynchronizer</a></div>
+                                    <div class="mdui-typo-subheading mdui-m-b-2 index-neirong"><p>
+AbstractQueuedSynchronizer, 简称AQS, 是Java 并发包的基础类，并发包中的很多api都是基于AQS来实现加锁与释放锁等功能。
 
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<link rel="shortcut icon" href="https://caijh.github.io//favicon.ico?v=1577545527583">
-
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
-<link rel="stylesheet" href="https://caijh.github.io//styles/main.css">
-
-
-<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
-
-
-<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
-
-
-  </head>
-  <body>
-    <nav class="navbar border fixed split-nav">
-  <div class="nav-brand">
-    <h3><a href="https://caijh.github.io/">John&#39;s Blog</a></h3>
-  </div>
-  <div class="collapsible">
-    <input id="collapsible1" type="checkbox" name="collapsible1">
-    <button>
-      <label for="collapsible1">
-        <div class="bar1"></div>
-        <div class="bar2"></div>
-        <div class="bar3"></div>
-      </label>
-    </button>
-    <div class="collapsible-body">
-      <ul class="inline">
-        
-          <li>
-            
-              <a href="/" class="menu">
-                首页
-              </a>
-            
-          </li>
-        
-          <li>
-            
-              <a href="/archives" class="menu">
-                归档
-              </a>
-            
-          </li>
-        
-          <li>
-            
-              <a href="/tags" class="menu">
-                标签
-              </a>
-            
-          </li>
-        
-          <li>
-            
-              <a href="/post/about" class="menu">
-                关于
-              </a>
-            
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-</nav>
-
-    <div id="top" class="row site">
-      <div class="sm-12 md-8 col">
-        <div class="paper">
-          <h2 class="current-tag">标签: 源代码</h2>
-          
-  <article class="article">
-    <h2 class="article-title">
-      <a href="https://caijh.github.io//post/yuan-dai-ma-abstractqueuedsynchronizer">源码阅读 - AbstractQueuedSynchronizer</a>
-    </h2>
-    <p class="article-meta">
-      2019-07-14
-      
-        <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge secondary">
-          源代码
-        </a>
-      
-    </p>
-    <p class="text-lead">
-      <blockquote>
-<p>AbstractQueuedSynchronizer, 简称AQS, 是Java 并发包的基础类，并发包中的很多api都是基于AQS来实现加锁与释放锁等功能。</p>
-</blockquote>
-<p>例如ReentrantLock内部拥有一个继承于AbstractQueuedSynchronizer的Sync类实现加锁与释放锁。<br>
-AQS内部有一个state状态记录当前线程的加锁次数，还有一个exclusiveOwnerThread变量记录了独占的线程。</p>
-
-    </p>
-    <div class="row">
-      <a href="https://caijh.github.io//post/yuan-dai-ma-abstractqueuedsynchronizer" class="readmore-link">
-        <button>
-          Read More
-        </button>
-      </a>
-    </div>
-  </article>
-
-  <article class="article">
-    <h2 class="article-title">
-      <a href="https://caijh.github.io//post/yuan-ma-yue-du-tomcat">源码阅读-tomcat</a>
-    </h2>
-    <p class="article-meta">
-      2019-07-06
-      
-        <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge ">
-          源代码
-        </a>
-      
-    </p>
-    <p class="text-lead">
-      <h1 id="tomcat启动过程">tomcat启动过程</h1>
-<figure data-type="image" tabindex="1"><img src="https://caijh.github.io//post-images/1562423239997.jpg" alt=""></figure>
-
-    </p>
-    <div class="row">
-      <a href="https://caijh.github.io//post/yuan-ma-yue-du-tomcat" class="readmore-link">
-        <button>
-          Read More
-        </button>
-      </a>
-    </div>
-  </article>
-
-  <article class="article">
-    <h2 class="article-title">
-      <a href="https://caijh.github.io//post/yuan-ma-yue-du-hashmap-concurrenthashmap">源码阅读-HashMap ConcurrentHashMap</a>
-    </h2>
-    <p class="article-meta">
-      2019-07-03
-      
-        <a href="https://caijh.github.io//tag/kmQV6iHOM" class="badge ">
-          面试
-        </a>
-      
-        <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge warning">
-          源代码
-        </a>
-      
-    </p>
-    <p class="text-lead">
-      <p>搬砖自 https://mp.weixin.qq.com/s/DTzd3jdtnnveffL-zcpmyg</p>
-<p>前言<br>
-Map 这样的 Key Value 在软件开发中是非常经典的结构，常用于在内存中存放数据。</p>
-<p>本篇主要想讨论 ConcurrentHashMap 这样一个并发容器，在正式开始之前我觉得有必要谈谈 HashMap，没有它就不会有后面的 ConcurrentHashMap。</p>
-
-    </p>
-    <div class="row">
-      <a href="https://caijh.github.io//post/yuan-ma-yue-du-hashmap-concurrenthashmap" class="readmore-link">
-        <button>
-          Read More
-        </button>
-      </a>
-    </div>
-  </article>
-
-  <article class="article">
-    <h2 class="article-title">
-      <a href="https://caijh.github.io//post/yuan-ma-yue-du-hashmap-de-shi-xian-yuan-li">源码阅读-HashMap的实现原理</a>
-    </h2>
-    <p class="article-meta">
-      2019-07-01
-      
-        <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge secondary">
-          源代码
-        </a>
-      
-    </p>
-    <p class="text-lead">
-      <blockquote>
-<p>原文链接：https://blog.csdn.net/fenglibing/article/details/91565912</p>
-</blockquote>
-<h3 id="hashmap的类图">HashMap的类图</h3>
-<figure data-type="image" tabindex="1"><img src="https://caijh.github.io//post-images/1561974106214.png" alt=""></figure>
-<p>HashMap是Java开发当中使用得非常多的一种数据结构，因为其可以快速的定位到需要查找到数据，其最快的速度可以达到O(1)，最差的时候也可以达到O(n)。本文以Java8中的HashMap做为分析原型，因为不同的JDK版本中的HashMap，可能存在着底层实现上的不一样。</p>
-
-    </p>
-    <div class="row">
-      <a href="https://caijh.github.io//post/yuan-ma-yue-du-hashmap-de-shi-xian-yuan-li" class="readmore-link">
-        <button>
-          Read More
-        </button>
-      </a>
-    </div>
-  </article>
-
-
-        </div>
-        <div class="row flex-edges">
-  
-  
-</div>
-
-      </div>
-      <div class="sm-12 md-4 col sidebar">
-  <div class="paper info-container">
-    <img src="https://caijh.github.io//images/avatar.png?v=1577545527583" class="no-responsive avatar">
-    <div class="text-muted">搬砖小弟</div>
-    <div class="social-container">
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-    </div>
-  </div>
-  <div class="paper">
-    <div class="sidebar-title">
-      最新文章
-    </div>
-    <div class="row">
-      <ul>
-        
-          
-            <li>
-              <a href="https://caijh.github.io//post/kubernetes-jie-jue-shan-chu-namespace-yi-zhi-terminating-de-wen-ti">Kubernetes - 解决删除namespace一直Terminating的问题</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://caijh.github.io//post/spring-cloud-eureka">Spring Cloud - Eureka</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://caijh.github.io//post/kubernetes-bu-shu-rabbitmq-ji-qun">kubernetes - 部署rabbitmq集群</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://caijh.github.io//post/linux-an-zhuang-nfs">Linux - 安装nfs</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://caijh.github.io//post/k8s-an-zhuang-kube-dns-cha-jian">k8s - 安装kube-dns插件</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://caijh.github.io//post/maven-zen-me-yang-skip-test">Maven - 怎么样skip test</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://caijh.github.io//post/k8s-ji-ben-gai-nian">k8s - 基本概念</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://caijh.github.io//post/springboot-qi-dong-yuan-li">SpringBoot - 启动原理</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://caijh.github.io//post/redis-bian-yi-chun-jing-ban">Redis - 编译纯净版</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://caijh.github.io//post/redis-ru-he-fang-wen-da-liang-shu-ju">Redis - 如何访问大量数据</a>
-            </li>
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-      </ul>
-    </div>
-  </div>
-  <div class="paper">
-    <div class="sidebar-title">
-      标签列表
-    </div>
-    <div class="row">
-      
-        <a href="https://caijh.github.io//tag/nHOjalh2s" class="badge secondary">
-          Spring Cloud
-        </a>
-      
-        <a href="https://caijh.github.io//tag/Juj0cbeuP" class="badge success">
-          docker
-        </a>
-      
-        <a href="https://caijh.github.io//tag/hm42pTrhV" class="badge warning">
-          Maven
-        </a>
-      
-        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge success">
-          Java
-        </a>
-      
-        <a href="https://caijh.github.io//tag/6w7rEzKhc" class="badge success">
-          Redis
-        </a>
-      
-        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge success">
-          MySQL
-        </a>
-      
-        <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge secondary">
-          源代码
-        </a>
-      
-        <a href="https://caijh.github.io//tag/kmQV6iHOM" class="badge success">
-          面试
-        </a>
-      
-        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge secondary">
-          设计模式
-        </a>
-      
-    </div>
-  </div>
-  <div class="paper">
-    Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://caijh.github.io//atom.xml" target="_blank">RSS</a>
-  </div>
-</div>
-
-    </div>
-
-    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-
-<script type="application/javascript">
-
-AOS.init();
-
-hljs.initHighlightingOnLoad()
-
-</script>
+例如ReentrantLock内部拥有一个继承于AbstractQueued...</p></div>
+                                    <div class="index-list-rm index-guo"><a href="https://caijh.github.io/post/yuan-dai-ma-abstractqueuedsynchronizer">Read More</a></div>
+                                </article>
+                                
+                               <article class="mdui-p-a-5 index-list mdui-m-b-3 animated fadeIn" style="animation-delay: 0.8s;animation-duration: 2s">
+                                    <div class="mdui-typo-body-2 mdui-m-b-1" datetime="2019-07-06 22:18:45">2019-07-06</div>
+                                    <div class="mdui-typo-headline mdui-m-b-3 index-list-title index-guo"><a href="https://caijh.github.io/post/yuan-ma-yue-du-tomcat">源码阅读-tomcat</a></div>
+                                    <div class="mdui-typo-subheading mdui-m-b-2 index-neirong"><p>tomcat启动过程
 
 
 
 
-  </body>
+获取Bootstrap的静态代码块获取catalinaBaseFile及catalinaHomeFile
+static {
+        // Will always be non-null
+        ...</p></div>
+                                    <div class="index-list-rm index-guo"><a href="https://caijh.github.io/post/yuan-ma-yue-du-tomcat">Read More</a></div>
+                                </article>
+                                
+                               <article class="mdui-p-a-5 index-list mdui-m-b-3 animated fadeIn" style="animation-delay: 0.8s;animation-duration: 2s">
+                                    <div class="mdui-typo-body-2 mdui-m-b-1" datetime="2019-07-03 11:17:17">2019-07-03</div>
+                                    <div class="mdui-typo-headline mdui-m-b-3 index-list-title index-guo"><a href="https://caijh.github.io/post/yuan-ma-yue-du-hashmap-concurrenthashmap">源码阅读-HashMap ConcurrentHashMap</a></div>
+                                    <div class="mdui-typo-subheading mdui-m-b-2 index-neirong"><p>搬砖自 https://mp.weixin.qq.com/s/DTzd3jdtnnveffL-zcpmyg
+前言
+Map 这样的 Key Value 在软件开发中是非常经典的结构，常用于在内存中存放数据。
+本篇主要想讨论 Concurren...</p></div>
+                                    <div class="index-list-rm index-guo"><a href="https://caijh.github.io/post/yuan-ma-yue-du-hashmap-concurrenthashmap">Read More</a></div>
+                                </article>
+                                
+                               <article class="mdui-p-a-5 index-list mdui-m-b-3 animated fadeIn" style="animation-delay: 0.8s;animation-duration: 2s">
+                                    <div class="mdui-typo-body-2 mdui-m-b-1" datetime="2019-07-01 17:38:57">2019-07-01</div>
+                                    <div class="mdui-typo-headline mdui-m-b-3 index-list-title index-guo"><a href="https://caijh.github.io/post/yuan-ma-yue-du-hashmap-de-shi-xian-yuan-li">源码阅读-HashMap的实现原理</a></div>
+                                    <div class="mdui-typo-subheading mdui-m-b-2 index-neirong"><p>
+原文链接：https://blog.csdn.net/fenglibing/article/details/91565912
+
+HashMap的类图
+
+HashMap是Java开发当中使用得非常多的一种数据结构，因为其可以快速的定位到需要...</p></div>
+                                    <div class="index-list-rm index-guo"><a href="https://caijh.github.io/post/yuan-ma-yue-du-hashmap-de-shi-xian-yuan-li">Read More</a></div>
+                                </article>
+                                
+
+                                                            <nav class="mdui-m-t-5">
+                                
+                                
+                                </nav>     
+
+                        </div>
+                      </div>
+              </div>
+                <footer class="footer mdui-m-t-5 mdui-text-center">
+               <nav class="social-links">
+                      <ul>
+                      
+                      
+                           
+                      
+                           
+                      
+                           
+                      
+                           
+                      
+                           
+                      
+                           
+                      
+                           
+                      
+                           
+                      
+                           
+                      
+                           
+                      
+                           
+                      
+                           
+                      </ul>
+                    </nav>
+                    <div class="copyright">
+                      <p>Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> <br/> Theme <a href="https://github.com/shanbufun/gridea-theme-song" target="_blank"  title="宋"  >Song</a> by <a href="https://shanbu.fun/" target="_blank"  title="山卜方" >shanbufun</a> </p>
+                  </div>
+                  
+              </footer>
+    </body>
 </html>

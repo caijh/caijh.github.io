@@ -1,631 +1,206 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" >
+       <head>
+        <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1,initial-scale=1,user-scalable=no" />
+        <meta charset="utf-8">
+        <title>设计模式 | John&#39;s Blog</title>
+        <link rel="stylesheet" href="https://caijh.github.io//styles/main.css">
+        <link rel="stylesheet" href="https://at.alicdn.com/t/font_1306644_jwtuc2zzbrd.css">
+        <link href="https://cdn.bootcss.com/animate.css/3.7.2/animate.min.css" rel="stylesheet">
+         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+        <script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
+         <script src="https://cdn.bootcss.com/highlight.js/9.15.10/highlight.min.js"></script>
+         <script >hljs.initHighlightingOnLoad();</script>
 
-<title>设计模式 | John&#39;s Blog</title>
-<meta name="description" content="搬砖小弟">
+    </head>
+    <body>
+          <header class="header mdui-m-b-5">      
+            <div class="container  ">
+                <div class="index-title animated fadeInDown mdui-text-center mdui-text-color-white mdui-m-b-2" style="animation-delay: 0.2s"><a href="https://caijh.github.io/">John&#39;s Blog</a></div>
+                <div class="mdui-text-color-white animated fadeInDown mdui-text-center  mdui-m-b-3" style="animation-delay: 0.4s">搬砖小弟</div>
+           
+            <nav id="nav" class="mdui-text-center animated fadeInDown" style="animation-delay: 0.6s">
+                   
+                            <li><a href="/">首页</a>
+                                <span class="nav-style top"></span>
+                                <span class="nav-style bottom"></span>
+                                <span class="nav-style left"></span>
+                                <span class="nav-style right"></span>
+                                </li>
+                    
+                            <li><a href="/archives">归档</a>
+                                <span class="nav-style top"></span>
+                                <span class="nav-style bottom"></span>
+                                <span class="nav-style left"></span>
+                                <span class="nav-style right"></span>
+                                </li>
+                    
+                            <li><a href="/tags">标签</a>
+                                <span class="nav-style top"></span>
+                                <span class="nav-style bottom"></span>
+                                <span class="nav-style left"></span>
+                                <span class="nav-style right"></span>
+                                </li>
+                    
+                            <li><a href="/post/about">关于</a>
+                                <span class="nav-style top"></span>
+                                <span class="nav-style bottom"></span>
+                                <span class="nav-style left"></span>
+                                <span class="nav-style right"></span>
+                                </li>
+                    
+                  </nav>
+                </div>
+        </header>
+        <div class="mdui-container ">
+                <div class="mdui-row">
+                        <div class="mdui-col-md-8 mdui-col-offset-md-2 mdui-m-t-1">
+                                                         
+                               <article class="mdui-p-a-5 index-list mdui-m-b-3 animated fadeIn" style="animation-delay: 0.8s;animation-duration: 2s">
+                                    <div class="mdui-typo-body-2 mdui-m-b-1" datetime="2019-06-30 14:55:08">2019-06-30</div>
+                                    <div class="mdui-typo-headline mdui-m-b-3 index-list-title index-guo"><a href="https://caijh.github.io/post/she-ji-mo-shi-ce-lue-mo-shi">设计模式-策略模式</a></div>
+                                    <div class="mdui-typo-subheading mdui-m-b-2 index-neirong"><p>定义
 
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<link rel="shortcut icon" href="https://caijh.github.io//favicon.ico?v=1577545527583">
+Define a family of algorithms,encapsulate each one,and make them interchangeable.（定义一组算法，将每个算法都封装起来，并且使它们之间可以互换。）
 
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
-<link rel="stylesheet" href="https://caijh.github.io//styles/main.css">
+U...</p></div>
+                                    <div class="index-list-rm index-guo"><a href="https://caijh.github.io/post/she-ji-mo-shi-ce-lue-mo-shi">Read More</a></div>
+                                </article>
+                                
+                               <article class="mdui-p-a-5 index-list mdui-m-b-3 animated fadeIn" style="animation-delay: 0.8s;animation-duration: 2s">
+                                    <div class="mdui-typo-body-2 mdui-m-b-1" datetime="2019-06-30 14:46:44">2019-06-30</div>
+                                    <div class="mdui-typo-headline mdui-m-b-3 index-list-title index-guo"><a href="https://caijh.github.io/post/she-ji-mo-shi-zhuang-shi-mo-shi">设计模式-装饰模式</a></div>
+                                    <div class="mdui-typo-subheading mdui-m-b-2 index-neirong"><p>定义
 
+Attach additional responsibilities to an object dynamically keeping the same interface.Decorators provide a flexible...</p></div>
+                                    <div class="index-list-rm index-guo"><a href="https://caijh.github.io/post/she-ji-mo-shi-zhuang-shi-mo-shi">Read More</a></div>
+                                </article>
+                                
+                               <article class="mdui-p-a-5 index-list mdui-m-b-3 animated fadeIn" style="animation-delay: 0.8s;animation-duration: 2s">
+                                    <div class="mdui-typo-body-2 mdui-m-b-1" datetime="2019-06-30 14:31:43">2019-06-30</div>
+                                    <div class="mdui-typo-headline mdui-m-b-3 index-list-title index-guo"><a href="https://caijh.github.io/post/she-ji-mo-shi-ze-ren-lian-mo-shi">设计模式-责任链模式</a></div>
+                                    <div class="mdui-typo-subheading mdui-m-b-2 index-neirong"><p>定义
 
-<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+Avoid coupling the sender of a request to its receiver by giving more than one object a chance to handle the request...</p></div>
+                                    <div class="index-list-rm index-guo"><a href="https://caijh.github.io/post/she-ji-mo-shi-ze-ren-lian-mo-shi">Read More</a></div>
+                                </article>
+                                
+                               <article class="mdui-p-a-5 index-list mdui-m-b-3 animated fadeIn" style="animation-delay: 0.8s;animation-duration: 2s">
+                                    <div class="mdui-typo-body-2 mdui-m-b-1" datetime="2019-06-30 14:11:26">2019-06-30</div>
+                                    <div class="mdui-typo-headline mdui-m-b-3 index-list-title index-guo"><a href="https://caijh.github.io/post/she-ji-mo-shi-ming-ling-mo-shi">设计模式-命令模式</a></div>
+                                    <div class="mdui-typo-subheading mdui-m-b-2 index-neirong"><p>定义
 
+命令模式是一个高内聚的模式，其定义为：Encapsulate a request as an object,thereby letting you parameterize clients with different reques...</p></div>
+                                    <div class="index-list-rm index-guo"><a href="https://caijh.github.io/post/she-ji-mo-shi-ming-ling-mo-shi">Read More</a></div>
+                                </article>
+                                
+                               <article class="mdui-p-a-5 index-list mdui-m-b-3 animated fadeIn" style="animation-delay: 0.8s;animation-duration: 2s">
+                                    <div class="mdui-typo-body-2 mdui-m-b-1" datetime="2019-06-24 23:10:09">2019-06-24</div>
+                                    <div class="mdui-typo-headline mdui-m-b-3 index-list-title index-guo"><a href="https://caijh.github.io/post/she-ji-mo-shi-zhong-jie-zhe-mo-shi">设计模式-中介者模式</a></div>
+                                    <div class="mdui-typo-subheading mdui-m-b-2 index-neirong"><p>定义
 
-<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+中介者模式的定义为：Define an object that encapsulates how a set of objects interact.Mediator promotes loose coupling by keepi...</p></div>
+                                    <div class="index-list-rm index-guo"><a href="https://caijh.github.io/post/she-ji-mo-shi-zhong-jie-zhe-mo-shi">Read More</a></div>
+                                </article>
+                                
+                               <article class="mdui-p-a-5 index-list mdui-m-b-3 animated fadeIn" style="animation-delay: 0.8s;animation-duration: 2s">
+                                    <div class="mdui-typo-body-2 mdui-m-b-1" datetime="2019-06-24 23:06:00">2019-06-24</div>
+                                    <div class="mdui-typo-headline mdui-m-b-3 index-list-title index-guo"><a href="https://caijh.github.io/post/she-ji-mo-shi-yuan-xing-mo-shi">设计模式-原型模式</a></div>
+                                    <div class="mdui-typo-subheading mdui-m-b-2 index-neirong"><p>定义
 
+Specify the kinds of objects to create using a prototypical instance,and create new objects by copying this prototyp...</p></div>
+                                    <div class="index-list-rm index-guo"><a href="https://caijh.github.io/post/she-ji-mo-shi-yuan-xing-mo-shi">Read More</a></div>
+                                </article>
+                                
+                               <article class="mdui-p-a-5 index-list mdui-m-b-3 animated fadeIn" style="animation-delay: 0.8s;animation-duration: 2s">
+                                    <div class="mdui-typo-body-2 mdui-m-b-1" datetime="2019-06-24 23:03:20">2019-06-24</div>
+                                    <div class="mdui-typo-headline mdui-m-b-3 index-list-title index-guo"><a href="https://caijh.github.io/post/she-ji-mo-shi-dai-li-mo-shi">设计模式-代理模式</a></div>
+                                    <div class="mdui-typo-subheading mdui-m-b-2 index-neirong"><p>定义
 
-  </head>
-  <body>
-    <nav class="navbar border fixed split-nav">
-  <div class="nav-brand">
-    <h3><a href="https://caijh.github.io/">John&#39;s Blog</a></h3>
-  </div>
-  <div class="collapsible">
-    <input id="collapsible1" type="checkbox" name="collapsible1">
-    <button>
-      <label for="collapsible1">
-        <div class="bar1"></div>
-        <div class="bar2"></div>
-        <div class="bar3"></div>
-      </label>
-    </button>
-    <div class="collapsible-body">
-      <ul class="inline">
-        
-          <li>
-            
-              <a href="/" class="menu">
-                首页
-              </a>
-            
-          </li>
-        
-          <li>
-            
-              <a href="/archives" class="menu">
-                归档
-              </a>
-            
-          </li>
-        
-          <li>
-            
-              <a href="/tags" class="menu">
-                标签
-              </a>
-            
-          </li>
-        
-          <li>
-            
-              <a href="/post/about" class="menu">
-                关于
-              </a>
-            
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-</nav>
+Provide a surrogate or placeholder for another object to control access to it.（为其他对象提供一种代理以控制对这个对象的访问。）
 
-    <div id="top" class="row site">
-      <div class="sm-12 md-8 col">
-        <div class="paper">
-          <h2 class="current-tag">标签: 设计模式</h2>
-          
-  <article class="article">
-    <h2 class="article-title">
-      <a href="https://caijh.github.io//post/she-ji-mo-shi-ce-lue-mo-shi">设计模式-策略模式</a>
-    </h2>
-    <p class="article-meta">
-      2019-06-30
-      
-        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge ">
-          设计模式
-        </a>
-      
-    </p>
-    <p class="text-lead">
-      <h4 id="定义">定义</h4>
-<blockquote>
-<p>Define a family of algorithms,encapsulate each one,and make them interchangeable.（定义一组算法，将每个算法都封装起来，并且使它们之间可以互换。）</p>
-</blockquote>
-<h4 id="uml">UML</h4>
-<figure data-type="image" tabindex="1"><img src="https://caijh.github.io//post-images/1561877754788.png" alt=""></figure>
-
-    </p>
-    <div class="row">
-      <a href="https://caijh.github.io//post/she-ji-mo-shi-ce-lue-mo-shi" class="readmore-link">
-        <button>
-          Read More
-        </button>
-      </a>
-    </div>
-  </article>
-
-  <article class="article">
-    <h2 class="article-title">
-      <a href="https://caijh.github.io//post/she-ji-mo-shi-zhuang-shi-mo-shi">设计模式-装饰模式</a>
-    </h2>
-    <p class="article-meta">
-      2019-06-30
-      
-        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge ">
-          设计模式
-        </a>
-      
-    </p>
-    <p class="text-lead">
-      <h4 id="定义">定义</h4>
-<blockquote>
-<p>Attach additional responsibilities to an object dynamically keeping the same interface.Decorators provide a flexible alternative to subclassing for extending functionality.（动态地给一个对象添加一些额外的职责。就增加功能来说，装饰模式相比生成子类更为灵活。）</p>
-</blockquote>
-<h4 id="uml">UML</h4>
-<figure data-type="image" tabindex="1"><img src="https://caijh.github.io//post-images/1561877503426.png" alt=""></figure>
-
-    </p>
-    <div class="row">
-      <a href="https://caijh.github.io//post/she-ji-mo-shi-zhuang-shi-mo-shi" class="readmore-link">
-        <button>
-          Read More
-        </button>
-      </a>
-    </div>
-  </article>
-
-  <article class="article">
-    <h2 class="article-title">
-      <a href="https://caijh.github.io//post/she-ji-mo-shi-ze-ren-lian-mo-shi">设计模式-责任链模式</a>
-    </h2>
-    <p class="article-meta">
-      2019-06-30
-      
-        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge warning">
-          设计模式
-        </a>
-      
-    </p>
-    <p class="text-lead">
-      <h4 id="定义">定义</h4>
-<blockquote>
-<p>Avoid coupling the sender of a request to its receiver by giving more than one object a chance to handle the request.Chain the receiving objects and pass the request along the chain until an object handles it.（使多个对象都有机会处理请求，从而避免了请求的发送者和接受者之间的耦合关系。将这些对象连成一条链，并沿着这条链传递该请求，直到有对象处理它为止。）</p>
-</blockquote>
-<h4 id="uml">UML</h4>
-<figure data-type="image" tabindex="1"><img src="https://caijh.github.io//post-images/1561876377460.png" alt=""></figure>
-
-    </p>
-    <div class="row">
-      <a href="https://caijh.github.io//post/she-ji-mo-shi-ze-ren-lian-mo-shi" class="readmore-link">
-        <button>
-          Read More
-        </button>
-      </a>
-    </div>
-  </article>
-
-  <article class="article">
-    <h2 class="article-title">
-      <a href="https://caijh.github.io//post/she-ji-mo-shi-ming-ling-mo-shi">设计模式-命令模式</a>
-    </h2>
-    <p class="article-meta">
-      2019-06-30
-      
-        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge secondary">
-          设计模式
-        </a>
-      
-    </p>
-    <p class="text-lead">
-      <h4 id="定义">定义</h4>
-<blockquote>
-<p>命令模式是一个高内聚的模式，其定义为：Encapsulate a request as an object,thereby letting you parameterize clients with different requests,queue or log requests,and support undoable operations.（将一个请求封装成一个对象，从而让你使用不同的请求把客户端参数化，对请求排队或者记录请求日志，可以提供命令的撤销和恢复功能。）</p>
-</blockquote>
-<h4 id="uml">UML</h4>
-<figure data-type="image" tabindex="1"><img src="https://caijh.github.io//post-images/1561875177967.png" alt=""></figure>
-
-    </p>
-    <div class="row">
-      <a href="https://caijh.github.io//post/she-ji-mo-shi-ming-ling-mo-shi" class="readmore-link">
-        <button>
-          Read More
-        </button>
-      </a>
-    </div>
-  </article>
-
-  <article class="article">
-    <h2 class="article-title">
-      <a href="https://caijh.github.io//post/she-ji-mo-shi-zhong-jie-zhe-mo-shi">设计模式-中介者模式</a>
-    </h2>
-    <p class="article-meta">
-      2019-06-24
-      
-        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge success">
-          设计模式
-        </a>
-      
-    </p>
-    <p class="text-lead">
-      <h4 id="定义">定义</h4>
-<blockquote>
-<p>中介者模式的定义为：Define an object that encapsulates how a set of objects interact.Mediator promotes loose coupling by keeping objects from referring to each other explicitly,and it lets you vary their interaction independently.（用一个中介对象封装一系列的对象交互，中介者使各对象不需要显示地相互作用，从而使其耦合松散，而且可以独立地改变它们之间的交互。）</p>
-</blockquote>
-<h4 id="uml">UML</h4>
-<figure data-type="image" tabindex="1"><img src="https://caijh.github.io//post-images/1561389056024.png" alt=""></figure>
-
-    </p>
-    <div class="row">
-      <a href="https://caijh.github.io//post/she-ji-mo-shi-zhong-jie-zhe-mo-shi" class="readmore-link">
-        <button>
-          Read More
-        </button>
-      </a>
-    </div>
-  </article>
-
-  <article class="article">
-    <h2 class="article-title">
-      <a href="https://caijh.github.io//post/she-ji-mo-shi-yuan-xing-mo-shi">设计模式-原型模式</a>
-    </h2>
-    <p class="article-meta">
-      2019-06-24
-      
-        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge warning">
-          设计模式
-        </a>
-      
-    </p>
-    <p class="text-lead">
-      <h4 id="定义">定义</h4>
-<blockquote>
-<p>Specify the kinds of objects to create using a prototypical instance,and create new objects by copying this prototype.（用原型实例指定创建对象的种类，并且通过拷贝这些原型创建新的对象。）</p>
-</blockquote>
-<h4 id="uml">UML</h4>
-<figure data-type="image" tabindex="1"><img src="https://caijh.github.io//post-images/1561388832916.png" alt=""></figure>
-
-    </p>
-    <div class="row">
-      <a href="https://caijh.github.io//post/she-ji-mo-shi-yuan-xing-mo-shi" class="readmore-link">
-        <button>
-          Read More
-        </button>
-      </a>
-    </div>
-  </article>
-
-  <article class="article">
-    <h2 class="article-title">
-      <a href="https://caijh.github.io//post/she-ji-mo-shi-dai-li-mo-shi">设计模式-代理模式</a>
-    </h2>
-    <p class="article-meta">
-      2019-06-24
-      
-        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge secondary">
-          设计模式
-        </a>
-      
-    </p>
-    <p class="text-lead">
-      <h4 id="定义">定义</h4>
-<blockquote>
-<p>Provide a surrogate or placeholder for another object to control access to it.（为其他对象提供一种代理以控制对这个对象的访问。）</p>
-</blockquote>
-<h4 id="uml">UML</h4>
-<figure data-type="image" tabindex="1"><img src="https://caijh.github.io//post-images/1561388635995.png" alt=""></figure>
-
-    </p>
-    <div class="row">
-      <a href="https://caijh.github.io//post/she-ji-mo-shi-dai-li-mo-shi" class="readmore-link">
-        <button>
-          Read More
-        </button>
-      </a>
-    </div>
-  </article>
-
-  <article class="article">
-    <h2 class="article-title">
-      <a href="https://caijh.github.io//post/she-ji-mo-shi-jian-zao-zhe-mo-shi">设计模式-建造者模式</a>
-    </h2>
-    <p class="article-meta">
-      2019-06-24
-      
-        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge ">
-          设计模式
-        </a>
-      
-    </p>
-    <p class="text-lead">
-      <h4 id="定义">定义</h4>
-<blockquote>
-<p>Separate the construction of a complex object from its representation so that the same construction process can create different representations.（将一个复杂对象的构建与它的表示分离，使得同样的构建过程可以创建不同的表示。）</p>
-</blockquote>
-<h4 id="uml">UML</h4>
-<figure data-type="image" tabindex="1"><img src="https://caijh.github.io//post-images/1561388283844.png" alt=""></figure>
-
-    </p>
-    <div class="row">
-      <a href="https://caijh.github.io//post/she-ji-mo-shi-jian-zao-zhe-mo-shi" class="readmore-link">
-        <button>
-          Read More
-        </button>
-      </a>
-    </div>
-  </article>
-
-  <article class="article">
-    <h2 class="article-title">
-      <a href="https://caijh.github.io//post/she-ji-mo-shi-mo-ban-fang-fa-mo-shi">设计模式-模板方法模式</a>
-    </h2>
-    <p class="article-meta">
-      2019-06-24
-      
-        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge success">
-          设计模式
-        </a>
-      
-    </p>
-    <p class="text-lead">
-      <h4 id="定义">定义</h4>
-<blockquote>
-<p>Define the skeleton of an algorithm in an operation,deferring some steps to subclasses.Template Method lets subclasses redefine certain steps of an algorithm without changing the algorithm's structure.（定义一个操作中的算法的框架，而将一些步骤延迟到子类中。使得子类可以不改变一个算法的结构即可重定义该算法的某些特定步骤。）</p>
-</blockquote>
-<h4 id="uml">UML</h4>
-<figure data-type="image" tabindex="1"><img src="https://caijh.github.io//post-images/1561387763499.png" alt=""></figure>
-
-    </p>
-    <div class="row">
-      <a href="https://caijh.github.io//post/she-ji-mo-shi-mo-ban-fang-fa-mo-shi" class="readmore-link">
-        <button>
-          Read More
-        </button>
-      </a>
-    </div>
-  </article>
-
-  <article class="article">
-    <h2 class="article-title">
-      <a href="https://caijh.github.io//post/she-ji-mo-shi-chou-xiang-gong-han-mo-shi">设计模式-抽象工厂模式</a>
-    </h2>
-    <p class="article-meta">
-      2019-06-24
-      
-        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge secondary">
-          设计模式
-        </a>
-      
-    </p>
-    <p class="text-lead">
-      <h4 id="定义">定义</h4>
-<blockquote>
-<p>Provide an interface for creating families of related or dependent objects without specifying their concrete classes.（为创建一组相关或相互依赖的对象提供一个接口，而且无须指定它们的具体类。）</p>
-</blockquote>
-<h4 id="uml类图">UML类图</h4>
-<figure data-type="image" tabindex="1"><img src="https://caijh.github.io//post-images/1561387400624.png" alt=""></figure>
-
-    </p>
-    <div class="row">
-      <a href="https://caijh.github.io//post/she-ji-mo-shi-chou-xiang-gong-han-mo-shi" class="readmore-link">
-        <button>
-          Read More
-        </button>
-      </a>
-    </div>
-  </article>
+UML
 
 
-        </div>
-        <div class="row flex-edges">
-  
-    <a href="https://caijh.github.io//tag/CymMFfR-7/" class="paper-btn">
-      上一页
-    </a>
-  
-  
-    <a href="https://caijh.github.io//tag/CymMFfR-7//page/3/" class="paper-btn">
-      下一页
-    </a>
-  
-</div>
+代码实现
+...</p></div>
+                                    <div class="index-list-rm index-guo"><a href="https://caijh.github.io/post/she-ji-mo-shi-dai-li-mo-shi">Read More</a></div>
+                                </article>
+                                
+                               <article class="mdui-p-a-5 index-list mdui-m-b-3 animated fadeIn" style="animation-delay: 0.8s;animation-duration: 2s">
+                                    <div class="mdui-typo-body-2 mdui-m-b-1" datetime="2019-06-24 22:57:23">2019-06-24</div>
+                                    <div class="mdui-typo-headline mdui-m-b-3 index-list-title index-guo"><a href="https://caijh.github.io/post/she-ji-mo-shi-jian-zao-zhe-mo-shi">设计模式-建造者模式</a></div>
+                                    <div class="mdui-typo-subheading mdui-m-b-2 index-neirong"><p>定义
 
-      </div>
-      <div class="sm-12 md-4 col sidebar">
-  <div class="paper info-container">
-    <img src="https://caijh.github.io//images/avatar.png?v=1577545527583" class="no-responsive avatar">
-    <div class="text-muted">搬砖小弟</div>
-    <div class="social-container">
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-    </div>
-  </div>
-  <div class="paper">
-    <div class="sidebar-title">
-      最新文章
-    </div>
-    <div class="row">
-      <ul>
-        
-          
-            <li>
-              <a href="https://caijh.github.io//post/kubernetes-jie-jue-shan-chu-namespace-yi-zhi-terminating-de-wen-ti">Kubernetes - 解决删除namespace一直Terminating的问题</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://caijh.github.io//post/spring-cloud-eureka">Spring Cloud - Eureka</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://caijh.github.io//post/kubernetes-bu-shu-rabbitmq-ji-qun">kubernetes - 部署rabbitmq集群</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://caijh.github.io//post/linux-an-zhuang-nfs">Linux - 安装nfs</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://caijh.github.io//post/k8s-an-zhuang-kube-dns-cha-jian">k8s - 安装kube-dns插件</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://caijh.github.io//post/maven-zen-me-yang-skip-test">Maven - 怎么样skip test</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://caijh.github.io//post/k8s-ji-ben-gai-nian">k8s - 基本概念</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://caijh.github.io//post/springboot-qi-dong-yuan-li">SpringBoot - 启动原理</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://caijh.github.io//post/redis-bian-yi-chun-jing-ban">Redis - 编译纯净版</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://caijh.github.io//post/redis-ru-he-fang-wen-da-liang-shu-ju">Redis - 如何访问大量数据</a>
-            </li>
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-      </ul>
-    </div>
-  </div>
-  <div class="paper">
-    <div class="sidebar-title">
-      标签列表
-    </div>
-    <div class="row">
-      
-        <a href="https://caijh.github.io//tag/nHOjalh2s" class="badge warning">
-          Spring Cloud
-        </a>
-      
-        <a href="https://caijh.github.io//tag/Juj0cbeuP" class="badge secondary">
-          docker
-        </a>
-      
-        <a href="https://caijh.github.io//tag/hm42pTrhV" class="badge secondary">
-          Maven
-        </a>
-      
-        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge warning">
-          Java
-        </a>
-      
-        <a href="https://caijh.github.io//tag/6w7rEzKhc" class="badge ">
-          Redis
-        </a>
-      
-        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge success">
-          MySQL
-        </a>
-      
-        <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge success">
-          源代码
-        </a>
-      
-        <a href="https://caijh.github.io//tag/kmQV6iHOM" class="badge ">
-          面试
-        </a>
-      
-        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge warning">
-          设计模式
-        </a>
-      
-    </div>
-  </div>
-  <div class="paper">
-    Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://caijh.github.io//atom.xml" target="_blank">RSS</a>
-  </div>
-</div>
+Separate the construction of a complex object from its representation so that the same construction process can crea...</p></div>
+                                    <div class="index-list-rm index-guo"><a href="https://caijh.github.io/post/she-ji-mo-shi-jian-zao-zhe-mo-shi">Read More</a></div>
+                                </article>
+                                
+                               <article class="mdui-p-a-5 index-list mdui-m-b-3 animated fadeIn" style="animation-delay: 0.8s;animation-duration: 2s">
+                                    <div class="mdui-typo-body-2 mdui-m-b-1" datetime="2019-06-24 22:48:26">2019-06-24</div>
+                                    <div class="mdui-typo-headline mdui-m-b-3 index-list-title index-guo"><a href="https://caijh.github.io/post/she-ji-mo-shi-mo-ban-fang-fa-mo-shi">设计模式-模板方法模式</a></div>
+                                    <div class="mdui-typo-subheading mdui-m-b-2 index-neirong"><p>定义
 
-    </div>
+Define the skeleton of an algorithm in an operation,deferring some steps to subclasses.Template Method lets subclass...</p></div>
+                                    <div class="index-list-rm index-guo"><a href="https://caijh.github.io/post/she-ji-mo-shi-mo-ban-fang-fa-mo-shi">Read More</a></div>
+                                </article>
+                                
+                               <article class="mdui-p-a-5 index-list mdui-m-b-3 animated fadeIn" style="animation-delay: 0.8s;animation-duration: 2s">
+                                    <div class="mdui-typo-body-2 mdui-m-b-1" datetime="2019-06-24 22:42:05">2019-06-24</div>
+                                    <div class="mdui-typo-headline mdui-m-b-3 index-list-title index-guo"><a href="https://caijh.github.io/post/she-ji-mo-shi-chou-xiang-gong-han-mo-shi">设计模式-抽象工厂模式</a></div>
+                                    <div class="mdui-typo-subheading mdui-m-b-2 index-neirong"><p>定义
 
-    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+Provide an interface for creating families of related or dependent objects without specifying their concrete classes...</p></div>
+                                    <div class="index-list-rm index-guo"><a href="https://caijh.github.io/post/she-ji-mo-shi-chou-xiang-gong-han-mo-shi">Read More</a></div>
+                                </article>
+                                
 
-<script type="application/javascript">
+                                                            <nav class="mdui-m-t-5">
+                                
+                                <div class="index-yema mdui-float-left"><a href="https://caijh.github.io/tag/CymMFfR-7">上一页</a></div>
+                                 
+                                
+                                <div class="index-yema mdui-float-right"><a href="https://caijh.github.io/tag/CymMFfR-7/page/3/">下一页</a></div>
+                                 
+                                </nav>     
 
-AOS.init();
-
-hljs.initHighlightingOnLoad()
-
-</script>
-
-
-
-
-  </body>
+                        </div>
+                      </div>
+              </div>
+                <footer class="footer mdui-m-t-5 mdui-text-center">
+               <nav class="social-links">
+                      <ul>
+                      
+                      
+                           
+                      
+                           
+                      
+                           
+                      
+                           
+                      
+                           
+                      
+                           
+                      
+                           
+                      
+                           
+                      
+                           
+                      
+                           
+                      
+                           
+                      
+                           
+                      </ul>
+                    </nav>
+                    <div class="copyright">
+                      <p>Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> <br/> Theme <a href="https://github.com/shanbufun/gridea-theme-song" target="_blank"  title="宋"  >Song</a> by <a href="https://shanbu.fun/" target="_blank"  title="山卜方" >shanbufun</a> </p>
+                  </div>
+                  
+              </footer>
+    </body>
 </html>

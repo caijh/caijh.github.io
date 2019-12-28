@@ -1,109 +1,69 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" >
+        <head>
+        <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1,initial-scale=1,user-scalable=no" />
+        <meta charset="utf-8">
+        <title>设计模式-状态模式 | John&#39;s Blog</title>
+        <link rel="stylesheet" href="https://caijh.github.io//styles/main.css">
+        <link rel="stylesheet" href="https://at.alicdn.com/t/font_1306644_jwtuc2zzbrd.css">
+        <link href="https://cdn.bootcss.com/animate.css/3.7.2/animate.min.css" rel="stylesheet">
+         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+        <script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
+         <script src="https://cdn.bootcss.com/highlight.js/9.15.10/highlight.min.js"></script>
+         <script >hljs.initHighlightingOnLoad();</script>
 
-<title>设计模式-状态模式 | John&#39;s Blog</title>
-<meta name="description" content="搬砖小弟">
-
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<link rel="shortcut icon" href="https://caijh.github.io//favicon.ico?v=1577545527583">
-
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
-<link rel="stylesheet" href="https://caijh.github.io//styles/main.css">
-
-
-  
-
-  
-    <link rel="stylesheet" href="https://unpkg.com/disqusjs@1.1/dist/disqusjs.css" />
-  
-
-<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
-
-
-<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
-
-
-  </head>
-  <body>
-  
-    <nav class="navbar border fixed split-nav">
-  <div class="nav-brand">
-    <h3><a href="https://caijh.github.io/">John&#39;s Blog</a></h3>
-  </div>
-  <div class="collapsible">
-    <input id="collapsible1" type="checkbox" name="collapsible1">
-    <button>
-      <label for="collapsible1">
-        <div class="bar1"></div>
-        <div class="bar2"></div>
-        <div class="bar3"></div>
-      </label>
-    </button>
-    <div class="collapsible-body">
-      <ul class="inline">
-        
-          <li>
-            
-              <a href="/" class="menu">
-                首页
-              </a>
-            
-          </li>
-        
-          <li>
-            
-              <a href="/archives" class="menu">
-                归档
-              </a>
-            
-          </li>
-        
-          <li>
-            
-              <a href="/tags" class="menu">
-                标签
-              </a>
-            
-          </li>
-        
-          <li>
-            
-              <a href="/post/about" class="menu">
-                关于
-              </a>
-            
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-</nav>
-
-    <div id="top" class="row site">
-      <div class="sm-12 md-8 col">
-        <div class="paper">
-          <article class="article">
-            <h1>设计模式-状态模式</h1>
-            <p class="article-meta">
-              2019-06-30
-              
-                <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge ">
-                  设计模式
-                </a>
-              
-            </p>
-            
-            <div class="post-content">
-              <h4 id="定义">定义</h4>
+    </head>
+    <body>
+              <header class="header mdui-m-b-5">      
+            <div class="container  ">
+                <div class="index-title animated fadeInDown mdui-text-center mdui-text-color-white mdui-m-b-2" style="animation-delay: 0.2s"><a href="https://caijh.github.io/">John&#39;s Blog</a></div>
+                <div class="mdui-text-color-white animated fadeInDown mdui-text-center  mdui-m-b-3" style="animation-delay: 0.4s">搬砖小弟</div>
+           
+            <nav id="nav" class="mdui-text-center animated fadeInDown" style="animation-delay: 0.6s">
+                   
+                            <li><a href="/">首页</a>
+                                <span class="nav-style top"></span>
+                                <span class="nav-style bottom"></span>
+                                <span class="nav-style left"></span>
+                                <span class="nav-style right"></span>
+                                </li>
+                    
+                            <li><a href="/archives">归档</a>
+                                <span class="nav-style top"></span>
+                                <span class="nav-style bottom"></span>
+                                <span class="nav-style left"></span>
+                                <span class="nav-style right"></span>
+                                </li>
+                    
+                            <li><a href="/tags">标签</a>
+                                <span class="nav-style top"></span>
+                                <span class="nav-style bottom"></span>
+                                <span class="nav-style left"></span>
+                                <span class="nav-style right"></span>
+                                </li>
+                    
+                            <li><a href="/post/about">关于</a>
+                                <span class="nav-style top"></span>
+                                <span class="nav-style bottom"></span>
+                                <span class="nav-style left"></span>
+                                <span class="nav-style right"></span>
+                                </li>
+                    
+                  </nav>
+                </div>
+        </header>
+        <div class="mdui-container ">
+                <div class="mdui-row">
+                        <div class="mdui-col-md-8 mdui-col-offset-md-2 ">
+                                <article class="mdui-p-a-2 post animated fadeIn" style="animation-delay: 0.8s;animation-duration: 2s">
+                                    <div class="post-title  mdui-m-b-1">设计模式-状态模式</div>
+                                    <div class="mdui-typo-body-2 mdui-m-b-2" datetime="2019-06-30 19:15:56">2019-06-30 / 4 min read</div>
+                                    <div class="mdui-m-b-2 mdui-typo post-neirong"><h4 id="定义">定义</h4>
 <blockquote>
 <p>Allow an object to alter its behavior when its internal state changes.The object will appear to change its class.（当一个对象内在状态改变时允许其改变行为，这个对象看起来像改变了其类。）</p>
 </blockquote>
 <h4 id="uml">UML</h4>
-<figure data-type="image" tabindex="1"><img src="https://caijh.github.io//post-images/1561893392766.png" alt=""></figure>
+<figure data-type="image" tabindex="1"><img src="https://caijh.github.io//post-images/1561893392766.png" alt="" loading="lazy"></figure>
 <!-- more -->
 <h4 id="代码实现">代码实现</h4>
 <pre><code>public abstract class State {
@@ -202,285 +162,109 @@ public class Client {
 <ul>
 <li>javax.faces.lifecycle.LifeCycle#execute()</li>
 </ul>
-
-            </div>
-          </article>
-        </div>
-        <div class="paper" data-aos="fade-in">
-          
-            <div class="next-post">
-              <div class="next">
-                下一篇
-              </div>
-              <a href="https://caijh.github.io//post/she-ji-mo-shi-fang-wen-zhe-mo-shi">
-                <h3 class="post-title">
-                  设计模式-访问者模式
-                </h3>
-              </a>
-            </div>
-          
-        </div>
-        
-          
-
-          
-            <div class="paper" data-aos="fade-in">
-              <div id="disqus_thread"></div>
-            </div>
-          
-        
-      </div>
-
-      <div class="sm-12 md-4 col sidebar">
-  <div class="paper info-container">
-    <img src="https://caijh.github.io//images/avatar.png?v=1577545527583" class="no-responsive avatar">
-    <div class="text-muted">搬砖小弟</div>
-    <div class="social-container">
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-    </div>
-  </div>
-  <div class="paper">
-    <div class="sidebar-title">
-      最新文章
-    </div>
-    <div class="row">
-      <ul>
-        
-          
-            <li>
-              <a href="https://caijh.github.io//post/kubernetes-jie-jue-shan-chu-namespace-yi-zhi-terminating-de-wen-ti">Kubernetes - 解决删除namespace一直Terminating的问题</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://caijh.github.io//post/spring-cloud-eureka">Spring Cloud - Eureka</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://caijh.github.io//post/kubernetes-bu-shu-rabbitmq-ji-qun">kubernetes - 部署rabbitmq集群</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://caijh.github.io//post/linux-an-zhuang-nfs">Linux - 安装nfs</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://caijh.github.io//post/k8s-an-zhuang-kube-dns-cha-jian">k8s - 安装kube-dns插件</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://caijh.github.io//post/maven-zen-me-yang-skip-test">Maven - 怎么样skip test</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://caijh.github.io//post/k8s-ji-ben-gai-nian">k8s - 基本概念</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://caijh.github.io//post/springboot-qi-dong-yuan-li">SpringBoot - 启动原理</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://caijh.github.io//post/redis-bian-yi-chun-jing-ban">Redis - 编译纯净版</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://caijh.github.io//post/redis-ru-he-fang-wen-da-liang-shu-ju">Redis - 如何访问大量数据</a>
-            </li>
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-      </ul>
-    </div>
-  </div>
-  <div class="paper">
-    <div class="sidebar-title">
-      标签列表
-    </div>
-    <div class="row">
-      
-        <a href="https://caijh.github.io//tag/nHOjalh2s" class="badge secondary">
-          Spring Cloud
-        </a>
-      
-        <a href="https://caijh.github.io//tag/Juj0cbeuP" class="badge success">
-          docker
-        </a>
-      
-        <a href="https://caijh.github.io//tag/hm42pTrhV" class="badge secondary">
-          Maven
-        </a>
-      
-        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge ">
-          Java
-        </a>
-      
-        <a href="https://caijh.github.io//tag/6w7rEzKhc" class="badge ">
-          Redis
-        </a>
-      
-        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge ">
-          MySQL
-        </a>
-      
-        <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge secondary">
-          源代码
-        </a>
-      
-        <a href="https://caijh.github.io//tag/kmQV6iHOM" class="badge secondary">
-          面试
-        </a>
-      
-        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge success">
-          设计模式
-        </a>
-      
-    </div>
-  </div>
-  <div class="paper">
-    Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://caijh.github.io//atom.xml" target="_blank">RSS</a>
-  </div>
 </div>
+                                    <div class="mdui-divider mdui-m-b-2"></div>
+                                    <div class="mdui-row-xs-2 post-fenye">
+                                       
+                                        <div class="mdui-col"> <div class="mdui-text-left"><a href="https://caijh.github.io/post/she-ji-mo-shi-jie-shi-qi-mo-shi">设计模式-解释器模式</a></div></div>
+                                        
 
+                                        
+                                        <div class="mdui-col"><div class="mdui-text-right "><a href="https://caijh.github.io/post/she-ji-mo-shi-fang-wen-zhe-mo-shi">设计模式-访问者模式</a></div> </div>
+                                       
+                                      </div>
+                                   
+                                    <div class="mdui-divider mdui-m-t-2 mdui-m-b-2"></div>
+                                    
+          
+          
+            <link rel="stylesheet" href="https://unpkg.com/disqusjs@1.1/dist/disqusjs.css">
+<script src="https://unpkg.com/disqusjs@1.1/dist/disqus.js"></script>
 
-    </div>
+<div id="disqus_thread"></div>
 
-    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script>
 
-<script type="application/javascript">
-
-AOS.init();
-
-hljs.initHighlightingOnLoad()
+var options = {
+  shortname: 'caijh',
+  apikey: 'lO2xchFAyPIP4VOKbgm796D9jIvqLVziAqLHOPnOZySwUlyWXAhgwrIbPQ16AyUX',
+}
+if ('https://disqus.skk.moe/disqus/') {
+  options.api = 'https://disqus.skk.moe/disqus/'
+}
+var dsqjs = new DisqusJS(options)
 
 </script>
 
+          
+        
+                                     <script src="https://caijh.github.io//media/scripts/Valine.min.js"></script>
+ <div class="comment"></div>
+
+<script>
+      new Valine({
+            el: '.comment',
 
 
-  
 
-  
-    <script src="https://unpkg.com/disqusjs@1.1/dist/disqus.js"></script>
-    <script>
-
-    var options = {
-      shortname: 'caijh',
-      apikey: 'lO2xchFAyPIP4VOKbgm796D9jIvqLVziAqLHOPnOZySwUlyWXAhgwrIbPQ16AyUX',
+            path: window.location.pathname,
+            pageSize: 30,
+            avatar:'mm', 
+       })
+    </script> 
+<script>
+    if(window.location.hash){
+        var checkExist = setInterval(function() {
+           if ($(window.location.hash).length) {
+              $('html, body').animate({scrollTop: $(window.location.hash).offset().top-90}, 1000);
+              clearInterval(checkExist);
+           }
+        }, 100);
     }
-    if ('https://disqus.skk.moe/disqus/') {
-      options.api = 'https://disqus.skk.moe/disqus/'
-    }
-    var dsqjs = new DisqusJS(options)
+</script>
+                                </article>
 
-    </script>
-  
+                                    
+                        </div>
+                      </div>
+    
+                
 
-
-
-
-  </body>
+              </div>
+                    <footer class="footer mdui-m-t-5 mdui-text-center">
+               <nav class="social-links">
+                      <ul>
+                      
+                      
+                           
+                      
+                           
+                      
+                           
+                      
+                           
+                      
+                           
+                      
+                           
+                      
+                           
+                      
+                           
+                      
+                           
+                      
+                           
+                      
+                           
+                      
+                           
+                      </ul>
+                    </nav>
+                    <div class="copyright">
+                      <p>Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> <br/> Theme <a href="https://github.com/shanbufun/gridea-theme-song" target="_blank"  title="宋"  >Song</a> by <a href="https://shanbu.fun/" target="_blank"  title="山卜方" >shanbufun</a> </p>
+                  </div>
+                  
+              </footer>
+    </body>
 </html>

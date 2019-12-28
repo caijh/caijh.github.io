@@ -1,630 +1,241 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" >
+        <head>
+        <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1,initial-scale=1,user-scalable=no" />
+        <meta charset="utf-8">
+        <title>John&#39;s Blog</title>
+        <link rel="stylesheet" href="https://caijh.github.io//styles/main.css">
+        <link rel="stylesheet" href="https://at.alicdn.com/t/font_1306644_jwtuc2zzbrd.css">
+        <link href="https://cdn.bootcss.com/animate.css/3.7.2/animate.min.css" rel="stylesheet">
+         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+        <script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
+         <script src="https://cdn.bootcss.com/highlight.js/9.15.10/highlight.min.js"></script>
+         <script >hljs.initHighlightingOnLoad();</script>
 
-<title>John&#39;s Blog</title>
-<meta name="description" content="搬砖小弟">
+    </head>
+    <body>
+          <header class="header mdui-m-b-5">      
+            <div class="container  ">
+                <div class="index-title animated fadeInDown mdui-text-center mdui-text-color-white mdui-m-b-2" style="animation-delay: 0.2s"><a href="https://caijh.github.io/">John&#39;s Blog</a></div>
+                <div class="mdui-text-color-white animated fadeInDown mdui-text-center  mdui-m-b-3" style="animation-delay: 0.4s">搬砖小弟</div>
+           
+            <nav id="nav" class="mdui-text-center animated fadeInDown" style="animation-delay: 0.6s">
+                   
+                            <li><a href="/">首页</a>
+                                <span class="nav-style top"></span>
+                                <span class="nav-style bottom"></span>
+                                <span class="nav-style left"></span>
+                                <span class="nav-style right"></span>
+                                </li>
+                    
+                            <li><a href="/archives">归档</a>
+                                <span class="nav-style top"></span>
+                                <span class="nav-style bottom"></span>
+                                <span class="nav-style left"></span>
+                                <span class="nav-style right"></span>
+                                </li>
+                    
+                            <li><a href="/tags">标签</a>
+                                <span class="nav-style top"></span>
+                                <span class="nav-style bottom"></span>
+                                <span class="nav-style left"></span>
+                                <span class="nav-style right"></span>
+                                </li>
+                    
+                            <li><a href="/post/about">关于</a>
+                                <span class="nav-style top"></span>
+                                <span class="nav-style bottom"></span>
+                                <span class="nav-style left"></span>
+                                <span class="nav-style right"></span>
+                                </li>
+                    
+                  </nav>
+                </div>
+        </header>
+        <div class="mdui-container ">
+                <div class="mdui-row">
+                        <div class="mdui-col-md-8 mdui-col-offset-md-2 mdui-m-t-1">
+                         
+                                                         
+                               <article class="mdui-p-a-5 index-list mdui-m-b-3 animated fadeIn" style="animation-delay: 0.8s;animation-duration: 2s">
+                                    <div class="mdui-typo-body-2 mdui-m-b-1" datetime="2019-07-18 11:42:55">2019-07-18</div>
+                                    <div class="mdui-typo-headline mdui-m-b-3 index-list-title index-guo"><a href="https://caijh.github.io/post/redis-huan-cun-wen-ti">Redis - 缓存问题</a></div>
+                                    <div class="mdui-typo-subheading mdui-m-b-2 index-neirong"><p>缓存穿透
 
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<link rel="shortcut icon" href="https://caijh.github.io//favicon.ico?v=1577545527583">
+什么是缓存穿透？
+缓存穿透是指查询一个一定不在缓存中存在的key. 由于key不存在，每次都会去查询数据库，如果对于这个key的请求很多的话，可能会把数据库搞垮。
 
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
-<link rel="stylesheet" href="https://caijh.github.io//styles/main.css">
+解决方案：
 
+布隆过滤器
+将查询数据库的空结果也缓存起来，设置...</p></div>
+                                    <div class="index-list-rm index-guo"><a href="https://caijh.github.io/post/redis-huan-cun-wen-ti">Read More</a></div>
+                                </article>
+                                
+                               <article class="mdui-p-a-5 index-list mdui-m-b-3 animated fadeIn" style="animation-delay: 0.8s;animation-duration: 2s">
+                                    <div class="mdui-typo-body-2 mdui-m-b-1" datetime="2019-07-18 11:08:46">2019-07-18</div>
+                                    <div class="mdui-typo-headline mdui-m-b-3 index-list-title index-guo"><a href="https://caijh.github.io/post/redis-shu-ju-tao-tai-ce-lue">Redis - 数据淘汰策略</a></div>
+                                    <div class="mdui-typo-subheading mdui-m-b-2 index-neirong"><p>
+volatile-lru：从已设置过期时间的数据集（server.db[i].expires）中挑选最近最少使用的数据淘汰
+volatile-ttl：从已设置过期时间的数据集（server.db[i].expires）中挑选将要过期的数据...</p></div>
+                                    <div class="index-list-rm index-guo"><a href="https://caijh.github.io/post/redis-shu-ju-tao-tai-ce-lue">Read More</a></div>
+                                </article>
+                                
+                               <article class="mdui-p-a-5 index-list mdui-m-b-3 animated fadeIn" style="animation-delay: 0.8s;animation-duration: 2s">
+                                    <div class="mdui-typo-body-2 mdui-m-b-1" datetime="2019-07-17 22:11:55">2019-07-17</div>
+                                    <div class="mdui-typo-headline mdui-m-b-3 index-list-title index-guo"><a href="https://caijh.github.io/post/vagrant-shi-yong">Vagrant - 使用</a></div>
+                                    <div class="mdui-typo-subheading mdui-m-b-2 index-neirong"><p>Vagrant是用来管理虚拟机的，如VirtualBox、VMware、AWS等，主要好处是可以提供一个可配置、可移植和复用的软件环境，可以使用shell、chef、puppet等工具部署。所以vagrant不能单独使用，如果你用它来管理自...</p></div>
+                                    <div class="index-list-rm index-guo"><a href="https://caijh.github.io/post/vagrant-shi-yong">Read More</a></div>
+                                </article>
+                                
+                               <article class="mdui-p-a-5 index-list mdui-m-b-3 animated fadeIn" style="animation-delay: 0.8s;animation-duration: 2s">
+                                    <div class="mdui-typo-body-2 mdui-m-b-1" datetime="2019-07-15 11:18:31">2019-07-15</div>
+                                    <div class="mdui-typo-headline mdui-m-b-3 index-list-title index-guo"><a href="https://caijh.github.io/post/redis-guo-qi-shan-chu-ce-lue">Redis - 过期删除策略</a></div>
+                                    <div class="mdui-typo-subheading mdui-m-b-2 index-neirong"><p>Redis 采用的过期策略： 懒汉式删除 + 定期删除
 
-<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+三种过期删除策略
+定时删除
+设置key的过期时间的同时为key设置一个定时器，在key过期时对key进行删除。
+优点： 保证内存被尽快回收。
+缺点：
 
-
-<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
-
-
-  </head>
-  <body>
-    <nav class="navbar border fixed split-nav">
-  <div class="nav-brand">
-    <h3><a href="https://caijh.github.io/">John&#39;s Blog</a></h3>
-  </div>
-  <div class="collapsible">
-    <input id="collapsible1" type="checkbox" name="collapsible1">
-    <button>
-      <label for="collapsible1">
-        <div class="bar1"></div>
-        <div class="bar2"></div>
-        <div class="bar3"></div>
-      </label>
-    </button>
-    <div class="collapsible-body">
-      <ul class="inline">
-        
-          <li>
-            
-              <a href="/" class="menu">
-                首页
-              </a>
-            
-          </li>
-        
-          <li>
-            
-              <a href="/archives" class="menu">
-                归档
-              </a>
-            
-          </li>
-        
-          <li>
-            
-              <a href="/tags" class="menu">
-                标签
-              </a>
-            
-          </li>
-        
-          <li>
-            
-              <a href="/post/about" class="menu">
-                关于
-              </a>
-            
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-</nav>
-
-
-    <div id="top" class="row site">
-      <div class="sm-12 md-8 col">
-        <div class="paper">
-          
-  <article class="article">
-    <h2 class="article-title">
-      <a href="https://caijh.github.io//post/redis-huan-cun-wen-ti">Redis - 缓存问题</a>
-    </h2>
-    <p class="article-meta">
-      2019-07-18
-      
-    </p>
-    <p class="text-lead">
-      <h3 id="缓存穿透">缓存穿透</h3>
-<blockquote>
-<p>什么是缓存穿透？<br>
-缓存穿透是指查询一个一定不在缓存中存在的key. 由于key不存在，每次都会去查询数据库，如果对于这个key的请求很多的话，可能会把数据库搞垮。</p>
-</blockquote>
-<p>解决方案：</p>
-<ol>
-<li>布隆过滤器</li>
-<li>将查询数据库的空结果也缓存起来，设置一个较短的过期时间。</li>
-</ol>
-<h3 id="缓存雪崩">缓存雪崩</h3>
-<blockquote>
-<p>什么是缓存雪崩？<br>
-对于多个key的查询，全部请求都走数据库了。有两种情况：一种是redis挂掉，别一个情况是一段时间内那些key都失效了。<br>
-对于第一种情况要保证redis的的高可性，对于第二种情况可以为key设置不同的随随机过期时间。</p>
-</blockquote>
-<h3 id="缓存数据一致性">缓存数据一致性</h3>
-<ol>
-<li>写数据库也写缓存，保证了数据一致性；但是难保证数据库与redis的事务</li>
-<li>写数据库，直接删缓存；读缓存发现没有，从数据库读取并保存缓存；带来问题是并发问题。</li>
-<li>应该根据不同的业务，来处理缓存的生成。</li>
-</ol>
-
-    </p>
-    <div class="row">
-      <a href="https://caijh.github.io//post/redis-huan-cun-wen-ti" class="readmore-link">
-        <button>
-          Read More
-        </button>
-      </a>
-    </div>
-  </article>
-
-  <article class="article">
-    <h2 class="article-title">
-      <a href="https://caijh.github.io//post/redis-shu-ju-tao-tai-ce-lue">Redis - 数据淘汰策略</a>
-    </h2>
-    <p class="article-meta">
-      2019-07-18
-      
-    </p>
-    <p class="text-lead">
-      <ul>
-<li>volatile-lru：从已设置过期时间的数据集（server.db[i].expires）中挑选最近最少使用的数据淘汰</li>
-<li>volatile-ttl：从已设置过期时间的数据集（server.db[i].expires）中挑选将要过期的数据淘汰</li>
-<li>volatile-random：从已设置过期时间的数据集（server.db[i].expires）中任意选择数据淘汰</li>
-<li>allkeys-lru：从数据集（server.db[i].dict）中挑选最近最少使用的数据淘汰</li>
-<li>allkeys-random：从数据集（server.db[i].dict）中任意选择数据淘汰</li>
-<li>no-enviction（驱逐）：禁止驱逐数据，返回错误</li>
-</ul>
-
-    </p>
-    <div class="row">
-      <a href="https://caijh.github.io//post/redis-shu-ju-tao-tai-ce-lue" class="readmore-link">
-        <button>
-          Read More
-        </button>
-      </a>
-    </div>
-  </article>
-
-  <article class="article">
-    <h2 class="article-title">
-      <a href="https://caijh.github.io//post/vagrant-shi-yong">Vagrant - 使用</a>
-    </h2>
-    <p class="article-meta">
-      2019-07-17
-      
-    </p>
-    <p class="text-lead">
-      <p>Vagrant是用来管理虚拟机的，如VirtualBox、VMware、AWS等，主要好处是可以提供一个可配置、可移植和复用的软件环境，可以使用shell、chef、puppet等工具部署。所以vagrant不能单独使用，如果你用它来管理自己的开发环境的话，必须在自己的电脑里安装了虚拟机软件，我使用的是virtualbox。</p>
-<p>Vagrant提供一个命令行工具vagrant，通过这个命令行工具可以直接启动一个虚拟机，当然你需要提前定义一个Vagrantfile文件，这有点类似Dockerfile之于docker了。</p>
-<p>跟docker类比这来看vagrant就比较好理解了，vagrant也是用来提供一致性环境的，vagrant本身也提供一个镜像源，使用vagrant init hashicorp/precise64就可以初始化一个Ubuntu 12.04的镜像。</p>
-
-    </p>
-    <div class="row">
-      <a href="https://caijh.github.io//post/vagrant-shi-yong" class="readmore-link">
-        <button>
-          Read More
-        </button>
-      </a>
-    </div>
-  </article>
-
-  <article class="article">
-    <h2 class="article-title">
-      <a href="https://caijh.github.io//post/redis-guo-qi-shan-chu-ce-lue">Redis - 过期删除策略</a>
-    </h2>
-    <p class="article-meta">
-      2019-07-15
-      
-        <a href="https://caijh.github.io//tag/6w7rEzKhc" class="badge secondary">
-          Redis
-        </a>
-      
-    </p>
-    <p class="text-lead">
-      <p>Redis 采用的过期策略： 懒汉式删除 + 定期删除</p>
-
-    </p>
-    <div class="row">
-      <a href="https://caijh.github.io//post/redis-guo-qi-shan-chu-ce-lue" class="readmore-link">
-        <button>
-          Read More
-        </button>
-      </a>
-    </div>
-  </article>
-
-  <article class="article">
-    <h2 class="article-title">
-      <a href="https://caijh.github.io//post/mysql-explain-xiang-jie">MySQL - explain详解</a>
-    </h2>
-    <p class="article-meta">
-      2019-07-14
-      
-        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge success">
-          MySQL
-        </a>
-      
-    </p>
-    <p class="text-lead">
-      
-    </p>
-    <div class="row">
-      <a href="https://caijh.github.io//post/mysql-explain-xiang-jie" class="readmore-link">
-        <button>
-          Read More
-        </button>
-      </a>
-    </div>
-  </article>
-
-  <article class="article">
-    <h2 class="article-title">
-      <a href="https://caijh.github.io//post/yuan-dai-ma-abstractqueuedsynchronizer">源码阅读 - AbstractQueuedSynchronizer</a>
-    </h2>
-    <p class="article-meta">
-      2019-07-14
-      
-        <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge secondary">
-          源代码
-        </a>
-      
-    </p>
-    <p class="text-lead">
-      <blockquote>
-<p>AbstractQueuedSynchronizer, 简称AQS, 是Java 并发包的基础类，并发包中的很多api都是基于AQS来实现加锁与释放锁等功能。</p>
-</blockquote>
-<p>例如ReentrantLock内部拥有一个继承于AbstractQueuedSynchronizer的Sync类实现加锁与释放锁。<br>
-AQS内部有一个state状态记录当前线程的加锁次数，还有一个exclusiveOwnerThread变量记录了独占的线程。</p>
-
-    </p>
-    <div class="row">
-      <a href="https://caijh.github.io//post/yuan-dai-ma-abstractqueuedsynchronizer" class="readmore-link">
-        <button>
-          Read More
-        </button>
-      </a>
-    </div>
-  </article>
-
-  <article class="article">
-    <h2 class="article-title">
-      <a href="https://caijh.github.io//post/spring-cloud-ru-he-jie-jue-feignribbon-di-yi-ci-qing-qiu-shi-bai-de-wen-ti">Spring Cloud - 如何解决Feign/Ribbon第一次请求失败的问题</a>
-    </h2>
-    <p class="article-meta">
-      2019-07-13
-      
-        <a href="https://caijh.github.io//tag/nHOjalh2s" class="badge warning">
-          Spring Cloud
-        </a>
-      
-    </p>
-    <p class="text-lead">
-      <blockquote>
-<p>造成该问题的原因？<br>
-Hystrix默认的超时时间是1秒，如果超过这个时间尚未响应，将会进入fallback代码。而首次请求往往会比较慢（由于Ribbon是懒加载的，在首次请求时，才会开始初始化相关类），这个响应时间可能就大于1秒了。</p>
-</blockquote>
-
-    </p>
-    <div class="row">
-      <a href="https://caijh.github.io//post/spring-cloud-ru-he-jie-jue-feignribbon-di-yi-ci-qing-qiu-shi-bai-de-wen-ti" class="readmore-link">
-        <button>
-          Read More
-        </button>
-      </a>
-    </div>
-  </article>
-
-  <article class="article">
-    <h2 class="article-title">
-      <a href="https://caijh.github.io//post/java-xian-cheng-chi">Java - 线程池</a>
-    </h2>
-    <p class="article-meta">
-      2019-07-08
-      
-        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge warning">
-          Java
-        </a>
-      
-    </p>
-    <p class="text-lead">
-      <h4 id="threadpoolexecutor的重要参数">ThreadPoolExecutor的重要参数</h4>
-<ul>
-<li>corePoolSize：核心线程数<br>
-核心线程会一直存活，及时没有任务需要执行<br>
-当线程数小于核心线程数时，即使有线程空闲，线程池也会优先创建新线程处理<br>
-设置allowCoreThreadTimeout=true（默认false）时，核心线程会超时关闭</li>
-<li>queueCapacity：任务队列容量（阻塞队列）<br>
-当核心线程数达到最大时，新任务会放在队列中排队等待执行</li>
-<li>maxPoolSize：最大线程数<br>
-当线程数&gt;=corePoolSize，且任务队列已满时。线程池会创建新线程来处理任务<br>
-当线程数=maxPoolSize，且任务队列已满时，线程池会拒绝处理任务而抛出异常</li>
-<li>keepAliveTime：线程空闲时间<br>
-当线程空闲时间达到keepAliveTime时，线程会退出，直到线程数量=corePoolSize<br>
-如果allowCoreThreadTimeout=true，则会直到线程数量=0</li>
-<li>allowCoreThreadTimeout：允许核心线程超时</li>
-<li>rejectedExecutionHandler：任务拒绝处理器<br>
-两种情况会拒绝处理任务：<br>
-当线程数已经达到maxPoolSize，切队列已满，会拒绝新任务<br>
-当线程池被调用shutdown()后，会等待线程池里的任务执行完毕，再shutdown。如果在调用shutdown()和线程池真正shutdown之间提交任务，会拒绝新任务<br>
-线程池会调用rejectedExecutionHandler来处理这个任务。如果没有设置默认是AbortPolicy，会抛出异常<br>
-ThreadPoolExecutor类有几个内部实现类来处理这类情况：<br>
-AbortPolicy 丢弃任务，抛运行时异常<br>
-CallerRunsPolicy 执行任务<br>
-DiscardPolicy 忽视，什么都不会发生<br>
-DiscardOldestPolicy 从队列中踢出最先进入队列（最后一个执行）的任务<br>
-实现RejectedExecutionHandler接口，可自定义处理器</li>
-</ul>
-
-    </p>
-    <div class="row">
-      <a href="https://caijh.github.io//post/java-xian-cheng-chi" class="readmore-link">
-        <button>
-          Read More
-        </button>
-      </a>
-    </div>
-  </article>
-
-  <article class="article">
-    <h2 class="article-title">
-      <a href="https://caijh.github.io//post/kafka-acks-can-shu">Kafka-Acks参数</a>
-    </h2>
-    <p class="article-meta">
-      2019-07-06
-      
-    </p>
-    <p class="text-lead">
-      <p>kafka中用topic表示同类的消息，topic可以有1个或多个partition.<br>
-kafka集群中一个broker负责一部分partition，在kafka集群中，每个Partition都有多个副本，其中一个副本叫做leader，其他的副本叫做follower。</p>
-
-    </p>
-    <div class="row">
-      <a href="https://caijh.github.io//post/kafka-acks-can-shu" class="readmore-link">
-        <button>
-          Read More
-        </button>
-      </a>
-    </div>
-  </article>
-
-  <article class="article">
-    <h2 class="article-title">
-      <a href="https://caijh.github.io//post/yuan-ma-yue-du-tomcat">源码阅读-tomcat</a>
-    </h2>
-    <p class="article-meta">
-      2019-07-06
-      
-        <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge ">
-          源代码
-        </a>
-      
-    </p>
-    <p class="text-lead">
-      <h1 id="tomcat启动过程">tomcat启动过程</h1>
-<figure data-type="image" tabindex="1"><img src="https://caijh.github.io//post-images/1562423239997.jpg" alt=""></figure>
-
-    </p>
-    <div class="row">
-      <a href="https://caijh.github.io//post/yuan-ma-yue-du-tomcat" class="readmore-link">
-        <button>
-          Read More
-        </button>
-      </a>
-    </div>
-  </article>
+若key过多，删除key占用C...</p></div>
+                                    <div class="index-list-rm index-guo"><a href="https://caijh.github.io/post/redis-guo-qi-shan-chu-ce-lue">Read More</a></div>
+                                </article>
+                                
+                               <article class="mdui-p-a-5 index-list mdui-m-b-3 animated fadeIn" style="animation-delay: 0.8s;animation-duration: 2s">
+                                    <div class="mdui-typo-body-2 mdui-m-b-1" datetime="2019-07-14 23:23:40">2019-07-14</div>
+                                    <div class="mdui-typo-headline mdui-m-b-3 index-list-title index-guo"><a href="https://caijh.github.io/post/mysql-explain-xiang-jie">MySQL - explain详解</a></div>
+                                    <div class="mdui-typo-subheading mdui-m-b-2 index-neirong"><p>Explain详解
 
 
-        </div>
-        
-        <div class="row flex-edges">
-  
-    <a href="https://caijh.github.io//" class="paper-btn">
-      上一页
-    </a>
-  
-  
-    <a href="https://caijh.github.io//page/3/" class="paper-btn">
-      下一页
-    </a>
-  
-</div>
+ID列
+ID值不同时, 执行计划由ID大的向ID小读; ID值相同时, 执行计划由上到下读
 
-      </div>
-      
-      <div class="sm-12 md-4 col sidebar">
-  <div class="paper info-container">
-    <img src="https://caijh.github.io//images/avatar.png?v=1577545527583" class="no-responsive avatar">
-    <div class="text-muted">搬砖小弟</div>
-    <div class="social-container">
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-    </div>
-  </div>
-  <div class="paper">
-    <div class="sidebar-title">
-      最新文章
-    </div>
-    <div class="row">
-      <ul>
-        
-          
-            <li>
-              <a href="https://caijh.github.io//post/kubernetes-jie-jue-shan-chu-namespace-yi-zhi-terminating-de-wen-ti">Kubernetes - 解决删除namespace一直Terminating的问题</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://caijh.github.io//post/spring-cloud-eureka">Spring Cloud - Eureka</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://caijh.github.io//post/kubernetes-bu-shu-rabbitmq-ji-qun">kubernetes - 部署rabbitmq集群</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://caijh.github.io//post/linux-an-zhuang-nfs">Linux - 安装nfs</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://caijh.github.io//post/k8s-an-zhuang-kube-dns-cha-jian">k8s - 安装kube-dns插件</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://caijh.github.io//post/maven-zen-me-yang-skip-test">Maven - 怎么样skip test</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://caijh.github.io//post/k8s-ji-ben-gai-nian">k8s - 基本概念</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://caijh.github.io//post/springboot-qi-dong-yuan-li">SpringBoot - 启动原理</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://caijh.github.io//post/redis-bian-yi-chun-jing-ban">Redis - 编译纯净版</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://caijh.github.io//post/redis-ru-he-fang-wen-da-liang-shu-ju">Redis - 如何访问大量数据</a>
-            </li>
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-      </ul>
-    </div>
-  </div>
-  <div class="paper">
-    <div class="sidebar-title">
-      标签列表
-    </div>
-    <div class="row">
-      
-        <a href="https://caijh.github.io//tag/nHOjalh2s" class="badge ">
-          Spring Cloud
-        </a>
-      
-        <a href="https://caijh.github.io//tag/Juj0cbeuP" class="badge secondary">
-          docker
-        </a>
-      
-        <a href="https://caijh.github.io//tag/hm42pTrhV" class="badge success">
-          Maven
-        </a>
-      
-        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge ">
-          Java
-        </a>
-      
-        <a href="https://caijh.github.io//tag/6w7rEzKhc" class="badge warning">
-          Redis
-        </a>
-      
-        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge secondary">
-          MySQL
-        </a>
-      
-        <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge warning">
-          源代码
-        </a>
-      
-        <a href="https://caijh.github.io//tag/kmQV6iHOM" class="badge warning">
-          面试
-        </a>
-      
-        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge ">
-          设计模式
-        </a>
-      
-    </div>
-  </div>
-  <div class="paper">
-    Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://caijh.github.io//atom.xml" target="_blank">RSS</a>
-  </div>
-</div>
 
-    </div>
-    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+SELECT_TYPE列
 
-<script type="application/javascript">
 
-AOS.init();
 
-hljs.initHighlightingOnLoad()
-
-</script>
+值
+含义
 
 
 
 
-  </body>
+SIMPLE
+不包含子查询或UNION操作的查询
+
+
+PRIMARY
+...</p></div>
+                                    <div class="index-list-rm index-guo"><a href="https://caijh.github.io/post/mysql-explain-xiang-jie">Read More</a></div>
+                                </article>
+                                
+                               <article class="mdui-p-a-5 index-list mdui-m-b-3 animated fadeIn" style="animation-delay: 0.8s;animation-duration: 2s">
+                                    <div class="mdui-typo-body-2 mdui-m-b-1" datetime="2019-07-14 18:38:40">2019-07-14</div>
+                                    <div class="mdui-typo-headline mdui-m-b-3 index-list-title index-guo"><a href="https://caijh.github.io/post/yuan-dai-ma-abstractqueuedsynchronizer">源码阅读 - AbstractQueuedSynchronizer</a></div>
+                                    <div class="mdui-typo-subheading mdui-m-b-2 index-neirong"><p>
+AbstractQueuedSynchronizer, 简称AQS, 是Java 并发包的基础类，并发包中的很多api都是基于AQS来实现加锁与释放锁等功能。
+
+例如ReentrantLock内部拥有一个继承于AbstractQueued...</p></div>
+                                    <div class="index-list-rm index-guo"><a href="https://caijh.github.io/post/yuan-dai-ma-abstractqueuedsynchronizer">Read More</a></div>
+                                </article>
+                                
+                               <article class="mdui-p-a-5 index-list mdui-m-b-3 animated fadeIn" style="animation-delay: 0.8s;animation-duration: 2s">
+                                    <div class="mdui-typo-body-2 mdui-m-b-1" datetime="2019-07-13 22:43:38">2019-07-13</div>
+                                    <div class="mdui-typo-headline mdui-m-b-3 index-list-title index-guo"><a href="https://caijh.github.io/post/spring-cloud-ru-he-jie-jue-feignribbon-di-yi-ci-qing-qiu-shi-bai-de-wen-ti">Spring Cloud - 如何解决Feign/Ribbon第一次请求失败的问题</a></div>
+                                    <div class="mdui-typo-subheading mdui-m-b-2 index-neirong"><p>
+造成该问题的原因？
+Hystrix默认的超时时间是1秒，如果超过这个时间尚未响应，将会进入fallback代码。而首次请求往往会比较慢（由于Ribbon是懒加载的，在首次请求时，才会开始初始化相关类），这个响应时间可能就大于1秒了。
+
+
+...</p></div>
+                                    <div class="index-list-rm index-guo"><a href="https://caijh.github.io/post/spring-cloud-ru-he-jie-jue-feignribbon-di-yi-ci-qing-qiu-shi-bai-de-wen-ti">Read More</a></div>
+                                </article>
+                                
+                               <article class="mdui-p-a-5 index-list mdui-m-b-3 animated fadeIn" style="animation-delay: 0.8s;animation-duration: 2s">
+                                    <div class="mdui-typo-body-2 mdui-m-b-1" datetime="2019-07-08 18:49:35">2019-07-08</div>
+                                    <div class="mdui-typo-headline mdui-m-b-3 index-list-title index-guo"><a href="https://caijh.github.io/post/java-xian-cheng-chi">Java - 线程池</a></div>
+                                    <div class="mdui-typo-subheading mdui-m-b-2 index-neirong"><p>ThreadPoolExecutor的重要参数
+
+corePoolSize：核心线程数
+核心线程会一直存活，及时没有任务需要执行
+当线程数小于核心线程数时，即使有线程空闲，线程池也会优先创建新线程处理
+设置allowCoreThreadTi...</p></div>
+                                    <div class="index-list-rm index-guo"><a href="https://caijh.github.io/post/java-xian-cheng-chi">Read More</a></div>
+                                </article>
+                                
+                               <article class="mdui-p-a-5 index-list mdui-m-b-3 animated fadeIn" style="animation-delay: 0.8s;animation-duration: 2s">
+                                    <div class="mdui-typo-body-2 mdui-m-b-1" datetime="2019-07-06 23:16:29">2019-07-06</div>
+                                    <div class="mdui-typo-headline mdui-m-b-3 index-list-title index-guo"><a href="https://caijh.github.io/post/kafka-acks-can-shu">Kafka-Acks参数</a></div>
+                                    <div class="mdui-typo-subheading mdui-m-b-2 index-neirong"><p>kafka中用topic表示同类的消息，topic可以有1个或多个partition.
+kafka集群中一个broker负责一部分partition，在kafka集群中，每个Partition都有多个副本，其中一个副本叫做leader，其他...</p></div>
+                                    <div class="index-list-rm index-guo"><a href="https://caijh.github.io/post/kafka-acks-can-shu">Read More</a></div>
+                                </article>
+                                
+                               <article class="mdui-p-a-5 index-list mdui-m-b-3 animated fadeIn" style="animation-delay: 0.8s;animation-duration: 2s">
+                                    <div class="mdui-typo-body-2 mdui-m-b-1" datetime="2019-07-06 22:18:45">2019-07-06</div>
+                                    <div class="mdui-typo-headline mdui-m-b-3 index-list-title index-guo"><a href="https://caijh.github.io/post/yuan-ma-yue-du-tomcat">源码阅读-tomcat</a></div>
+                                    <div class="mdui-typo-subheading mdui-m-b-2 index-neirong"><p>tomcat启动过程
+
+
+
+
+获取Bootstrap的静态代码块获取catalinaBaseFile及catalinaHomeFile
+static {
+        // Will always be non-null
+        ...</p></div>
+                                    <div class="index-list-rm index-guo"><a href="https://caijh.github.io/post/yuan-ma-yue-du-tomcat">Read More</a></div>
+                                </article>
+                                
+
+                                                            <nav class="mdui-m-t-5">
+                                
+                                <div class="index-yema mdui-float-left"><a href="https://caijh.github.io/">上一页</a></div>
+                                 
+                                
+                                <div class="index-yema mdui-float-right"><a href="https://caijh.github.io/page/3/">下一页</a></div>
+                                 
+                                </nav>     
+
+                        </div>
+                      </div>
+              </div>
+                <footer class="footer mdui-m-t-5 mdui-text-center">
+               <nav class="social-links">
+                      <ul>
+                      
+                      
+                           
+                      
+                           
+                      
+                           
+                      
+                           
+                      
+                           
+                      
+                           
+                      
+                           
+                      
+                           
+                      
+                           
+                      
+                           
+                      
+                           
+                      
+                           
+                      </ul>
+                    </nav>
+                    <div class="copyright">
+                      <p>Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> <br/> Theme <a href="https://github.com/shanbufun/gridea-theme-song" target="_blank"  title="宋"  >Song</a> by <a href="https://shanbu.fun/" target="_blank"  title="山卜方" >shanbufun</a> </p>
+                  </div>
+                  
+              </footer>
+    </body>
 </html>

@@ -1,675 +1,221 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" >
+        <head>
+        <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1,initial-scale=1,user-scalable=no" />
+        <meta charset="utf-8">
+        <title>John&#39;s Blog</title>
+        <link rel="stylesheet" href="https://caijh.github.io//styles/main.css">
+        <link rel="stylesheet" href="https://at.alicdn.com/t/font_1306644_jwtuc2zzbrd.css">
+        <link href="https://cdn.bootcss.com/animate.css/3.7.2/animate.min.css" rel="stylesheet">
+         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+        <script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
+         <script src="https://cdn.bootcss.com/highlight.js/9.15.10/highlight.min.js"></script>
+         <script >hljs.initHighlightingOnLoad();</script>
 
-<title>John&#39;s Blog</title>
-<meta name="description" content="搬砖小弟">
+    </head>
+    <body>
+          <header class="header mdui-m-b-5">      
+            <div class="container  ">
+                <div class="index-title animated fadeInDown mdui-text-center mdui-text-color-white mdui-m-b-2" style="animation-delay: 0.2s"><a href="https://caijh.github.io/">John&#39;s Blog</a></div>
+                <div class="mdui-text-color-white animated fadeInDown mdui-text-center  mdui-m-b-3" style="animation-delay: 0.4s">搬砖小弟</div>
+           
+            <nav id="nav" class="mdui-text-center animated fadeInDown" style="animation-delay: 0.6s">
+                   
+                            <li><a href="/">首页</a>
+                                <span class="nav-style top"></span>
+                                <span class="nav-style bottom"></span>
+                                <span class="nav-style left"></span>
+                                <span class="nav-style right"></span>
+                                </li>
+                    
+                            <li><a href="/archives">归档</a>
+                                <span class="nav-style top"></span>
+                                <span class="nav-style bottom"></span>
+                                <span class="nav-style left"></span>
+                                <span class="nav-style right"></span>
+                                </li>
+                    
+                            <li><a href="/tags">标签</a>
+                                <span class="nav-style top"></span>
+                                <span class="nav-style bottom"></span>
+                                <span class="nav-style left"></span>
+                                <span class="nav-style right"></span>
+                                </li>
+                    
+                            <li><a href="/post/about">关于</a>
+                                <span class="nav-style top"></span>
+                                <span class="nav-style bottom"></span>
+                                <span class="nav-style left"></span>
+                                <span class="nav-style right"></span>
+                                </li>
+                    
+                  </nav>
+                </div>
+        </header>
+        <div class="mdui-container ">
+                <div class="mdui-row">
+                        <div class="mdui-col-md-8 mdui-col-offset-md-2 mdui-m-t-1">
+                         
+                                                         
+                               <article class="mdui-p-a-5 index-list mdui-m-b-3 animated fadeIn" style="animation-delay: 0.8s;animation-duration: 2s">
+                                    <div class="mdui-typo-body-2 mdui-m-b-1" datetime="2019-12-28 23:04:43">2019-12-28</div>
+                                    <div class="mdui-typo-headline mdui-m-b-3 index-list-title index-guo"><a href="https://caijh.github.io/post/kubernetes-jie-jue-shan-chu-namespace-yi-zhi-terminating-de-wen-ti">Kubernetes - 解决删除namespace一直Terminating的问题</a></div>
+                                    <div class="mdui-typo-subheading mdui-m-b-2 index-neirong"><p>在删除命名空间时，一直卡在Terminating状态，使用--force参数依然无法删除，报错
+Error from server (Conflict): Operation cannot be fulfilled on namespace...</p></div>
+                                    <div class="index-list-rm index-guo"><a href="https://caijh.github.io/post/kubernetes-jie-jue-shan-chu-namespace-yi-zhi-terminating-de-wen-ti">Read More</a></div>
+                                </article>
+                                
+                               <article class="mdui-p-a-5 index-list mdui-m-b-3 animated fadeIn" style="animation-delay: 0.8s;animation-duration: 2s">
+                                    <div class="mdui-typo-body-2 mdui-m-b-1" datetime="2019-11-04 15:00:32">2019-11-04</div>
+                                    <div class="mdui-typo-headline mdui-m-b-3 index-list-title index-guo"><a href="https://caijh.github.io/post/spring-cloud-eureka">Spring Cloud - Eureka</a></div>
+                                    <div class="mdui-typo-subheading mdui-m-b-2 index-neirong"><p>
+是由Netflix开源的基于REST的服务治理组件，包含了eureka server 和eureka client。从2012年9月在GitHub上发布1.1.2版本以来，至今已经发布了231次，最新版本为2018年8月份发布的1.9.4...</p></div>
+                                    <div class="index-list-rm index-guo"><a href="https://caijh.github.io/post/spring-cloud-eureka">Read More</a></div>
+                                </article>
+                                
+                               <article class="mdui-p-a-5 index-list mdui-m-b-3 animated fadeIn" style="animation-delay: 0.8s;animation-duration: 2s">
+                                    <div class="mdui-typo-body-2 mdui-m-b-1" datetime="2019-08-30 09:05:56">2019-08-30</div>
+                                    <div class="mdui-typo-headline mdui-m-b-3 index-list-title index-guo"><a href="https://caijh.github.io/post/kubernetes-bu-shu-rabbitmq-ji-qun">kubernetes - 部署rabbitmq集群</a></div>
+                                    <div class="mdui-typo-subheading mdui-m-b-2 index-neirong"><p>
+author: caijunhui
+date: 2019-08-29
 
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<link rel="shortcut icon" href="https://caijh.github.io//favicon.ico?v=1577545527583">
-
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
-<link rel="stylesheet" href="https://caijh.github.io//styles/main.css">
-
-
-<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
-
-
-<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+本文介绍如何在k8s环境下部署rabbitmq
+镜像使用rabbitmq:3.7-management-alpine，从3.7.0开始rabbitmq使用了peer ...</p></div>
+                                    <div class="index-list-rm index-guo"><a href="https://caijh.github.io/post/kubernetes-bu-shu-rabbitmq-ji-qun">Read More</a></div>
+                                </article>
+                                
+                               <article class="mdui-p-a-5 index-list mdui-m-b-3 animated fadeIn" style="animation-delay: 0.8s;animation-duration: 2s">
+                                    <div class="mdui-typo-body-2 mdui-m-b-1" datetime="2019-08-28 16:50:56">2019-08-28</div>
+                                    <div class="mdui-typo-headline mdui-m-b-3 index-list-title index-guo"><a href="https://caijh.github.io/post/linux-an-zhuang-nfs">Linux - 安装nfs</a></div>
+                                    <div class="mdui-typo-subheading mdui-m-b-2 index-neirong"><p>想要k8s中使用nfs来动态提供PersistentVolume，so查下怎么搭建nfs server.
+环境：
+centos 7
 
 
-  </head>
-  <body>
-    <nav class="navbar border fixed split-nav">
-  <div class="nav-brand">
-    <h3><a href="https://caijh.github.io/">John&#39;s Blog</a></h3>
-  </div>
-  <div class="collapsible">
-    <input id="collapsible1" type="checkbox" name="collapsible1">
-    <button>
-      <label for="collapsible1">
-        <div class="bar1"></div>
-        <div class="bar2"></div>
-        <div class="bar3"></div>
-      </label>
-    </button>
-    <div class="collapsible-body">
-      <ul class="inline">
-        
-          <li>
-            
-              <a href="/" class="menu">
-                首页
-              </a>
-            
-          </li>
-        
-          <li>
-            
-              <a href="/archives" class="menu">
-                归档
-              </a>
-            
-          </li>
-        
-          <li>
-            
-              <a href="/tags" class="menu">
-                标签
-              </a>
-            
-          </li>
-        
-          <li>
-            
-              <a href="/post/about" class="menu">
-                关于
-              </a>
-            
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-</nav>
+安装nfs-utils
+
+yum install -y nfs-utils
 
 
-    <div id="top" class="row site">
-      <div class="sm-12 md-8 col">
-        <div class="paper">
-          
-  <article class="article">
-    <h2 class="article-title">
-      <a href="https://caijh.github.io//post/kubernetes-jie-jue-shan-chu-namespace-yi-zhi-terminating-de-wen-ti">Kubernetes - 解决删除namespace一直Terminating的问题</a>
-    </h2>
-    <p class="article-meta">
-      2019-12-28
-      
-    </p>
-    <p class="text-lead">
-      
-    </p>
-    <div class="row">
-      <a href="https://caijh.github.io//post/kubernetes-jie-jue-shan-chu-namespace-yi-zhi-terminating-de-wen-ti" class="readmore-link">
-        <button>
-          Read More
-        </button>
-      </a>
-    </div>
-  </article>
+修改配置
 
-  <article class="article">
-    <h2 class="article-title">
-      <a href="https://caijh.github.io//post/spring-cloud-eureka">Spring Cloud - Eureka</a>
-    </h2>
-    <p class="article-meta">
-      2019-11-04
-      
-        <a href="https://caijh.github.io//tag/nHOjalh2s" class="badge secondary">
-          Spring Cloud
-        </a>
-      
-    </p>
-    <p class="text-lead">
-      <blockquote>
-<p>是由Netflix开源的基于REST的服务治理组件，包含了eureka server 和eureka client。从2012年9月在GitHub上发布1.1.2版本以来，至今已经发布了231次，最新版本为2018年8月份发布的1.9.4版本。期间有进行2.x版本的开发，不过由于各种原因内部已经冻结开发，目前还是以1.x版本为主。Spring Cloud Netflix Eureka是Pivotal公司为了将Netflix Eureka整合于Spring Cloud生态系统提供的版本。</p>
-</blockquote>
-<h1 id="eureka快速入门">Eureka快速入门</h1>
-<p><strong>Eureka Server</strong></p>
-<ol>
-<li>
-<p>引入依赖</p>
-<pre><code>        &lt;dependency&gt;
-            &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
-            &lt;artifactId&gt;spring-cloud-starter-netflix-eureka-server&lt;/artifactId&gt;
-        &lt;/dependency&gt;
-</code></pre>
-</li>
-<li>
-<p>主应用类上添加**@EnableEurekaServer**</p>
-</li>
-<li>
-<p>配置eureka</p>
-<pre><code>eureka:
-  client:
-    register-with-eureka: true
-    fetch-registry: true
-    service-url:
-      defaultZone: ${EUREKA_SERVER_ADDRESS:http://localhost:8761/eureka/}
-  server:
-    peer-node-read-timeout-ms: 5000
-</code></pre>
-</li>
-<li>
-<p>启动</p>
-<p>![image-20191024165113212](Spring Cloud - 服务注册中心eureka/image-20191024165113212.png)</p>
-</li>
-</ol>
-<p><strong>Eureka Client</strong></p>
-<ol>
-<li>
-<p>引入客户端依赖</p>
-<pre><code>        &lt;dependency&gt;
-            &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
-            &lt;artifactId&gt;spring-cloud-starter-netflix-eureka-client&lt;/artifactId&gt;
-        &lt;/dependency&gt;
-</code></pre>
-</li>
-<li>
-<p>主应用类添加**@EnableDiscoveryClient**</p>
-</li>
-<li>
-<p>配置</p>
-<pre><code>eureka:
-  instance:
-    prefer-ip-address: true
-  client:
-    service-url:
-      defaultZone: ${EUREKA_SERVER_ADDRESS:http://localhost:8761/eureka/}
-</code></pre>
-</li>
-<li>
-<p>启动客户端</p>
-</li>
-</ol>
+mkdir ...</p></div>
+                                    <div class="index-list-rm index-guo"><a href="https://caijh.github.io/post/linux-an-zhuang-nfs">Read More</a></div>
+                                </article>
+                                
+                               <article class="mdui-p-a-5 index-list mdui-m-b-3 animated fadeIn" style="animation-delay: 0.8s;animation-duration: 2s">
+                                    <div class="mdui-typo-body-2 mdui-m-b-1" datetime="2019-08-09 15:11:13">2019-08-09</div>
+                                    <div class="mdui-typo-headline mdui-m-b-3 index-list-title index-guo"><a href="https://caijh.github.io/post/k8s-an-zhuang-kube-dns-cha-jian">k8s - 安装kube-dns插件</a></div>
+                                    <div class="mdui-typo-subheading mdui-m-b-2 index-neirong"><p>Kubernetes - 安装kube-dns插件
+k8s 版本: 1.5.2
 
-    </p>
-    <div class="row">
-      <a href="https://caijh.github.io//post/spring-cloud-eureka" class="readmore-link">
-        <button>
-          Read More
-        </button>
-      </a>
-    </div>
-  </article>
+下载yaml文件，根据实际情况修改文件
+kubectl creata -f yaml
+重启node
+测试
 
-  <article class="article">
-    <h2 class="article-title">
-      <a href="https://caijh.github.io//post/kubernetes-bu-shu-rabbitmq-ji-qun">kubernetes - 部署rabbitmq集群</a>
-    </h2>
-    <p class="article-meta">
-      2019-08-30
-      
-    </p>
-    <p class="text-lead">
-      <hr>
-<p>author: caijunhui<br>
-date: 2019-08-29</p>
-<hr>
-<p>本文介绍如何在k8s环境下部署rabbitmq</p>
-<p>镜像使用rabbitmq:3.7-management-alpine，从3.7.0开始rabbitmq使用了peer discovery， 不使用autoscale。</p>
+下载所需的文件
+主要有yaml文件和yaml文件要...</p></div>
+                                    <div class="index-list-rm index-guo"><a href="https://caijh.github.io/post/k8s-an-zhuang-kube-dns-cha-jian">Read More</a></div>
+                                </article>
+                                
+                               <article class="mdui-p-a-5 index-list mdui-m-b-3 animated fadeIn" style="animation-delay: 0.8s;animation-duration: 2s">
+                                    <div class="mdui-typo-body-2 mdui-m-b-1" datetime="2019-08-06 11:20:36">2019-08-06</div>
+                                    <div class="mdui-typo-headline mdui-m-b-3 index-list-title index-guo"><a href="https://caijh.github.io/post/maven-zen-me-yang-skip-test">Maven - 怎么样skip test</a></div>
+                                    <div class="mdui-typo-subheading mdui-m-b-2 index-neirong"><p>Maven 参数设置
 
-    </p>
-    <div class="row">
-      <a href="https://caijh.github.io//post/kubernetes-bu-shu-rabbitmq-ji-qun" class="readmore-link">
-        <button>
-          Read More
-        </button>
-      </a>
-    </div>
-  </article>
-
-  <article class="article">
-    <h2 class="article-title">
-      <a href="https://caijh.github.io//post/linux-an-zhuang-nfs">Linux - 安装nfs</a>
-    </h2>
-    <p class="article-meta">
-      2019-08-28
-      
-    </p>
-    <p class="text-lead">
-      <p>想要k8s中使用nfs来动态提供PersistentVolume，so查下怎么搭建nfs server.<br>
-环境：<br>
-centos 7</p>
-
-    </p>
-    <div class="row">
-      <a href="https://caijh.github.io//post/linux-an-zhuang-nfs" class="readmore-link">
-        <button>
-          Read More
-        </button>
-      </a>
-    </div>
-  </article>
-
-  <article class="article">
-    <h2 class="article-title">
-      <a href="https://caijh.github.io//post/k8s-an-zhuang-kube-dns-cha-jian">k8s - 安装kube-dns插件</a>
-    </h2>
-    <p class="article-meta">
-      2019-08-09
-      
-        <a href="https://caijh.github.io//tag/Juj0cbeuP" class="badge ">
-          docker
-        </a>
-      
-    </p>
-    <p class="text-lead">
-      
-    </p>
-    <div class="row">
-      <a href="https://caijh.github.io//post/k8s-an-zhuang-kube-dns-cha-jian" class="readmore-link">
-        <button>
-          Read More
-        </button>
-      </a>
-    </div>
-  </article>
-
-  <article class="article">
-    <h2 class="article-title">
-      <a href="https://caijh.github.io//post/maven-zen-me-yang-skip-test">Maven - 怎么样skip test</a>
-    </h2>
-    <p class="article-meta">
-      2019-08-06
-      
-        <a href="https://caijh.github.io//tag/hm42pTrhV" class="badge secondary">
-          Maven
-        </a>
-      
-    </p>
-    <p class="text-lead">
-      <h3 id="maven-参数设置">Maven 参数设置</h3>
-<ul>
-<li>使用参数-Dmaven.test.skip=true</li>
-<li>在pom.xml中定义参数<br>
-<code>&lt;properties&gt; &lt;maven.test.skip&gt;true&lt;/maven.test.skip&gt; &lt;/properties&gt;</code></li>
-</ul>
-
-    </p>
-    <div class="row">
-      <a href="https://caijh.github.io//post/maven-zen-me-yang-skip-test" class="readmore-link">
-        <button>
-          Read More
-        </button>
-      </a>
-    </div>
-  </article>
-
-  <article class="article">
-    <h2 class="article-title">
-      <a href="https://caijh.github.io//post/k8s-ji-ben-gai-nian">k8s - 基本概念</a>
-    </h2>
-    <p class="article-meta">
-      2019-08-06
-      
-    </p>
-    <p class="text-lead">
-      <h2 id="pod">Pod</h2>
-<p>Pod是一个或多个若干相关容器的组合，Pod包含的容器运行在同一台宿主机上，这些容器使用相同的网络命名空间、IP地址和端口，相互之间能通过localhost来发现和通信。另外，这些容器还可共享一块存储卷空间。在Kubernetes中创建、调度和管理的最小单位是Pod，而不是容器，Pod通过提供更高层次的抽象，提供了更加灵活的部署和管理模式。</p>
-<p>Pod是Kubernetes的基本操作单元，也是应用运行的载体。</p>
-<p>Pod是容器的集合，容器是真正的执行体。相比原生的容器接口，Pod提供了更高层次的抽象，但是Pod的设计并不是为了运行同一个应用的多个实例，而是运行一个应用多个紧密联系的程序。而每个程序运行在单独的容器中，以Pod的形式组合成一个应用。</p>
-<h2 id="replication-controller">Replication Controller</h2>
-<p>Replication Controller用来控制管理Pod副本（Replica，或者称为实例），Replication Controller确保任何时候Kubernetes集群中有指定数量的Pod副本在运行。如果少于指定数量的Pod副本，Replication Controller会启动新的Pod副本，反之会杀死多余的副本以保证数量不变。另外，Replication Controller是弹性伸缩、滚动升级的实现核心。</p>
-<p>注：官方建议使用Deployment代替</p>
-<h2 id="service">Service</h2>
-<p>Service是真实应用服务的抽象，定义了Pod的逻辑集合和访问这个Pod集合的策略。Service将代理Pod对外表现为一个单一访问接口，外部不需要了解后端Pod如何运行，这给扩展和维护带来很多好处，提供了一套简化的服务代理和发现机制。</p>
-<h2 id="label">Label</h2>
-<p>Label是用于区分Pod、Service、Replication Controller的Key/Value对，实际上，Kubernetes中的任意API对象都可以通过Label进行标识。每个API对象可以有多个Label，但是每个Label的Key只能对应一个Value。Label是Service和Replication Controller运行的基础，它们都通过Label来关联Pod.</p>
-<h2 id="master">Master</h2>
-<p>Kubernetes里的Master指的是集群控制节点，每个Kubernetes集群里需要有一个Master节点来负责整个集群的管理和控制，基本上Kubernetes所有的控制命令都是发给它，它来负责具体的执行过程.</p>
-<p>在Master运行的组件有：</p>
-<ul>
-<li>kube-apiserver, 提供了HTTP Rest接口的关键服务进程，是Kubernetes里所有资源的增、删、改、查等操作的唯一入口，也是集群控制的入口进程.</li>
-<li>etcd, 强一致性高可用的key-value存储系统，kubernetes用来存储集群的数据。</li>
-<li>Kube-scheduler，负责资源调度（Pod调度）的进程，为新建的Pod分配Node。</li>
-<li>Kube-controller-manager，Kubernetes里所有资源对象的自动化控制中心，负责执行各种控制器。</li>
-</ul>
-<h2 id="node">Node</h2>
-<p>Kubernetes属于主从分布式集群架构，Kubernetes Node（简称为Node，早期版本叫作Minion）运行并管理容器。Node作为Kubernetes的操作单元，用来分配给Pod（或者说容器）进行绑定，Pod最终运行在Node上，Node可以认为是Pod的宿主机。</p>
-<p>Node节点上运行的组件有：</p>
-<ul>
-<li>kubelet, 负责Pod对应的容器的创建、启停等任务，同时与Master节点密切协作，实现集群管理的基本功能。</li>
-<li>Kube-proxy, 实现Kubernetes Service的通信与负载均衡机制的重要组件。</li>
-<li>container runtime, 负责运行容器。</li>
-</ul>
-
-    </p>
-    <div class="row">
-      <a href="https://caijh.github.io//post/k8s-ji-ben-gai-nian" class="readmore-link">
-        <button>
-          Read More
-        </button>
-      </a>
-    </div>
-  </article>
-
-  <article class="article">
-    <h2 class="article-title">
-      <a href="https://caijh.github.io//post/springboot-qi-dong-yuan-li">SpringBoot - 启动原理</a>
-    </h2>
-    <p class="article-meta">
-      2019-07-20
-      
-        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge secondary">
-          Java
-        </a>
-      
-    </p>
-    <p class="text-lead">
-      <p>SpringBoot应用启动类一般如下：</p>
-<pre><code>@SpringBootApplication
+使用参数-Dmaven.test.skip=true
+在pom.xml中定义参数
+&lt;properties&gt; &lt;maven.test.skip&gt;true&lt;/maven.test.skip&...</p></div>
+                                    <div class="index-list-rm index-guo"><a href="https://caijh.github.io/post/maven-zen-me-yang-skip-test">Read More</a></div>
+                                </article>
+                                
+                               <article class="mdui-p-a-5 index-list mdui-m-b-3 animated fadeIn" style="animation-delay: 0.8s;animation-duration: 2s">
+                                    <div class="mdui-typo-body-2 mdui-m-b-1" datetime="2019-08-06 10:57:14">2019-08-06</div>
+                                    <div class="mdui-typo-headline mdui-m-b-3 index-list-title index-guo"><a href="https://caijh.github.io/post/k8s-ji-ben-gai-nian">k8s - 基本概念</a></div>
+                                    <div class="mdui-typo-subheading mdui-m-b-2 index-neirong"><p>Pod
+Pod是一个或多个若干相关容器的组合，Pod包含的容器运行在同一台宿主机上，这些容器使用相同的网络命名空间、IP地址和端口，相互之间能通过localhost来发现和通信。另外，这些容器还可共享一块存储卷空间。在Kubernetes中...</p></div>
+                                    <div class="index-list-rm index-guo"><a href="https://caijh.github.io/post/k8s-ji-ben-gai-nian">Read More</a></div>
+                                </article>
+                                
+                               <article class="mdui-p-a-5 index-list mdui-m-b-3 animated fadeIn" style="animation-delay: 0.8s;animation-duration: 2s">
+                                    <div class="mdui-typo-body-2 mdui-m-b-1" datetime="2019-07-20 11:41:54">2019-07-20</div>
+                                    <div class="mdui-typo-headline mdui-m-b-3 index-list-title index-guo"><a href="https://caijh.github.io/post/springboot-qi-dong-yuan-li">SpringBoot - 启动原理</a></div>
+                                    <div class="mdui-typo-subheading mdui-m-b-2 index-neirong"><p>SpringBoot应用启动类一般如下：
+@SpringBootApplication
 public class SampleRabbitmqApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(SampleRabbitmqApplication.class, args);
-    }
+    public static void main(String...</p></div>
+                                    <div class="index-list-rm index-guo"><a href="https://caijh.github.io/post/springboot-qi-dong-yuan-li">Read More</a></div>
+                                </article>
+                                
+                               <article class="mdui-p-a-5 index-list mdui-m-b-3 animated fadeIn" style="animation-delay: 0.8s;animation-duration: 2s">
+                                    <div class="mdui-typo-body-2 mdui-m-b-1" datetime="2019-07-18 15:38:08">2019-07-18</div>
+                                    <div class="mdui-typo-headline mdui-m-b-3 index-list-title index-guo"><a href="https://caijh.github.io/post/redis-bian-yi-chun-jing-ban">Redis - 编译纯净版</a></div>
+                                    <div class="mdui-typo-subheading mdui-m-b-2 index-neirong"><p>按redis官网编译的redis, 可执行文件会与源码在一起, 如果想编译纯净版可按下边的步骤。
 
-}
-</code></pre>
-<h1 id="springbootapplication">@SpringBootApplication</h1>
-<p>@SpringBootApplication这个组合注解包含了三个注解 ：</p>
-<ul>
-<li>@SpringBootConfiguration</li>
-<li>@EnableAutoConfiguration</li>
-<li>@ComponentScan</li>
-</ul>
-<p>@SpringBootConfiguration实际上应用@Configuration， 任何注解了Configuration了java类都是一个JavaConfig配置类。<br>
-@ComponentScan的功能是自动扫描并加载符合条件的组件（如@Component和@Repository）,最终将这些bean加载IoC容器中。<br>
-@EnableAutoConfiguration借助@Import收集和注册特定场景相关的bean定义。</p>
+下载redis
+$ wget http://download.redis.io/releases/redis-5.0.5.tar.gz
+$ ...</p></div>
+                                    <div class="index-list-rm index-guo"><a href="https://caijh.github.io/post/redis-bian-yi-chun-jing-ban">Read More</a></div>
+                                </article>
+                                
+                               <article class="mdui-p-a-5 index-list mdui-m-b-3 animated fadeIn" style="animation-delay: 0.8s;animation-duration: 2s">
+                                    <div class="mdui-typo-body-2 mdui-m-b-1" datetime="2019-07-18 12:31:22">2019-07-18</div>
+                                    <div class="mdui-typo-headline mdui-m-b-3 index-list-title index-guo"><a href="https://caijh.github.io/post/redis-ru-he-fang-wen-da-liang-shu-ju">Redis - 如何访问大量数据</a></div>
+                                    <div class="mdui-typo-subheading mdui-m-b-2 index-neirong"><p>众如周知，Redis中keys pattern命令可以返回大量数据。
+非生产环境可以结合linux的管道删除相同pattern的key.
+redis-cli keys &quot;*&quot; | xargs redis-cli del
+...</p></div>
+                                    <div class="index-list-rm index-guo"><a href="https://caijh.github.io/post/redis-ru-he-fang-wen-da-liang-shu-ju">Read More</a></div>
+                                </article>
+                                
 
-    </p>
-    <div class="row">
-      <a href="https://caijh.github.io//post/springboot-qi-dong-yuan-li" class="readmore-link">
-        <button>
-          Read More
-        </button>
-      </a>
-    </div>
-  </article>
+                                                            <nav class="mdui-m-t-5">
+                                
+                                
+                                <div class="index-yema mdui-float-right"><a href="https://caijh.github.io/page/2">下一页</a></div>
+                                 
+                                </nav>     
 
-  <article class="article">
-    <h2 class="article-title">
-      <a href="https://caijh.github.io//post/redis-bian-yi-chun-jing-ban">Redis - 编译纯净版</a>
-    </h2>
-    <p class="article-meta">
-      2019-07-18
-      
-    </p>
-    <p class="text-lead">
-      <p>按redis官网编译的redis, 可执行文件会与源码在一起, 如果想编译纯净版可按下边的步骤。</p>
-
-    </p>
-    <div class="row">
-      <a href="https://caijh.github.io//post/redis-bian-yi-chun-jing-ban" class="readmore-link">
-        <button>
-          Read More
-        </button>
-      </a>
-    </div>
-  </article>
-
-  <article class="article">
-    <h2 class="article-title">
-      <a href="https://caijh.github.io//post/redis-ru-he-fang-wen-da-liang-shu-ju">Redis - 如何访问大量数据</a>
-    </h2>
-    <p class="article-meta">
-      2019-07-18
-      
-    </p>
-    <p class="text-lead">
-      <p>众如周知，Redis中<code>keys pattern</code>命令可以返回大量数据。<br>
-非生产环境可以结合linux的管道删除相同pattern的key.</p>
-<pre><code>redis-cli keys &quot;*&quot; | xargs redis-cli del
-</code></pre>
-<p>但是生产环境一般keys会被重命名禁止在生产使用。<br>
-这时可以使用scan命令删除。</p>
-
-    </p>
-    <div class="row">
-      <a href="https://caijh.github.io//post/redis-ru-he-fang-wen-da-liang-shu-ju" class="readmore-link">
-        <button>
-          Read More
-        </button>
-      </a>
-    </div>
-  </article>
-
-
-        </div>
-        
-        <div class="row flex-edges">
-  
-  
-    <a href="https://caijh.github.io//page/2/" class="paper-btn">
-      下一页
-    </a>
-  
-</div>
-
-      </div>
-      
-      <div class="sm-12 md-4 col sidebar">
-  <div class="paper info-container">
-    <img src="https://caijh.github.io//images/avatar.png?v=1577545527583" class="no-responsive avatar">
-    <div class="text-muted">搬砖小弟</div>
-    <div class="social-container">
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-    </div>
-  </div>
-  <div class="paper">
-    <div class="sidebar-title">
-      最新文章
-    </div>
-    <div class="row">
-      <ul>
-        
-          
-            <li>
-              <a href="https://caijh.github.io//post/kubernetes-jie-jue-shan-chu-namespace-yi-zhi-terminating-de-wen-ti">Kubernetes - 解决删除namespace一直Terminating的问题</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://caijh.github.io//post/spring-cloud-eureka">Spring Cloud - Eureka</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://caijh.github.io//post/kubernetes-bu-shu-rabbitmq-ji-qun">kubernetes - 部署rabbitmq集群</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://caijh.github.io//post/linux-an-zhuang-nfs">Linux - 安装nfs</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://caijh.github.io//post/k8s-an-zhuang-kube-dns-cha-jian">k8s - 安装kube-dns插件</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://caijh.github.io//post/maven-zen-me-yang-skip-test">Maven - 怎么样skip test</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://caijh.github.io//post/k8s-ji-ben-gai-nian">k8s - 基本概念</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://caijh.github.io//post/springboot-qi-dong-yuan-li">SpringBoot - 启动原理</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://caijh.github.io//post/redis-bian-yi-chun-jing-ban">Redis - 编译纯净版</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://caijh.github.io//post/redis-ru-he-fang-wen-da-liang-shu-ju">Redis - 如何访问大量数据</a>
-            </li>
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-      </ul>
-    </div>
-  </div>
-  <div class="paper">
-    <div class="sidebar-title">
-      标签列表
-    </div>
-    <div class="row">
-      
-        <a href="https://caijh.github.io//tag/nHOjalh2s" class="badge success">
-          Spring Cloud
-        </a>
-      
-        <a href="https://caijh.github.io//tag/Juj0cbeuP" class="badge ">
-          docker
-        </a>
-      
-        <a href="https://caijh.github.io//tag/hm42pTrhV" class="badge secondary">
-          Maven
-        </a>
-      
-        <a href="https://caijh.github.io//tag/nFkZ3G6Fh" class="badge warning">
-          Java
-        </a>
-      
-        <a href="https://caijh.github.io//tag/6w7rEzKhc" class="badge secondary">
-          Redis
-        </a>
-      
-        <a href="https://caijh.github.io//tag/o82yUqML0" class="badge secondary">
-          MySQL
-        </a>
-      
-        <a href="https://caijh.github.io//tag/cZgK3KqpU" class="badge ">
-          源代码
-        </a>
-      
-        <a href="https://caijh.github.io//tag/kmQV6iHOM" class="badge secondary">
-          面试
-        </a>
-      
-        <a href="https://caijh.github.io//tag/CymMFfR-7" class="badge ">
-          设计模式
-        </a>
-      
-    </div>
-  </div>
-  <div class="paper">
-    Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://caijh.github.io//atom.xml" target="_blank">RSS</a>
-  </div>
-</div>
-
-    </div>
-    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-
-<script type="application/javascript">
-
-AOS.init();
-
-hljs.initHighlightingOnLoad()
-
-</script>
-
-
-
-
-  </body>
+                        </div>
+                      </div>
+              </div>
+                <footer class="footer mdui-m-t-5 mdui-text-center">
+               <nav class="social-links">
+                      <ul>
+                      
+                      
+                           
+                      
+                           
+                      
+                           
+                      
+                           
+                      
+                           
+                      
+                           
+                      
+                           
+                      
+                           
+                      
+                           
+                      
+                           
+                      
+                           
+                      
+                           
+                      </ul>
+                    </nav>
+                    <div class="copyright">
+                      <p>Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> <br/> Theme <a href="https://github.com/shanbufun/gridea-theme-song" target="_blank"  title="宋"  >Song</a> by <a href="https://shanbu.fun/" target="_blank"  title="山卜方" >shanbufun</a> </p>
+                  </div>
+                  
+              </footer>
+    </body>
 </html>

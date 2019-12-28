@@ -2,18 +2,18 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://caijh.github.io/</id>
     <title>John&apos;s Blog</title>
-    <updated>2019-12-28T15:15:27.592Z</updated>
+    <updated>2019-12-28T16:39:44.590Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://caijh.github.io/"/>
-    <link rel="self" href="https://caijh.github.io//atom.xml"/>
+    <link rel="self" href="https://caijh.github.io/atom.xml"/>
     <subtitle>搬砖小弟</subtitle>
-    <logo>https://caijh.github.io//images/avatar.png</logo>
-    <icon>https://caijh.github.io//favicon.ico</icon>
+    <logo>https://caijh.github.io/images/avatar.png</logo>
+    <icon>https://caijh.github.io/favicon.ico</icon>
     <rights>All rights reserved 2019, John&apos;s Blog</rights>
     <entry>
         <title type="html"><![CDATA[Kubernetes - 解决删除namespace一直Terminating的问题]]></title>
-        <id>https://caijh.github.io//post/kubernetes-jie-jue-shan-chu-namespace-yi-zhi-terminating-de-wen-ti</id>
-        <link href="https://caijh.github.io//post/kubernetes-jie-jue-shan-chu-namespace-yi-zhi-terminating-de-wen-ti">
+        <id>https://caijh.github.io/post/kubernetes-jie-jue-shan-chu-namespace-yi-zhi-terminating-de-wen-ti</id>
+        <link href="https://caijh.github.io/post/kubernetes-jie-jue-shan-chu-namespace-yi-zhi-terminating-de-wen-ti">
         </link>
         <updated>2019-12-28T15:04:43.000Z</updated>
         <content type="html"><![CDATA[<p>在删除命名空间时，一直卡在Terminating状态，使用--force参数依然无法删除，报错</p>
@@ -29,8 +29,8 @@
     </entry>
     <entry>
         <title type="html"><![CDATA[Spring Cloud - Eureka]]></title>
-        <id>https://caijh.github.io//post/spring-cloud-eureka</id>
-        <link href="https://caijh.github.io//post/spring-cloud-eureka">
+        <id>https://caijh.github.io/post/spring-cloud-eureka</id>
+        <link href="https://caijh.github.io/post/spring-cloud-eureka">
         </link>
         <updated>2019-11-04T07:00:32.000Z</updated>
         <summary type="html"><![CDATA[<blockquote>
@@ -626,7 +626,7 @@ eureka:
 </table>
 <p>更多见https://github.com/Netflix/eureka/wiki/Eureka-REST-operations</p>
 <p>调用endpoint一个例子：</p>
-<figure data-type="image" tabindex="1"><img src="https://caijh.github.io//post-images/1572851163698.png" alt=""></figure>
+<figure data-type="image" tabindex="1"><img src="https://caijh.github.io//post-images/1572851163698.png" alt="" loading="lazy"></figure>
 <h1 id="eureka-源码">Eureka 源码</h1>
 <h2 id="server端"><strong>Server端</strong></h2>
 <h3 id="启动过程"><strong>启动过程</strong></h3>
@@ -1273,8 +1273,8 @@ spec:
     </entry>
     <entry>
         <title type="html"><![CDATA[kubernetes - 部署rabbitmq集群]]></title>
-        <id>https://caijh.github.io//post/kubernetes-bu-shu-rabbitmq-ji-qun</id>
-        <link href="https://caijh.github.io//post/kubernetes-bu-shu-rabbitmq-ji-qun">
+        <id>https://caijh.github.io/post/kubernetes-bu-shu-rabbitmq-ji-qun</id>
+        <link href="https://caijh.github.io/post/kubernetes-bu-shu-rabbitmq-ji-qun">
         </link>
         <updated>2019-08-30T01:05:56.000Z</updated>
         <summary type="html"><![CDATA[<hr>
@@ -1545,8 +1545,8 @@ spec:
     </entry>
     <entry>
         <title type="html"><![CDATA[Linux - 安装nfs]]></title>
-        <id>https://caijh.github.io//post/linux-an-zhuang-nfs</id>
-        <link href="https://caijh.github.io//post/linux-an-zhuang-nfs">
+        <id>https://caijh.github.io/post/linux-an-zhuang-nfs</id>
+        <link href="https://caijh.github.io/post/linux-an-zhuang-nfs">
         </link>
         <updated>2019-08-28T08:50:56.000Z</updated>
         <summary type="html"><![CDATA[<p>想要k8s中使用nfs来动态提供PersistentVolume，so查下怎么搭建nfs server.<br>
@@ -1590,8 +1590,8 @@ sudo systemctl start nfs
     </entry>
     <entry>
         <title type="html"><![CDATA[k8s - 安装kube-dns插件]]></title>
-        <id>https://caijh.github.io//post/k8s-an-zhuang-kube-dns-cha-jian</id>
-        <link href="https://caijh.github.io//post/k8s-an-zhuang-kube-dns-cha-jian">
+        <id>https://caijh.github.io/post/k8s-an-zhuang-kube-dns-cha-jian</id>
+        <link href="https://caijh.github.io/post/k8s-an-zhuang-kube-dns-cha-jian">
         </link>
         <updated>2019-08-09T07:11:13.000Z</updated>
         <content type="html"><![CDATA[<h1 id="kubernetes-安装kube-dns插件">Kubernetes - 安装kube-dns插件</h1>
@@ -1873,13 +1873,13 @@ spec:
 </code></pre>
 <pre><code>kubectl exec -ti busybox -- nslookup kubernetes
 </code></pre>
-<figure data-type="image" tabindex="1"><img src="https://caijh.github.io//post-images/1565334765466.png" alt=""></figure>
+<figure data-type="image" tabindex="1"><img src="https://caijh.github.io//post-images/1565334765466.png" alt="" loading="lazy"></figure>
 ]]></content>
     </entry>
     <entry>
         <title type="html"><![CDATA[Maven - 怎么样skip test]]></title>
-        <id>https://caijh.github.io//post/maven-zen-me-yang-skip-test</id>
-        <link href="https://caijh.github.io//post/maven-zen-me-yang-skip-test">
+        <id>https://caijh.github.io/post/maven-zen-me-yang-skip-test</id>
+        <link href="https://caijh.github.io/post/maven-zen-me-yang-skip-test">
         </link>
         <updated>2019-08-06T03:20:36.000Z</updated>
         <summary type="html"><![CDATA[<h3 id="maven-参数设置">Maven 参数设置</h3>
@@ -1913,8 +1913,8 @@ spec:
     </entry>
     <entry>
         <title type="html"><![CDATA[k8s - 基本概念]]></title>
-        <id>https://caijh.github.io//post/k8s-ji-ben-gai-nian</id>
-        <link href="https://caijh.github.io//post/k8s-ji-ben-gai-nian">
+        <id>https://caijh.github.io/post/k8s-ji-ben-gai-nian</id>
+        <link href="https://caijh.github.io/post/k8s-ji-ben-gai-nian">
         </link>
         <updated>2019-08-06T02:57:14.000Z</updated>
         <summary type="html"><![CDATA[<h2 id="pod">Pod</h2>
@@ -1979,8 +1979,8 @@ spec:
     </entry>
     <entry>
         <title type="html"><![CDATA[SpringBoot - 启动原理]]></title>
-        <id>https://caijh.github.io//post/springboot-qi-dong-yuan-li</id>
-        <link href="https://caijh.github.io//post/springboot-qi-dong-yuan-li">
+        <id>https://caijh.github.io/post/springboot-qi-dong-yuan-li</id>
+        <link href="https://caijh.github.io/post/springboot-qi-dong-yuan-li">
         </link>
         <updated>2019-07-20T03:41:54.000Z</updated>
         <summary type="html"><![CDATA[<p>SpringBoot应用启动类一般如下：</p>
@@ -2107,8 +2107,8 @@ public @interface EnableAutoConfiguration {
     </entry>
     <entry>
         <title type="html"><![CDATA[Redis - 编译纯净版]]></title>
-        <id>https://caijh.github.io//post/redis-bian-yi-chun-jing-ban</id>
-        <link href="https://caijh.github.io//post/redis-bian-yi-chun-jing-ban">
+        <id>https://caijh.github.io/post/redis-bian-yi-chun-jing-ban</id>
+        <link href="https://caijh.github.io/post/redis-bian-yi-chun-jing-ban">
         </link>
         <updated>2019-07-18T07:38:08.000Z</updated>
         <summary type="html"><![CDATA[<p>按redis官网编译的redis, 可执行文件会与源码在一起, 如果想编译纯净版可按下边的步骤。</p>
@@ -2131,8 +2131,8 @@ $ cd redis-5.0.5
     </entry>
     <entry>
         <title type="html"><![CDATA[Redis - 如何访问大量数据]]></title>
-        <id>https://caijh.github.io//post/redis-ru-he-fang-wen-da-liang-shu-ju</id>
-        <link href="https://caijh.github.io//post/redis-ru-he-fang-wen-da-liang-shu-ju">
+        <id>https://caijh.github.io/post/redis-ru-he-fang-wen-da-liang-shu-ju</id>
+        <link href="https://caijh.github.io/post/redis-ru-he-fang-wen-da-liang-shu-ju">
         </link>
         <updated>2019-07-18T04:31:22.000Z</updated>
         <summary type="html"><![CDATA[<p>众如周知，Redis中<code>keys pattern</code>命令可以返回大量数据。<br>
