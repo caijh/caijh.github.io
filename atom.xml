@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://caijh.github.io/</id>
     <title>John&apos;s Blog</title>
-    <updated>2019-11-05T06:02:27.535Z</updated>
+    <updated>2019-12-28T15:15:27.592Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://caijh.github.io/"/>
     <link rel="self" href="https://caijh.github.io//atom.xml"/>
@@ -10,6 +10,23 @@
     <logo>https://caijh.github.io//images/avatar.png</logo>
     <icon>https://caijh.github.io//favicon.ico</icon>
     <rights>All rights reserved 2019, John&apos;s Blog</rights>
+    <entry>
+        <title type="html"><![CDATA[Kubernetes - 解决删除namespace一直Terminating的问题]]></title>
+        <id>https://caijh.github.io//post/kubernetes-jie-jue-shan-chu-namespace-yi-zhi-terminating-de-wen-ti</id>
+        <link href="https://caijh.github.io//post/kubernetes-jie-jue-shan-chu-namespace-yi-zhi-terminating-de-wen-ti">
+        </link>
+        <updated>2019-12-28T15:04:43.000Z</updated>
+        <content type="html"><![CDATA[<p>在删除命名空间时，一直卡在Terminating状态，使用--force参数依然无法删除，报错</p>
+<pre><code>Error from server (Conflict): Operation cannot be fulfilled on namespaces &quot;test&quot;: The system is ensuring all content is removed from this namespace. Upon completion, this namespace will automatically be purged by the system.
+</code></pre>
+<p>可以使用以下方式删除</p>
+<ol>
+<li><code>kubectl get namespace &lt;annoying-namespace-to-delete&gt; -o json &gt; tmp.json</code></li>
+<li>编辑tmp.json文件，删除其中spec字段的finalize字段，如果namespace的meta指令了finalizer也需要删除这信息</li>
+<li><code>curl -k -H &quot;Content-Type: application/json&quot; -X PUT --data-binary @tmp.json http://127.0.0.1:8001/api/v1/namespaces/&lt;namspace-to-delete&gt;/finalize</code></li>
+</ol>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Spring Cloud - Eureka]]></title>
         <id>https://caijh.github.io//post/spring-cloud-eureka</id>
@@ -2141,60 +2158,6 @@ $ cd redis-5.0.5
 <li>返回的结果可能会有重复，需要客户端去重复，这点非常重要;</li>
 <li>单次返回的结果是空的并不意味着遍历结束，而要看返回的游标值是否为零</li>
 </ul>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Redis - 缓存问题]]></title>
-        <id>https://caijh.github.io//post/redis-huan-cun-wen-ti</id>
-        <link href="https://caijh.github.io//post/redis-huan-cun-wen-ti">
-        </link>
-        <updated>2019-07-18T03:42:55.000Z</updated>
-        <summary type="html"><![CDATA[<h3 id="缓存穿透">缓存穿透</h3>
-<blockquote>
-<p>什么是缓存穿透？<br>
-缓存穿透是指查询一个一定不在缓存中存在的key. 由于key不存在，每次都会去查询数据库，如果对于这个key的请求很多的话，可能会把数据库搞垮。</p>
-</blockquote>
-<p>解决方案：</p>
-<ol>
-<li>布隆过滤器</li>
-<li>将查询数据库的空结果也缓存起来，设置一个较短的过期时间。</li>
-</ol>
-<h3 id="缓存雪崩">缓存雪崩</h3>
-<blockquote>
-<p>什么是缓存雪崩？<br>
-对于多个key的查询，全部请求都走数据库了。有两种情况：一种是redis挂掉，别一个情况是一段时间内那些key都失效了。<br>
-对于第一种情况要保证redis的的高可性，对于第二种情况可以为key设置不同的随随机过期时间。</p>
-</blockquote>
-<h3 id="缓存数据一致性">缓存数据一致性</h3>
-<ol>
-<li>写数据库也写缓存，保证了数据一致性；但是难保证数据库与redis的事务</li>
-<li>写数据库，直接删缓存；读缓存发现没有，从数据库读取并保存缓存；带来问题是并发问题。</li>
-<li>应该根据不同的业务，来处理缓存的生成。</li>
-</ol>
-]]></summary>
-        <content type="html"><![CDATA[<h3 id="缓存穿透">缓存穿透</h3>
-<blockquote>
-<p>什么是缓存穿透？<br>
-缓存穿透是指查询一个一定不在缓存中存在的key. 由于key不存在，每次都会去查询数据库，如果对于这个key的请求很多的话，可能会把数据库搞垮。</p>
-</blockquote>
-<p>解决方案：</p>
-<ol>
-<li>布隆过滤器</li>
-<li>将查询数据库的空结果也缓存起来，设置一个较短的过期时间。</li>
-</ol>
-<h3 id="缓存雪崩">缓存雪崩</h3>
-<blockquote>
-<p>什么是缓存雪崩？<br>
-对于多个key的查询，全部请求都走数据库了。有两种情况：一种是redis挂掉，别一个情况是一段时间内那些key都失效了。<br>
-对于第一种情况要保证redis的的高可性，对于第二种情况可以为key设置不同的随随机过期时间。</p>
-</blockquote>
-<h3 id="缓存数据一致性">缓存数据一致性</h3>
-<ol>
-<li>写数据库也写缓存，保证了数据一致性；但是难保证数据库与redis的事务</li>
-<li>写数据库，直接删缓存；读缓存发现没有，从数据库读取并保存缓存；带来问题是并发问题。</li>
-<li>应该根据不同的业务，来处理缓存的生成。</li>
-</ol>
-<!-- more -->
 ]]></content>
     </entry>
 </feed>
