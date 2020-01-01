@@ -2,14 +2,335 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://caijh.github.io/</id>
     <title>John&apos;s Blog</title>
-    <updated>2019-12-28T16:41:35.611Z</updated>
+    <updated>2020-01-01T11:41:41.535Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://caijh.github.io/"/>
     <link rel="self" href="https://caijh.github.io/atom.xml"/>
     <subtitle>搬砖小弟</subtitle>
     <logo>https://caijh.github.io/images/avatar.png</logo>
     <icon>https://caijh.github.io/favicon.ico</icon>
-    <rights>All rights reserved 2019, John&apos;s Blog</rights>
+    <rights>All rights reserved 2020, John&apos;s Blog</rights>
+    <entry>
+        <title type="html"><![CDATA[Kubernetes - 通过kubeadm部署Kubernetes集群]]></title>
+        <id>https://caijh.github.io/post/kubernetes-tong-guo-kubeadm-bu-shu-kubernetes-ji-qun</id>
+        <link href="https://caijh.github.io/post/kubernetes-tong-guo-kubeadm-bu-shu-kubernetes-ji-qun">
+        </link>
+        <updated>2020-01-01T11:19:54.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="准备环境">准备环境</h1>
+<p>使用vagrant来生成三台虚拟机，虚拟机基本信息如下：</p>
+<table>
+<thead>
+<tr>
+<th>hostname</th>
+<th>ip</th>
+<th>操作系统</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>kube-master</td>
+<td>192.168.33.10</td>
+<td>centos/7</td>
+</tr>
+<tr>
+<td>kube-node-1</td>
+<td>192.168.33.11</td>
+<td>centos/7</td>
+</tr>
+<tr>
+<td>kube-node-2</td>
+<td>192.168.33.12</td>
+<td>centos/7</td>
+</tr>
+</tbody>
+</table>
+<p>Vagrantfile配置内容如下：</p>
+<pre><code># -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# All Vagrant configuration is done below. The &quot;2&quot; in Vagrant.configure
+# configures the configuration version (we support older styles for
+# backwards compatibility). Please don't change it unless you know what
+# you're doing.
+Vagrant.configure(&quot;2&quot;) do |config|
+  # The most common configuration options are documented and commented below.
+  # For a complete reference, please see the online documentation at
+  # https://docs.vagrantup.com.
+
+  # Every Vagrant development environment requires a box. You can search for
+  # boxes at https://vagrantcloud.com/search.
+  config.vm.box = &quot;centos/7&quot;
+  config.vm.hostname = &quot;k8s-master&quot;
+
+  # Disable automatic box update checking. If you disable this, then
+  # boxes will only be checked for updates when the user runs
+  # `vagrant box outdated`. This is not recommended.
+  # config.vm.box_check_update = false
+
+  # Create a forwarded port mapping which allows access to a specific port
+  # within the machine from a port on the host machine. In the example below,
+  # accessing &quot;localhost:8080&quot; will access port 80 on the guest machine.
+  # NOTE: This will enable public access to the opened port
+  config.vm.network &quot;forwarded_port&quot;, guest: 8001, host: 8001
+
+  # Create a forwarded port mapping which allows access to a specific port
+  # within the machine from a port on the host machine and only allow access
+  # via 127.0.0.1 to disable public access
+  # config.vm.network &quot;forwarded_port&quot;, guest: 80, host: 8080, host_ip: &quot;127.0.0.1&quot;
+
+  # Create a private network, which allows host-only access to the machine
+  # using a specific IP.
+  config.vm.network &quot;private_network&quot;, ip: &quot;192.168.33.10&quot;
+
+  # Create a public network, which generally matched to bridged network.
+  # Bridged networks make the machine appear as another physical device on
+  # your network.
+  # config.vm.network &quot;public_network&quot;
+
+  # Share an additional folder to the guest VM. The first argument is
+  # the path on the host to the actual folder. The second argument is
+  # the path on the guest to mount the folder. And the optional third
+  # argument is a set of non-required options.
+  config.vm.synced_folder &quot;../data&quot;, &quot;/vagrant_data&quot;
+
+  # Provider-specific configuration so you can fine-tune various
+  # backing providers for Vagrant. These expose provider-specific options.
+  # Example for VirtualBox:
+  #
+  config.vm.provider &quot;virtualbox&quot; do |vb|
+    # Display the VirtualBox GUI when booting the machine
+    vb.gui = false
+  
+    # Customize the amount of memory on the VM:
+    vb.memory = &quot;2048&quot;
+    vb.cpus = 2
+  end
+  #
+  # View the documentation for the provider you are using for more
+  # information on available options.
+
+  # Enable provisioning with a shell script. Additional provisioners such as
+  # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
+  # documentation for more information about their specific syntax and use.
+  # config.vm.provision &quot;shell&quot;, inline: &lt;&lt;-SHELL
+  #   apt-get update
+  #   apt-get install -y apache2
+  # SHELL
+end
+
+</code></pre>
+<p>以上只是kube-master的配置cpus不小于2，其他人配置根据需要修改，如hostname,vb. memory,private_network</p>
+<h1 id="安装">安装</h1>
+<p><strong>各个节点都需要的操作</strong></p>
+<ol>
+<li>
+<p>关闭防火墙selinux</p>
+<pre><code># systemctl stop firewalld
+# systemctl disable firewalld
+# Set SELinux in permissive mode (effectively disabling it)
+setenforce 0
+sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
+</code></pre>
+</li>
+<li>
+<p>关闭swap交换区功能，实际不用也行，但是如果不关闭的话，kubeadm等会报错虽然也可以通过命令行加参数不让报错，但没有直接关闭来的方便</p>
+<p>临时关闭，可以使用命令<code>swapoff -a</code></p>
+<p>永远关闭，直接编辑<code>/etc/fstab</code>, 将swapfile那行注释掉</p>
+</li>
+<li>
+<p>安装docker</p>
+<pre><code>yum install -y yum-utils device-mapper-persistent-data lvm2
+yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+yum install -y docker-ce docker-ce-cli containerd.io
+systemctl enable docker --now
+</code></pre>
+</li>
+<li>
+<p>网络增强</p>
+<p>创建/etc/sysctl.d/k8s.conf文件，添加如下内容：</p>
+<pre><code>net.bridge.bridge-nf-call-ip6tables = 1
+net.bridge.bridge-nf-call-iptables = 1
+</code></pre>
+<p>执行如下命令使修改生效：</p>
+<pre><code>$ modprobe br_netfilter
+$ sysctl -p /etc/sysctl.d/k8s.conf
+</code></pre>
+</li>
+<li>
+<p>安装有kubeadm</p>
+<pre><code>cat &lt;&lt;EOF &gt; /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64
+enabled=1
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
+EOF
+</code></pre>
+<pre><code>yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
+systemctl enable --now kubelet
+</code></pre>
+<p>注：因为使用了vagrant来搭建k8s集群，这里还需要修改/etc/sysconfig/kubelet,<code>KUBELET_EXTRA_ARGS=&quot;--node-ip=&lt;node_ip&gt;&quot;</code>,否则会报以下错误</p>
+<p>![image-20191215223528931](Kubernetes - kubeadm安装k8s集群.assets/image-20191215223528931.png)</p>
+</li>
+<li>
+<p>准备kubeadm init 过程中使用的镜像</p>
+<p>由于k8s.gcr.io被墙的原因，镜像没有直接pull到， 需要先从别的地方（registry.cn-hangzhou.aliyuncs.com）拉到到镜像，再tag成需要的镜像, 以下是我要部署的镜像；</p>
+<pre><code>REPOSITORY                                                                    TAG                 IMAGE ID            CREATED             SIZE
+k8s.gcr.io/kube-proxy                                                         v1.17.0             7d54289267dc        7 days ago          116MB
+registry.cn-hangzhou.aliyuncs.com/google_containers/kube-proxy                v1.17.0             7d54289267dc        7 days ago          116MB
+k8s.gcr.io/kube-controller-manager                                            v1.17.0             5eb3b7486872        7 days ago          161MB
+registry.cn-hangzhou.aliyuncs.com/google_containers/kube-controller-manager   v1.17.0             5eb3b7486872        7 days ago          161MB
+k8s.gcr.io/kube-apiserver                                                     v1.17.0             0cae8d5cc64c        7 days ago          171MB
+registry.cn-hangzhou.aliyuncs.com/google_containers/kube-apiserver            v1.17.0             0cae8d5cc64c        7 days ago          171MB
+k8s.gcr.io/kube-scheduler                                                     v1.17.0             78c190f736b1        7 days ago          94.4MB
+registry.cn-hangzhou.aliyuncs.com/google_containers/kube-scheduler            v1.17.0             78c190f736b1        7 days ago          94.4MB
+busybox                                                                       latest              b534869c81f0        11 days ago         1.22MB
+kubernetesui/dashboard                                                        v2.0.0-beta6        84cd817d07fb        4 weeks ago         91.7MB
+k8s.gcr.io/coredns                                                            1.6.5               70f311871ae1        5 weeks ago         41.6MB
+registry.cn-hangzhou.aliyuncs.com/google_containers/coredns                   1.6.5               70f311871ae1        5 weeks ago         41.6MB
+k8s.gcr.io/etcd                                                               3.4.3-0             303ce5db0e90        7 weeks ago         288MB
+registry.cn-hangzhou.aliyuncs.com/google_containers/etcd                      3.4.3-0             303ce5db0e90        7 weeks ago         288MB
+kubernetesui/metrics-scraper                                                  v1.0.1              709901356c11        5 months ago        40.1MB
+quay.io/coreos/flannel                                                        v0.11.0-amd64       ff281650a721        10 months ago       52.6MB
+k8s.gcr.io/pause                                                              3.1                 da86e6ba6ca1        24 months ago       742kB
+registry.cn-hangzhou.aliyuncs.com/google_containers/pause                     3.1                 da86e6ba6ca1        24 months ago       742kB
+</code></pre>
+<p>主节点需要的镜像有：kube-proxy，kube-controller-manager，kube-apiserver，kube-scheduler，coredns，etcd，pause</p>
+<p>工作节点需要的镜像有：kube-proxy，pause</p>
+</li>
+</ol>
+<p><strong>Master节点操作</strong></p>
+<ol>
+<li>执行kubeadm init</li>
+</ol>
+<pre><code>kubeadm init --apiserver-advertise-address=192.168.33.10 --image-repository registry.aliyuncs.com/google_containers --pod-network-cidr=10.244.0.0/16
+</code></pre>
+<p>具体请参考官网，我只设置了apiserver-advertise-address，pod-network-cidr</p>
+<pre><code>[init] Using Kubernetes version: vX.Y.Z
+[preflight] Running pre-flight checks
+[preflight] Pulling images required for setting up a Kubernetes cluster
+[preflight] This might take a minute or two, depending on the speed of your internet connection
+[preflight] You can also perform this action in beforehand using 'kubeadm config images pull'
+[kubelet-start] Writing kubelet environment file with flags to file &quot;/var/lib/kubelet/kubeadm-flags.env&quot;
+[kubelet-start] Writing kubelet configuration to file &quot;/var/lib/kubelet/config.yaml&quot;
+[kubelet-start] Activating the kubelet service
+[certs] Using certificateDir folder &quot;/etc/kubernetes/pki&quot;
+[certs] Generating &quot;etcd/ca&quot; certificate and key
+[certs] Generating &quot;etcd/server&quot; certificate and key
+[certs] etcd/server serving cert is signed for DNS names [kubeadm-cp localhost] and IPs [10.138.0.4 127.0.0.1 ::1]
+[certs] Generating &quot;etcd/healthcheck-client&quot; certificate and key
+[certs] Generating &quot;etcd/peer&quot; certificate and key
+[certs] etcd/peer serving cert is signed for DNS names [kubeadm-cp localhost] and IPs [10.138.0.4 127.0.0.1 ::1]
+[certs] Generating &quot;apiserver-etcd-client&quot; certificate and key
+[certs] Generating &quot;ca&quot; certificate and key
+[certs] Generating &quot;apiserver&quot; certificate and key
+[certs] apiserver serving cert is signed for DNS names [kubeadm-cp kubernetes kubernetes.default kubernetes.default.svc kubernetes.default.svc.cluster.local] and IPs [10.96.0.1 10.138.0.4]
+[certs] Generating &quot;apiserver-kubelet-client&quot; certificate and key
+[certs] Generating &quot;front-proxy-ca&quot; certificate and key
+[certs] Generating &quot;front-proxy-client&quot; certificate and key
+[certs] Generating &quot;sa&quot; key and public key
+[kubeconfig] Using kubeconfig folder &quot;/etc/kubernetes&quot;
+[kubeconfig] Writing &quot;admin.conf&quot; kubeconfig file
+[kubeconfig] Writing &quot;kubelet.conf&quot; kubeconfig file
+[kubeconfig] Writing &quot;controller-manager.conf&quot; kubeconfig file
+[kubeconfig] Writing &quot;scheduler.conf&quot; kubeconfig file
+[control-plane] Using manifest folder &quot;/etc/kubernetes/manifests&quot;
+[control-plane] Creating static Pod manifest for &quot;kube-apiserver&quot;
+[control-plane] Creating static Pod manifest for &quot;kube-controller-manager&quot;
+[control-plane] Creating static Pod manifest for &quot;kube-scheduler&quot;
+[etcd] Creating static Pod manifest for local etcd in &quot;/etc/kubernetes/manifests&quot;
+[wait-control-plane] Waiting for the kubelet to boot up the control plane as static Pods from directory &quot;/etc/kubernetes/manifests&quot;. This can take up to 4m0s
+[apiclient] All control plane components are healthy after 31.501735 seconds
+[uploadconfig] storing the configuration used in ConfigMap &quot;kubeadm-config&quot; in the &quot;kube-system&quot; Namespace
+[kubelet] Creating a ConfigMap &quot;kubelet-config-X.Y&quot; in namespace kube-system with the configuration for the kubelets in the cluster
+[patchnode] Uploading the CRI Socket information &quot;/var/run/dockershim.sock&quot; to the Node API object &quot;kubeadm-cp&quot; as an annotation
+[mark-control-plane] Marking the node kubeadm-cp as control-plane by adding the label &quot;node-role.kubernetes.io/master=''&quot;
+[mark-control-plane] Marking the node kubeadm-cp as control-plane by adding the taints [node-role.kubernetes.io/master:NoSchedule]
+[bootstrap-token] Using token: &lt;token&gt;
+[bootstrap-token] Configuring bootstrap tokens, cluster-info ConfigMap, RBAC Roles
+[bootstraptoken] configured RBAC rules to allow Node Bootstrap tokens to post CSRs in order for nodes to get long term certificate credentials
+[bootstraptoken] configured RBAC rules to allow the csrapprover controller automatically approve CSRs from a Node Bootstrap Token
+[bootstraptoken] configured RBAC rules to allow certificate rotation for all node client certificates in the cluster
+[bootstraptoken] creating the &quot;cluster-info&quot; ConfigMap in the &quot;kube-public&quot; namespace
+[addons] Applied essential addon: CoreDNS
+[addons] Applied essential addon: kube-proxy
+
+Your Kubernetes control-plane has initialized successfully!
+
+To start using your cluster, you need to run the following as a regular user:
+
+  mkdir -p $HOME/.kube
+  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+You should now deploy a pod network to the cluster.
+Run &quot;kubectl apply -f [podnetwork].yaml&quot; with one of the options listed at:
+  /docs/concepts/cluster-administration/addons/
+
+You can now join any number of machines by running the following on each node
+as root:
+
+  kubeadm join &lt;control-plane-host&gt;:&lt;control-plane-port&gt; --token &lt;token&gt; --discovery-token-ca-cert-hash sha256:&lt;hash&gt;
+</code></pre>
+<p>记得执行以下命令</p>
+<pre><code>mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+</code></pre>
+<ol start="2">
+<li>安装pod 网络插件，我选择了flannel</li>
+</ol>
+<pre><code>kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/2140ac876ef134e0ed5af15c65e414cf26827915/Documentation/kube-flannel.yml
+</code></pre>
+<p><strong>节点操作</strong></p>
+<ol>
+<li>
+<p>在master节点执行kubeadm token list获取token</p>
+</li>
+<li>
+<p>获取hash</p>
+<pre><code>openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2&gt;/dev/null | \
+   openssl dgst -sha256 -hex | sed 's/^.* //'
+</code></pre>
+</li>
+<li>
+<p>执行kubeadm join命令</p>
+<pre><code>kubeadm join --token &lt;token&gt; &lt;control-plane-host&gt;:&lt;control-plane-port&gt; --discovery-token-ca-cert-hash sha256:&lt;hash&gt;
+</code></pre>
+</li>
+</ol>
+<figure data-type="image" tabindex="1"><img src="https://raw.githubusercontent.com/caijh/imagehosting/master/20200101194030.png" alt="" loading="lazy"></figure>
+<h1 id="安装dasboard-admin">安装dasboard-admin</h1>
+<pre><code>kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0-beta6/aio/deploy/recommended.yaml
+</code></pre>
+<pre><code>kubectl proxy -address=0.0.0.0
+</code></pre>
+<p>创建集群管理账号被绑定cluster-admin</p>
+<pre><code>apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: dashboard-admin
+  namespace: kube-system
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: dashboard-admin
+subjects:
+  - kind: ServiceAccount
+    name: dashboard-admin
+    namespace: kube-system
+roleRef:
+  kind: ClusterRole
+  name: cluster-admin
+  apiGroup: rbac.authorization.k8s.io
+</code></pre>
+<p>获取token,登录</p>
+<figure data-type="image" tabindex="2"><img src="https://raw.githubusercontent.com/caijh/imagehosting/master/20200101193859.png" alt="" loading="lazy"></figure>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Kubernetes - 解决删除namespace一直Terminating的问题]]></title>
         <id>https://caijh.github.io/post/kubernetes-jie-jue-shan-chu-namespace-yi-zhi-terminating-de-wen-ti</id>
@@ -2127,37 +2448,6 @@ $ cd redis-5.0.5
 <pre><code>➜  redis-5.0.5 cp redis.conf ~/dev/redis-5.0.5 
 ➜  redis-5.0.5 cp sentinel.conf ~/dev/redis-5.0.5
 </code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Redis - 如何访问大量数据]]></title>
-        <id>https://caijh.github.io/post/redis-ru-he-fang-wen-da-liang-shu-ju</id>
-        <link href="https://caijh.github.io/post/redis-ru-he-fang-wen-da-liang-shu-ju">
-        </link>
-        <updated>2019-07-18T04:31:22.000Z</updated>
-        <summary type="html"><![CDATA[<p>众如周知，Redis中<code>keys pattern</code>命令可以返回大量数据。<br>
-非生产环境可以结合linux的管道删除相同pattern的key.</p>
-<pre><code>redis-cli keys &quot;*&quot; | xargs redis-cli del
-</code></pre>
-<p>但是生产环境一般keys会被重命名禁止在生产使用。<br>
-这时可以使用scan命令删除。</p>
-]]></summary>
-        <content type="html"><![CDATA[<p>众如周知，Redis中<code>keys pattern</code>命令可以返回大量数据。<br>
-非生产环境可以结合linux的管道删除相同pattern的key.</p>
-<pre><code>redis-cli keys &quot;*&quot; | xargs redis-cli del
-</code></pre>
-<p>但是生产环境一般keys会被重命名禁止在生产使用。<br>
-这时可以使用scan命令删除。</p>
-<!-- more -->
-<p>scan的特点：</p>
-<ul>
-<li>复杂度虽然也是 O(n)，但是它是通过游标分步进行的，不会阻塞线程</li>
-<li>提供 count 参数，不是结果数量，是Redis单次遍历字典槽位数量(约等于)</li>
-<li>同 keys 一样，它也提供模式匹配功能;</li>
-<li>服务器不需要为游标保存状态，游标的唯一状态就是 scan 返回给客户端的游标整数;</li>
-<li>返回的结果可能会有重复，需要客户端去重复，这点非常重要;</li>
-<li>单次返回的结果是空的并不意味着遍历结束，而要看返回的游标值是否为零</li>
-</ul>
 ]]></content>
     </entry>
 </feed>
