@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+        <head>
+        <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1,initial-scale=1,user-scalable=no" />
+        <meta charset="utf-8">
+        <title>Centos  - 下载离线安装包 | John&#39;s Blog</title>
+        <link rel="stylesheet" href="https://caijh.github.io//styles/main.css">
+        <link rel="stylesheet" href="https://at.alicdn.com/t/font_1306644_jwtuc2zzbrd.css">
+        <link href="https://cdn.bootcss.com/animate.css/3.7.2/animate.min.css" rel="stylesheet">
+         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+        <script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
+         <script src="https://cdn.bootcss.com/highlight.js/9.15.10/highlight.min.js"></script>
+         <script >hljs.initHighlightingOnLoad();</script>
+
+    </head>
+    <body>
+              <header class="header mdui-m-b-5">      
+            <div class="container  ">
+                <div class="index-title animated fadeInDown mdui-text-center mdui-text-color-white mdui-m-b-2" style="animation-delay: 0.2s"><a href="https://caijh.github.io/">John&#39;s Blog</a></div>
+                <div class="mdui-text-color-white animated fadeInDown mdui-text-center  mdui-m-b-3" style="animation-delay: 0.4s">搬砖小弟</div>
+           
+            <nav id="nav" class="mdui-text-center animated fadeInDown" style="animation-delay: 0.6s">
+                   
+                            <li><a href="/">首页</a>
+                                <span class="nav-style top"></span>
+                                <span class="nav-style bottom"></span>
+                                <span class="nav-style left"></span>
+                                <span class="nav-style right"></span>
+                                </li>
+                    
+                            <li><a href="/archives">归档</a>
+                                <span class="nav-style top"></span>
+                                <span class="nav-style bottom"></span>
+                                <span class="nav-style left"></span>
+                                <span class="nav-style right"></span>
+                                </li>
+                    
+                            <li><a href="/tags">标签</a>
+                                <span class="nav-style top"></span>
+                                <span class="nav-style bottom"></span>
+                                <span class="nav-style left"></span>
+                                <span class="nav-style right"></span>
+                                </li>
+                    
+                            <li><a href="/post/about">关于</a>
+                                <span class="nav-style top"></span>
+                                <span class="nav-style bottom"></span>
+                                <span class="nav-style left"></span>
+                                <span class="nav-style right"></span>
+                                </li>
+                    
+                  </nav>
+                </div>
+        </header>
+        <div class="mdui-container ">
+                <div class="mdui-row">
+                        <div class="mdui-col-md-8 mdui-col-offset-md-2 ">
+                                <article class="mdui-p-a-2 post animated fadeIn" style="animation-delay: 0.8s;animation-duration: 2s">
+                                    <div class="post-title  mdui-m-b-1">Centos  - 下载离线安装包</div>
+                                    <div class="mdui-typo-body-2 mdui-m-b-2" datetime="2020-01-20 09:04:57">2020-01-20 / 5 min read</div>
+                                    <div class="mdui-m-b-2 mdui-typo post-neirong"><h2 id="一-背景">一、背景</h2>
+<p>yum是Fedora 22-、RedHat以及CentOS系统中默认使用的一款软件包管理器。使用yum命令我们可以非常轻松的为系统安装各种软件包。</p>
+<p>由于系统自带源中的软件包往往收录不全面或更新并不即时，所以例如Nginx，MySQL，MongoDB、Docker等有名的程序都会创建自己的软件源，我们只需添加他们的源即可在yum中找到并安装最新的版本了。</p>
+<p>不过这种非官方自建源，往往会因为服务器在国外，且国内没有镜像服务器，导致下载速度非常不稳定，比如MySQL官方源在国内最高速度一般只有200-300KB/s，最低甚至只有几B/s。</p>
+<p>所以现在就有这么一个想法，能不能把yum在线安装时下载的文件离线保存在本地，到时候需要安装的时候直接拿着之前离线保存的安装包直接安装，这样在可以联网的电脑上安装需要的程序包时就可以省去从网上下载程序包的时间，另外也可以给不能联网的电脑安装程序包了。</p>
+<h2 id="二-yum离线下载程序包">二、yum离线下载程序包</h2>
+<p>关于这个需求，我们可以安装一个yum插件：“yum-plugin-downloadonly”去实现它。</p>
+<p>我们首先用yum安装这个插件</p>
+<pre><code>yum install -y yum-plugin-downloadonly
+</code></pre>
+<p>安装完成之后就在使用yum的时候使用“--downloadonly”参数。这个参数将告诉yum只下载程序包，不进行安装。</p>
+<p>例如我想下载supervisor这个程序包，就只要使用下面的命令：</p>
+<pre><code>yum install -y --downloadonly supervisor 
+</code></pre>
+<p>请注意：--downloadonly参数将自动下载程序包安装时所需要的所有依赖，所以建议在全新的系统中使用本命令，因为在已经安装过部分依赖的系统上，yum不会将所有需要的依赖下载完全，例如下面这幅图所示：</p>
+<figure data-type="image" tabindex="1"><img src="https://sources.yanning.wang/images/Archives/664/01.png" alt="img" loading="lazy"></figure>
+<p>左边是已经安装过mysql-server的系统，它只会下载mysql-server和mysql-common两个程序包。右边是一个新系统，在这个系统下yum会下载mysql-server依赖的所有程序包，包括mysql-client和perl等。</p>
+<p>当然，您也可以使用yum resolvedep命令手动查看并下载依赖，只不过这样比较麻烦就是了。</p>
+<p>使用--downloadonly参数之后，yum在下载完程序包后就会显示一句“exiting because &quot;Download Only&quot; specified”并自动退出，此时要下载的程序包已经被放置到了yum的默认存放位置，在CentOS 7 x64下，这个默认路径是：</p>
+<p><strong>/var/cache/yum/x86_64/7//packages/</strong></p>
+<p>如果要指定yum的下载目录，还需要一个“--downloaddir”参数，例如我要将supervisor程序包安装到当前文件夹下，就使用下面的命令：</p>
+<pre><code>yum install -y --downloadonly --downloaddir=. supervisor 
+</code></pre>
+<p>等待下载完成后，用ls命令就可以看到当前目录下已经出现了supervisor及其依赖的程序包rpm文件。</p>
+<figure data-type="image" tabindex="2"><img src="https://sources.yanning.wang/images/Archives/664/02.png" alt="img" loading="lazy"></figure>
+<h2 id="三-yum离线安装程序包">三、yum离线安装程序包</h2>
+<p>在刚刚第二步中我们使用了yum --downloadonly命令离线下载了想要的程序包安装文件，现在我们有一台因为种种原因而不能上网的系统，我们现在要把刚刚下载下来的程序包安装到这台电脑上该怎么办呢？</p>
+<p>很简单，用yum localinstall命令。</p>
+<p>首先将我们下载下来的程序包及其依赖去使用U盘等方式拷贝到这台不能上网的电脑中，然后进入程序包存放目录，执行下面的命令（仍以supervisor为例）：</p>
+<pre><code>12345yum localinstall -y --nogpgcheck supervisor-3.1.4-1.el7.noarch.rpm \    python-backports-1.0-8.el7.x86_64.rpm \    python-backports-ssl_match_hostname-3.4.0.2-4.el7.noarch.rpm \    python-meld3-0.6.10-1.el7.x86_64.rpm \    python-setuptools-0.9.8-7.el7.noarch.rpm 
+</code></pre>
+<p>几个注意点：</p>
+<p>1.使用yum localinstall命令需要的程序包时需要同时安装程序包所有的依赖项目，否则还是会尝试联网去下载缺少的依赖项目；</p>
+<p>2.“--nogpgcheck”参数主要是为了不让yum对程序包进行GPG验证；</p>
+<p>3.除了yum localinstall命令以外，还可以使用rpm -ivh命令安装rpm包，这里不再单独讨论。</p>
+<p>注原作者地址：https://www.yanning.wang/archives/664.html</p>
+</div>
+                                    <div class="mdui-divider mdui-m-b-2"></div>
+                                    <div class="mdui-row-xs-2 post-fenye">
+                                       
+                                        <div class="mdui-col"> </div>
+                                        
+
+                                        
+                                        <div class="mdui-col"><div class="mdui-text-right "><a href="https://caijh.github.io/post/kubernetes-tong-guo-kubeadm-bu-shu-kubernetes-ji-qun">Kubernetes - 通过kubeadm部署Kubernetes集群</a></div> </div>
+                                       
+                                      </div>
+                                   
+                                    <div class="mdui-divider mdui-m-t-2 mdui-m-b-2"></div>
+                                    
+          
+          
+            <link rel="stylesheet" href="https://unpkg.com/disqusjs@1.1/dist/disqusjs.css">
+<script src="https://unpkg.com/disqusjs@1.1/dist/disqus.js"></script>
+
+<div id="disqus_thread"></div>
+
+<script>
+
+var options = {
+  shortname: 'caijh',
+  apikey: 'lO2xchFAyPIP4VOKbgm796D9jIvqLVziAqLHOPnOZySwUlyWXAhgwrIbPQ16AyUX',
+}
+if ('https://disqus.skk.moe/disqus/') {
+  options.api = 'https://disqus.skk.moe/disqus/'
+}
+var dsqjs = new DisqusJS(options)
+
+</script>
+
+          
+        
+                                     <script src="https://caijh.github.io//media/scripts/Valine.min.js"></script>
+ <div class="comment"></div>
+
+<script>
+      new Valine({
+            el: '.comment',
+
+
+
+            path: window.location.pathname,
+            pageSize: 30,
+            avatar:'mm', 
+       })
+    </script> 
+<script>
+    if(window.location.hash){
+        var checkExist = setInterval(function() {
+           if ($(window.location.hash).length) {
+              $('html, body').animate({scrollTop: $(window.location.hash).offset().top-90}, 1000);
+              clearInterval(checkExist);
+           }
+        }, 100);
+    }
+</script>
+                                </article>
+
+                                    
+                        </div>
+                      </div>
+    
+                
+
+              </div>
+                    <footer class="footer mdui-m-t-5 mdui-text-center">
+               <nav class="social-links">
+                      <ul>
+                      
+                      
+                           
+                      
+                           
+                      
+                           
+                      
+                           
+                      
+                           
+                      
+                           
+                      
+                           
+                      
+                           
+                      
+                           
+                      
+                           
+                      
+                           
+                      
+                           
+                      </ul>
+                    </nav>
+                    <div class="copyright">
+                      <p>Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> <br/> Theme <a href="https://github.com/shanbufun/gridea-theme-song" target="_blank"  title="宋"  >Song</a> by <a href="https://shanbu.fun/" target="_blank"  title="山卜方" >shanbufun</a> </p>
+                  </div>
+                  
+              </footer>
+    </body>
+</html>
