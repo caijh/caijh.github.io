@@ -66,6 +66,25 @@
                                         <div class="mdui-col mdui-p-a-1">
                                           <div class="archives mdui-p-a-3">
                                             <div class="mdui-typo-body-2 mdui-m-b-1">2019-06-24</div>
+                                            <div class="mdui-m-b-2 archives-title"><a href="https://caijh.github.io/post/mysql-gui-fan">MySQL规范</a></div>
+                                            <div class="mdui-typo-subheading mdui-m-b-1 mdui-text-truncate"><h1 id="数据库命名规范">数据库命名规范</h1>
+<ul>
+<li>所有数据库对象名称必须使用小写字母并用下划线分割</li>
+<li>所有数据库对象名称禁止使用mysql保留关键字（如果表名中包含关键字查询时，需要将其用单引号括起来）</li>
+<li>数据库对象的命名要能做到见名识意，并且最后不要超过32个字符</li>
+<li>临时库表必须以tmp_为前缀并以日期为后缀，备份表必须以bak_为前缀并以日期(时间戳)为后缀</li>
+<li>所有存储相同数据的列名和列类型必须一致（一般作为关联列，如果查询时关联列类型不一致会自动进行数据类型隐式转换，会造成列上的索引失效，导致查询效率降低）</li>
+</ul>
+</div>
+                                          </div>
+                                </article>
+                                
+                                
+                               
+                                <article class="animated fadeIn" style="animation-delay:1.3s;animation-duration: 2s">
+                                        <div class="mdui-col mdui-p-a-1">
+                                          <div class="archives mdui-p-a-3">
+                                            <div class="mdui-typo-body-2 mdui-m-b-1">2019-06-24</div>
                                             <div class="mdui-m-b-2 archives-title"><a href="https://caijh.github.io/post/graphql-xue-xi-bi-ji">GraphQL学习笔记</a></div>
                                             <div class="mdui-typo-subheading mdui-m-b-1 mdui-text-truncate"><h2 id="graphql是什么">GraphQL是什么？</h2>
 <p>GraphQl官方的定义是：</p>

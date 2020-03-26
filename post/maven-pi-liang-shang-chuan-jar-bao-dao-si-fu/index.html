@@ -3,7 +3,7 @@
         <head>
         <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1,initial-scale=1,user-scalable=no" />
         <meta charset="utf-8">
-        <title>John&#39;s Blog</title>
+        <title>Maven - 批量上传jar包到私服 | John&#39;s Blog</title>
         <link rel="stylesheet" href="https://caijh.github.io//styles/main.css">
         <link rel="stylesheet" href="https://at.alicdn.com/t/font_1306644_jwtuc2zzbrd.css">
         <link href="https://cdn.bootcss.com/animate.css/3.7.2/animate.min.css" rel="stylesheet">
@@ -14,7 +14,7 @@
 
     </head>
     <body>
-          <header class="header mdui-m-b-5">      
+              <header class="header mdui-m-b-5">      
             <div class="container  ">
                 <div class="index-title animated fadeInDown mdui-text-center mdui-text-color-white mdui-m-b-2" style="animation-delay: 0.2s"><a href="https://caijh.github.io/">John&#39;s Blog</a></div>
                 <div class="mdui-text-color-white animated fadeInDown mdui-text-center  mdui-m-b-3" style="animation-delay: 0.4s">搬砖小弟</div>
@@ -54,45 +54,124 @@
         </header>
         <div class="mdui-container ">
                 <div class="mdui-row">
-                        <div class="mdui-col-md-8 mdui-col-offset-md-2 mdui-m-t-1">
-                         
-                                                         
-                               <article class="mdui-p-a-5 index-list mdui-m-b-3 animated fadeIn" style="animation-delay: 0.8s;animation-duration: 2s">
-                                    <div class="mdui-typo-body-2 mdui-m-b-1" datetime="2019-06-24 10:54:06">2019-06-24</div>
-                                    <div class="mdui-typo-headline mdui-m-b-3 index-list-title index-guo"><a href="https://caijh.github.io/post/mysql-gui-fan">MySQL规范</a></div>
-                                    <div class="mdui-typo-subheading mdui-m-b-2 index-neirong"><p>数据库命名规范
+                        <div class="mdui-col-md-8 mdui-col-offset-md-2 ">
+                                <article class="mdui-p-a-2 post animated fadeIn" style="animation-delay: 0.8s;animation-duration: 2s">
+                                    <div class="post-title  mdui-m-b-1">Maven - 批量上传jar包到私服</div>
+                                    <div class="mdui-typo-body-2 mdui-m-b-2" datetime="2020-03-26 08:50:33">2020-03-26 / 2 min read</div>
+                                    <div class="mdui-m-b-2 mdui-typo post-neirong"><h1 id="单个上传">单个上传</h1>
+<pre><code>mvn deploy:deploy-file -DgroupId=com.oracle -DartifactId=ojdbc6 -Dversion=10.2.0.1.0 -Dpackaging=jar -Dfile=D:\\ojdbc6.jar -Durl=http://ip:8081/repository/maven-releases/ -DrepositoryId=nexus
+</code></pre>
+<h1 id="批量上传">批量上传</h1>
+<ol>
+<li>
+<p>先将本地maven/repository仓库打一个完整的zip压缩包</p>
+</li>
+<li>
+<p>上传到linux目录，如：/opt</p>
+</li>
+<li>
+<p>解压repository.zip</p>
+</li>
+<li>
+<p>进入repository目录</p>
+</li>
+<li>
+<p>创建mavenimport.sh 文件，添加以下内容，并将脚本放到服务器的repository目录下，执行以下脚本</p>
+<pre><code>#!/bin/bash
 
-所有数据库对象名称必须使用小写字母并用下划线分割
-所有数据库对象名称禁止使用mysql保留关键字（如果表名中包含关键字查询时，需要将其用单引号括起来）
-数据库对象的命名要能做到见名识意，并且最后不要超过32个字符
-临时库表...</p></div>
-                                    <div class="index-list-rm index-guo"><a href="https://caijh.github.io/post/mysql-gui-fan">Read More</a></div>
+# copy and run this script to the root of the repository directory containing files
+# this script attempts to exclude uploading itself explicitly so the script name is important
+# Get command line params
+
+while getopts &quot;:r:u:p:&quot; opt; do
+    case $opt in
+    r) REPO_URL=&quot;$OPTARG&quot;
+    ;;
+    u) USERNAME=&quot;$OPTARG&quot;
+    ;;
+    p) PASSWORD=&quot;$OPTARG&quot;
+    ;;
+    esac
+done
+
+find . -type f -not -path './mavenimport\.sh*' -not -path '*/\.*' -not -path '*/\^archetype\-catalog\.xml*' -not -path '*/\^maven\-metadata\-local*\.xml' -not -path '*/\^maven\-metadata\-deployment*\.xml' | sed &quot;s|^\./||&quot; | xargs -I '{}' curl -u &quot;$USERNAME:$PASSWORD&quot; -X PUT -v -T {} ${REPO_URL}/{} ;
+
+# ./mavenimport.sh -u admin -p admin -r http://jenkins_ip:port/repository/local/
+</code></pre>
+<pre><code>./mavenimport.sh -u admin -p admin -r http://jenkins_ip:port/repository/local/
+</code></pre>
+</li>
+</ol>
+</div>
+                                    <div class="mdui-divider mdui-m-b-2"></div>
+                                    <div class="mdui-row-xs-2 post-fenye">
+                                       
+                                        <div class="mdui-col"> </div>
+                                        
+
+                                        
+                                        <div class="mdui-col"><div class="mdui-text-right "><a href="https://caijh.github.io/post/centos-xia-zai-chi-xian-an-zhuang-bao">Centos  - 下载离线安装包</a></div> </div>
+                                       
+                                      </div>
+                                   
+                                    <div class="mdui-divider mdui-m-t-2 mdui-m-b-2"></div>
+                                    
+          
+          
+            <link rel="stylesheet" href="https://unpkg.com/disqusjs@1.1/dist/disqusjs.css">
+<script src="https://unpkg.com/disqusjs@1.1/dist/disqus.js"></script>
+
+<div id="disqus_thread"></div>
+
+<script>
+
+var options = {
+  shortname: 'caijh',
+  apikey: 'lO2xchFAyPIP4VOKbgm796D9jIvqLVziAqLHOPnOZySwUlyWXAhgwrIbPQ16AyUX',
+}
+if ('https://disqus.skk.moe/disqus/') {
+  options.api = 'https://disqus.skk.moe/disqus/'
+}
+var dsqjs = new DisqusJS(options)
+
+</script>
+
+          
+        
+                                     <script src="https://caijh.github.io//media/scripts/Valine.min.js"></script>
+ <div class="comment"></div>
+
+<script>
+      new Valine({
+            el: '.comment',
+
+
+
+            path: window.location.pathname,
+            pageSize: 30,
+            avatar:'mm', 
+       })
+    </script> 
+<script>
+    if(window.location.hash){
+        var checkExist = setInterval(function() {
+           if ($(window.location.hash).length) {
+              $('html, body').animate({scrollTop: $(window.location.hash).offset().top-90}, 1000);
+              clearInterval(checkExist);
+           }
+        }, 100);
+    }
+</script>
                                 </article>
-                                
-                               <article class="mdui-p-a-5 index-list mdui-m-b-3 animated fadeIn" style="animation-delay: 0.8s;animation-duration: 2s">
-                                    <div class="mdui-typo-body-2 mdui-m-b-1" datetime="2019-06-24 10:35:07">2019-06-24</div>
-                                    <div class="mdui-typo-headline mdui-m-b-3 index-list-title index-guo"><a href="https://caijh.github.io/post/graphql-xue-xi-bi-ji">GraphQL学习笔记</a></div>
-                                    <div class="mdui-typo-subheading mdui-m-b-2 index-neirong"><p>GraphQL是什么？
-GraphQl官方的定义是：
-GraphQL是一种API的查询语言。 它用于运行时完成数据查询。 GraphQL服务与传输无关，但通常通过HTTP提供。
-GraphQl特性
 
-GraphQL query， 只请求需要...</p></div>
-                                    <div class="index-list-rm index-guo"><a href="https://caijh.github.io/post/graphql-xue-xi-bi-ji">Read More</a></div>
-                                </article>
-                                
-
-                                                            <nav class="mdui-m-t-5">
-                                
-                                <div class="index-yema mdui-float-left"><a href="https://caijh.github.io/page/5/">上一页</a></div>
-                                 
-                                
-                                </nav>     
-
+                                    
                         </div>
                       </div>
+    
+                
+
               </div>
-                <footer class="footer mdui-m-t-5 mdui-text-center">
+                    <footer class="footer mdui-m-t-5 mdui-text-center">
                <nav class="social-links">
                       <ul>
                       
