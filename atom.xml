@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://caijh.github.io/</id>
     <title>John&apos;s Blog</title>
-    <updated>2020-03-26T00:51:09.026Z</updated>
+    <updated>2020-05-19T14:00:50.030Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://caijh.github.io/"/>
     <link rel="self" href="https://caijh.github.io/atom.xml"/>
@@ -11,9 +11,121 @@
     <icon>https://caijh.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, John&apos;s Blog</rights>
     <entry>
+        <title type="html"><![CDATA[规则引擎drools - 在K8S上部署drools-workbench和kie-server]]></title>
+        <id>https://caijh.github.io/post/gui-ze-yin-qing-drools-zai-k8s-shang-bu-shu-drools-workbench-he-kie-server/</id>
+        <link href="https://caijh.github.io/post/gui-ze-yin-qing-drools-zai-k8s-shang-bu-shu-drools-workbench-he-kie-server/">
+        </link>
+        <updated>2020-05-18T14:53:32.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="在k8s上部署drools-workbench和kie-server">在K8S上部署drools-workbench和kie-server</h1>
+<p>Yaml如下</p>
+<pre><code>---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: drools-data
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+        storage: 10Gi
+  storageClassName: nfs-storage
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: drools-workbench
+  labels:
+    app: drools-workbench
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: drools-workbench
+  template:
+    metadata:
+      labels:
+        app: drools-workbench
+    spec:
+      containers:
+      - image: jboss/drools-workbench-showcase:latest
+        imagePullPolicy: IfNotPresent
+        name: drools-workbench
+        ports:
+          - containerPort: 8080
+          - containerPort: 8001
+        volumeMounts:
+          - name: drools-data
+            mountPath: /opt/jboss/wildfly/bin/.niogit
+            subPath: wb_git
+          - name: drools-data
+            mountPath: /opt/jboss/wildfly/standalone/log
+            subPath: logs
+      volumes:
+      - name: drools-data
+        persistentVolumeClaim:
+          claimName: drools-data
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: drools-wb
+  labels:
+    app: drools-workbench
+spec:
+  type: NodePort
+  ports:
+    - port: 8080
+      targetPort: 8080
+      nodePort: 30808
+  selector:
+    app: drools-workbench
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kie-server
+  labels:
+    app: kie-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kie-server
+  template:
+    metadata:
+      labels:
+        app: kie-server
+    spec:
+      containers:
+      - image: jboss/kie-server-showcase:latest
+        imagePullPolicy: IfNotPresent
+        name: kie-server
+        ports:
+          - containerPort: 8080
+        env:
+          - name: KIE_SERVER_CONTROLLER
+            value: http://drools-wb:8080/business-central/rest/controller
+          - name: KIE_MAVEN_REPO
+            value: http://drools-wb:8080/business-central/maven2
+
+
+</code></pre>
+<p>需要注意</p>
+<ol>
+<li>你的K8S环境要有StorageClass, 并替换yaml中的storageClass</li>
+<li>如果修改了暴露drools-workbench的Service的名称，环境变量KIE_SERVER_CONTROLLER及KIE_MAVEN_REPO需要修改</li>
+</ol>
+<p>访问http://ip:30808/business-central, 使用admin/admin登录</p>
+<figure data-type="image" tabindex="1"><img src="https://raw.githubusercontent.com/caijh/imagehosting/master/image-20200518225205550.png" alt="image-20200518225205550" loading="lazy"></figure>
+]]></content>
+    </entry>
+    <entry>
         <title type="html"><![CDATA[Maven - 批量上传jar包到私服]]></title>
-        <id>https://caijh.github.io/post/maven-pi-liang-shang-chuan-jar-bao-dao-si-fu</id>
-        <link href="https://caijh.github.io/post/maven-pi-liang-shang-chuan-jar-bao-dao-si-fu">
+        <id>https://caijh.github.io/post/maven-pi-liang-shang-chuan-jar-bao-dao-si-fu/</id>
+        <link href="https://caijh.github.io/post/maven-pi-liang-shang-chuan-jar-bao-dao-si-fu/">
         </link>
         <updated>2020-03-26T00:50:33.000Z</updated>
         <content type="html"><![CDATA[<h1 id="单个上传">单个上传</h1>
@@ -64,8 +176,8 @@ find . -type f -not -path './mavenimport\.sh*' -not -path '*/\.*' -not -path '*/
     </entry>
     <entry>
         <title type="html"><![CDATA[Centos  - 下载离线安装包]]></title>
-        <id>https://caijh.github.io/post/centos-xia-zai-chi-xian-an-zhuang-bao</id>
-        <link href="https://caijh.github.io/post/centos-xia-zai-chi-xian-an-zhuang-bao">
+        <id>https://caijh.github.io/post/centos-xia-zai-chi-xian-an-zhuang-bao/</id>
+        <link href="https://caijh.github.io/post/centos-xia-zai-chi-xian-an-zhuang-bao/">
         </link>
         <updated>2020-01-20T01:04:57.000Z</updated>
         <content type="html"><![CDATA[<h2 id="一-背景">一、背景</h2>
@@ -108,8 +220,8 @@ find . -type f -not -path './mavenimport\.sh*' -not -path '*/\.*' -not -path '*/
     </entry>
     <entry>
         <title type="html"><![CDATA[Kubernetes - 通过kubeadm部署Kubernetes集群]]></title>
-        <id>https://caijh.github.io/post/kubernetes-tong-guo-kubeadm-bu-shu-kubernetes-ji-qun</id>
-        <link href="https://caijh.github.io/post/kubernetes-tong-guo-kubeadm-bu-shu-kubernetes-ji-qun">
+        <id>https://caijh.github.io/post/kubernetes-tong-guo-kubeadm-bu-shu-kubernetes-ji-qun/</id>
+        <link href="https://caijh.github.io/post/kubernetes-tong-guo-kubeadm-bu-shu-kubernetes-ji-qun/">
         </link>
         <updated>2020-01-01T11:19:54.000Z</updated>
         <content type="html"><![CDATA[<h1 id="准备环境">准备环境</h1>
@@ -429,8 +541,8 @@ roleRef:
     </entry>
     <entry>
         <title type="html"><![CDATA[Kubernetes - 解决删除namespace一直Terminating的问题]]></title>
-        <id>https://caijh.github.io/post/kubernetes-jie-jue-shan-chu-namespace-yi-zhi-terminating-de-wen-ti</id>
-        <link href="https://caijh.github.io/post/kubernetes-jie-jue-shan-chu-namespace-yi-zhi-terminating-de-wen-ti">
+        <id>https://caijh.github.io/post/kubernetes-jie-jue-shan-chu-namespace-yi-zhi-terminating-de-wen-ti/</id>
+        <link href="https://caijh.github.io/post/kubernetes-jie-jue-shan-chu-namespace-yi-zhi-terminating-de-wen-ti/">
         </link>
         <updated>2019-12-28T15:04:43.000Z</updated>
         <content type="html"><![CDATA[<p>在删除命名空间时，一直卡在Terminating状态，使用--force参数依然无法删除，报错</p>
@@ -446,8 +558,8 @@ roleRef:
     </entry>
     <entry>
         <title type="html"><![CDATA[Spring Cloud - Eureka]]></title>
-        <id>https://caijh.github.io/post/spring-cloud-eureka</id>
-        <link href="https://caijh.github.io/post/spring-cloud-eureka">
+        <id>https://caijh.github.io/post/spring-cloud-eureka/</id>
+        <link href="https://caijh.github.io/post/spring-cloud-eureka/">
         </link>
         <updated>2019-11-04T07:00:32.000Z</updated>
         <summary type="html"><![CDATA[<blockquote>
@@ -1690,8 +1802,8 @@ spec:
     </entry>
     <entry>
         <title type="html"><![CDATA[kubernetes - 部署rabbitmq集群]]></title>
-        <id>https://caijh.github.io/post/kubernetes-bu-shu-rabbitmq-ji-qun</id>
-        <link href="https://caijh.github.io/post/kubernetes-bu-shu-rabbitmq-ji-qun">
+        <id>https://caijh.github.io/post/kubernetes-bu-shu-rabbitmq-ji-qun/</id>
+        <link href="https://caijh.github.io/post/kubernetes-bu-shu-rabbitmq-ji-qun/">
         </link>
         <updated>2019-08-30T01:05:56.000Z</updated>
         <summary type="html"><![CDATA[<hr>
@@ -1962,8 +2074,8 @@ spec:
     </entry>
     <entry>
         <title type="html"><![CDATA[Linux - 安装nfs]]></title>
-        <id>https://caijh.github.io/post/linux-an-zhuang-nfs</id>
-        <link href="https://caijh.github.io/post/linux-an-zhuang-nfs">
+        <id>https://caijh.github.io/post/linux-an-zhuang-nfs/</id>
+        <link href="https://caijh.github.io/post/linux-an-zhuang-nfs/">
         </link>
         <updated>2019-08-28T08:50:56.000Z</updated>
         <summary type="html"><![CDATA[<p>想要k8s中使用nfs来动态提供PersistentVolume，so查下怎么搭建nfs server.<br>
@@ -2007,8 +2119,8 @@ sudo systemctl start nfs
     </entry>
     <entry>
         <title type="html"><![CDATA[k8s - 安装kube-dns插件]]></title>
-        <id>https://caijh.github.io/post/k8s-an-zhuang-kube-dns-cha-jian</id>
-        <link href="https://caijh.github.io/post/k8s-an-zhuang-kube-dns-cha-jian">
+        <id>https://caijh.github.io/post/k8s-an-zhuang-kube-dns-cha-jian/</id>
+        <link href="https://caijh.github.io/post/k8s-an-zhuang-kube-dns-cha-jian/">
         </link>
         <updated>2019-08-09T07:11:13.000Z</updated>
         <content type="html"><![CDATA[<h1 id="kubernetes-安装kube-dns插件">Kubernetes - 安装kube-dns插件</h1>
@@ -2295,8 +2407,8 @@ spec:
     </entry>
     <entry>
         <title type="html"><![CDATA[Maven - 怎么样skip test]]></title>
-        <id>https://caijh.github.io/post/maven-zen-me-yang-skip-test</id>
-        <link href="https://caijh.github.io/post/maven-zen-me-yang-skip-test">
+        <id>https://caijh.github.io/post/maven-zen-me-yang-skip-test/</id>
+        <link href="https://caijh.github.io/post/maven-zen-me-yang-skip-test/">
         </link>
         <updated>2019-08-06T03:20:36.000Z</updated>
         <summary type="html"><![CDATA[<h3 id="maven-参数设置">Maven 参数设置</h3>
@@ -2326,72 +2438,6 @@ spec:
     &lt;/configuration&gt;
 &lt;/plugin&gt;
 </code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[k8s - 基本概念]]></title>
-        <id>https://caijh.github.io/post/k8s-ji-ben-gai-nian</id>
-        <link href="https://caijh.github.io/post/k8s-ji-ben-gai-nian">
-        </link>
-        <updated>2019-08-06T02:57:14.000Z</updated>
-        <summary type="html"><![CDATA[<h2 id="pod">Pod</h2>
-<p>Pod是一个或多个若干相关容器的组合，Pod包含的容器运行在同一台宿主机上，这些容器使用相同的网络命名空间、IP地址和端口，相互之间能通过localhost来发现和通信。另外，这些容器还可共享一块存储卷空间。在Kubernetes中创建、调度和管理的最小单位是Pod，而不是容器，Pod通过提供更高层次的抽象，提供了更加灵活的部署和管理模式。</p>
-<p>Pod是Kubernetes的基本操作单元，也是应用运行的载体。</p>
-<p>Pod是容器的集合，容器是真正的执行体。相比原生的容器接口，Pod提供了更高层次的抽象，但是Pod的设计并不是为了运行同一个应用的多个实例，而是运行一个应用多个紧密联系的程序。而每个程序运行在单独的容器中，以Pod的形式组合成一个应用。</p>
-<h2 id="replication-controller">Replication Controller</h2>
-<p>Replication Controller用来控制管理Pod副本（Replica，或者称为实例），Replication Controller确保任何时候Kubernetes集群中有指定数量的Pod副本在运行。如果少于指定数量的Pod副本，Replication Controller会启动新的Pod副本，反之会杀死多余的副本以保证数量不变。另外，Replication Controller是弹性伸缩、滚动升级的实现核心。</p>
-<p>注：官方建议使用Deployment代替</p>
-<h2 id="service">Service</h2>
-<p>Service是真实应用服务的抽象，定义了Pod的逻辑集合和访问这个Pod集合的策略。Service将代理Pod对外表现为一个单一访问接口，外部不需要了解后端Pod如何运行，这给扩展和维护带来很多好处，提供了一套简化的服务代理和发现机制。</p>
-<h2 id="label">Label</h2>
-<p>Label是用于区分Pod、Service、Replication Controller的Key/Value对，实际上，Kubernetes中的任意API对象都可以通过Label进行标识。每个API对象可以有多个Label，但是每个Label的Key只能对应一个Value。Label是Service和Replication Controller运行的基础，它们都通过Label来关联Pod.</p>
-<h2 id="master">Master</h2>
-<p>Kubernetes里的Master指的是集群控制节点，每个Kubernetes集群里需要有一个Master节点来负责整个集群的管理和控制，基本上Kubernetes所有的控制命令都是发给它，它来负责具体的执行过程.</p>
-<p>在Master运行的组件有：</p>
-<ul>
-<li>kube-apiserver, 提供了HTTP Rest接口的关键服务进程，是Kubernetes里所有资源的增、删、改、查等操作的唯一入口，也是集群控制的入口进程.</li>
-<li>etcd, 强一致性高可用的key-value存储系统，kubernetes用来存储集群的数据。</li>
-<li>Kube-scheduler，负责资源调度（Pod调度）的进程，为新建的Pod分配Node。</li>
-<li>Kube-controller-manager，Kubernetes里所有资源对象的自动化控制中心，负责执行各种控制器。</li>
-</ul>
-<h2 id="node">Node</h2>
-<p>Kubernetes属于主从分布式集群架构，Kubernetes Node（简称为Node，早期版本叫作Minion）运行并管理容器。Node作为Kubernetes的操作单元，用来分配给Pod（或者说容器）进行绑定，Pod最终运行在Node上，Node可以认为是Pod的宿主机。</p>
-<p>Node节点上运行的组件有：</p>
-<ul>
-<li>kubelet, 负责Pod对应的容器的创建、启停等任务，同时与Master节点密切协作，实现集群管理的基本功能。</li>
-<li>Kube-proxy, 实现Kubernetes Service的通信与负载均衡机制的重要组件。</li>
-<li>container runtime, 负责运行容器。</li>
-</ul>
-]]></summary>
-        <content type="html"><![CDATA[<h2 id="pod">Pod</h2>
-<p>Pod是一个或多个若干相关容器的组合，Pod包含的容器运行在同一台宿主机上，这些容器使用相同的网络命名空间、IP地址和端口，相互之间能通过localhost来发现和通信。另外，这些容器还可共享一块存储卷空间。在Kubernetes中创建、调度和管理的最小单位是Pod，而不是容器，Pod通过提供更高层次的抽象，提供了更加灵活的部署和管理模式。</p>
-<p>Pod是Kubernetes的基本操作单元，也是应用运行的载体。</p>
-<p>Pod是容器的集合，容器是真正的执行体。相比原生的容器接口，Pod提供了更高层次的抽象，但是Pod的设计并不是为了运行同一个应用的多个实例，而是运行一个应用多个紧密联系的程序。而每个程序运行在单独的容器中，以Pod的形式组合成一个应用。</p>
-<h2 id="replication-controller">Replication Controller</h2>
-<p>Replication Controller用来控制管理Pod副本（Replica，或者称为实例），Replication Controller确保任何时候Kubernetes集群中有指定数量的Pod副本在运行。如果少于指定数量的Pod副本，Replication Controller会启动新的Pod副本，反之会杀死多余的副本以保证数量不变。另外，Replication Controller是弹性伸缩、滚动升级的实现核心。</p>
-<p>注：官方建议使用Deployment代替</p>
-<h2 id="service">Service</h2>
-<p>Service是真实应用服务的抽象，定义了Pod的逻辑集合和访问这个Pod集合的策略。Service将代理Pod对外表现为一个单一访问接口，外部不需要了解后端Pod如何运行，这给扩展和维护带来很多好处，提供了一套简化的服务代理和发现机制。</p>
-<h2 id="label">Label</h2>
-<p>Label是用于区分Pod、Service、Replication Controller的Key/Value对，实际上，Kubernetes中的任意API对象都可以通过Label进行标识。每个API对象可以有多个Label，但是每个Label的Key只能对应一个Value。Label是Service和Replication Controller运行的基础，它们都通过Label来关联Pod.</p>
-<h2 id="master">Master</h2>
-<p>Kubernetes里的Master指的是集群控制节点，每个Kubernetes集群里需要有一个Master节点来负责整个集群的管理和控制，基本上Kubernetes所有的控制命令都是发给它，它来负责具体的执行过程.</p>
-<p>在Master运行的组件有：</p>
-<ul>
-<li>kube-apiserver, 提供了HTTP Rest接口的关键服务进程，是Kubernetes里所有资源的增、删、改、查等操作的唯一入口，也是集群控制的入口进程.</li>
-<li>etcd, 强一致性高可用的key-value存储系统，kubernetes用来存储集群的数据。</li>
-<li>Kube-scheduler，负责资源调度（Pod调度）的进程，为新建的Pod分配Node。</li>
-<li>Kube-controller-manager，Kubernetes里所有资源对象的自动化控制中心，负责执行各种控制器。</li>
-</ul>
-<h2 id="node">Node</h2>
-<p>Kubernetes属于主从分布式集群架构，Kubernetes Node（简称为Node，早期版本叫作Minion）运行并管理容器。Node作为Kubernetes的操作单元，用来分配给Pod（或者说容器）进行绑定，Pod最终运行在Node上，Node可以认为是Pod的宿主机。</p>
-<p>Node节点上运行的组件有：</p>
-<ul>
-<li>kubelet, 负责Pod对应的容器的创建、启停等任务，同时与Master节点密切协作，实现集群管理的基本功能。</li>
-<li>Kube-proxy, 实现Kubernetes Service的通信与负载均衡机制的重要组件。</li>
-<li>container runtime, 负责运行容器。</li>
-</ul>
-<!-- more -->
 ]]></content>
     </entry>
 </feed>

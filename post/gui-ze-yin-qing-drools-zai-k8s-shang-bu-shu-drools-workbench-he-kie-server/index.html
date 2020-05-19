@@ -3,7 +3,7 @@
         <head>
         <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1,initial-scale=1,user-scalable=no" />
         <meta charset="utf-8">
-        <title>设计模式-适配器模式 | John&#39;s Blog</title>
+        <title>规则引擎drools - 在K8S上部署drools-workbench和kie-server | John&#39;s Blog</title>
         <link rel="stylesheet" href="https://caijh.github.io//styles/main.css">
         <link rel="stylesheet" href="https://at.alicdn.com/t/font_1306644_jwtuc2zzbrd.css">
         <link href="https://cdn.bootcss.com/animate.css/3.7.2/animate.min.css" rel="stylesheet">
@@ -56,67 +56,121 @@
                 <div class="mdui-row">
                         <div class="mdui-col-md-8 mdui-col-offset-md-2 ">
                                 <article class="mdui-p-a-2 post animated fadeIn" style="animation-delay: 0.8s;animation-duration: 2s">
-                                    <div class="post-title  mdui-m-b-1">设计模式-适配器模式</div>
-                                    <div class="mdui-typo-body-2 mdui-m-b-2" datetime="2019-06-30 14:59:48">2019-06-30 / 3 min read</div>
-                                    <div class="mdui-m-b-2 mdui-typo post-neirong"><h4 id="定义">定义</h4>
-<blockquote>
-<p>Convert the interface of a class into another interface clients expect.Adapter lets classes work together that couldn't otherwise because of incompatible interfaces.（将一个类的接口变换成客户端所期待的另一种接口，从而使原本因接口不匹配而无法在一起工作的两个类能够在一起工作。）</p>
-</blockquote>
-<h4 id="uml图">UML图</h4>
-<figure data-type="image" tabindex="1"><img src="https://caijh.github.io//post-images/1561879601059.png" alt="" loading="lazy"></figure>
-<!-- more -->
-<h4 id="代码实现">代码实现</h4>
-<pre><code>public interface Target {
-     //目标角色有自己的方法
-     public void request();
-}
-public class ConcreteTarget implements Target {
-     public void request() {
-             System.out.println(&quot;if you need any help,pls call me!&quot;);   }
-}
-public class Adaptee {
-     //原有的业务逻辑
-     public void doSomething(){
-             System.out.println(&quot;I'm kind of busy,leave me alone,pls!&quot;);
-     }
-}
-public class Adapter extends Adaptee implements Target {
-     public void request() {
-             super.doSomething();
-     }
-}
-public class Client {
-     public static void main(String[] args) {
-             //原有的业务逻辑
-             Target target = new ConcreteTarget();
-             target.request();
-             //现在增加了适配器角色后的业务逻辑
-             Target target2 = new Adapter();
-             target2.request();
-     }
-}
+                                    <div class="post-title  mdui-m-b-1">规则引擎drools - 在K8S上部署drools-workbench和kie-server</div>
+                                    <div class="mdui-typo-body-2 mdui-m-b-2" datetime="2020-05-18 22:53:32">2020-05-18 / 2 min read</div>
+                                    <div class="mdui-m-b-2 mdui-typo post-neirong"><h1 id="在k8s上部署drools-workbench和kie-server">在K8S上部署drools-workbench和kie-server</h1>
+<p>Yaml如下</p>
+<pre><code>---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: drools-data
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+        storage: 10Gi
+  storageClassName: nfs-storage
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: drools-workbench
+  labels:
+    app: drools-workbench
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: drools-workbench
+  template:
+    metadata:
+      labels:
+        app: drools-workbench
+    spec:
+      containers:
+      - image: jboss/drools-workbench-showcase:latest
+        imagePullPolicy: IfNotPresent
+        name: drools-workbench
+        ports:
+          - containerPort: 8080
+          - containerPort: 8001
+        volumeMounts:
+          - name: drools-data
+            mountPath: /opt/jboss/wildfly/bin/.niogit
+            subPath: wb_git
+          - name: drools-data
+            mountPath: /opt/jboss/wildfly/standalone/log
+            subPath: logs
+      volumes:
+      - name: drools-data
+        persistentVolumeClaim:
+          claimName: drools-data
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: drools-wb
+  labels:
+    app: drools-workbench
+spec:
+  type: NodePort
+  ports:
+    - port: 8080
+      targetPort: 8080
+      nodePort: 30808
+  selector:
+    app: drools-workbench
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kie-server
+  labels:
+    app: kie-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kie-server
+  template:
+    metadata:
+      labels:
+        app: kie-server
+    spec:
+      containers:
+      - image: jboss/kie-server-showcase:latest
+        imagePullPolicy: IfNotPresent
+        name: kie-server
+        ports:
+          - containerPort: 8080
+        env:
+          - name: KIE_SERVER_CONTROLLER
+            value: http://drools-wb:8080/business-central/rest/controller
+          - name: KIE_MAVEN_REPO
+            value: http://drools-wb:8080/business-central/maven2
+
+
 </code></pre>
-<h4 id="适配器模式的优点">适配器模式的优点</h4>
-<ul>
-<li>适配器模式可以让两个没有任何关系的类在一起运行，只要适配器这个角色能够搞定他们就成。</li>
-<li>增加了类的透明性<br>
-想想看，我们访问的Target目标角色，但是具体的实现都委托给了源角色，而这些对高层次模块是透明的，也是它不需要关心的。</li>
-<li>提高了类的复用度<br>
-当然了，源角色在原有的系统中还是可以正常使用，而在目标角色中也可以充当新的演员。</li>
-<li>灵活性非常好<br>
-某一天，突然不想要适配器，没问题，删除掉这个适配器就可以了，其他的代码都不用修改，基本上就类似一个灵活的构件，想用就用，不想就卸载。</li>
-</ul>
-<h4 id="适配器模式的使用场景">适配器模式的使用场景</h4>
-<p>适配器应用的场景只要记住一点就足够了：你有动机修改一个已经投产中的接口时，适配器模式可能是最适合你的模式。比如系统扩展了，需要使用一个已有或新建立的类，但这个类又不符合系统的接口，怎么办？使用适配器模式，这也是我们例子中提到的。</p>
+<p>需要注意</p>
+<ol>
+<li>你的K8S环境要有StorageClass, 并替换yaml中的storageClass</li>
+<li>如果修改了暴露drools-workbench的Service的名称，环境变量KIE_SERVER_CONTROLLER及KIE_MAVEN_REPO需要修改</li>
+</ol>
+<p>访问http://ip:30808/business-central, 使用admin/admin登录</p>
+<figure data-type="image" tabindex="1"><img src="https://raw.githubusercontent.com/caijh/imagehosting/master/image-20200518225205550.png" alt="image-20200518225205550" loading="lazy"></figure>
 </div>
                                     <div class="mdui-divider mdui-m-b-2"></div>
                                     <div class="mdui-row-xs-2 post-fenye">
                                        
-                                        <div class="mdui-col"> <div class="mdui-text-left"><a href="https://caijh.github.io/post/she-ji-mo-shi-die-dai-qi-mo-shi/">设计模式-迭代器模式</a></div></div>
+                                        <div class="mdui-col"> </div>
                                         
 
                                         
-                                        <div class="mdui-col"><div class="mdui-text-right "><a href="https://caijh.github.io/post/she-ji-mo-shi-ce-lue-mo-shi/">设计模式-策略模式</a></div> </div>
+                                        <div class="mdui-col"><div class="mdui-text-right "><a href="https://caijh.github.io/post/maven-pi-liang-shang-chuan-jar-bao-dao-si-fu/">Maven - 批量上传jar包到私服</a></div> </div>
                                        
                                       </div>
                                    

@@ -58,28 +58,40 @@
                          
                                                          
                                <article class="mdui-p-a-5 index-list mdui-m-b-3 animated fadeIn" style="animation-delay: 0.8s;animation-duration: 2s">
+                                    <div class="mdui-typo-body-2 mdui-m-b-1" datetime="2019-07-13 22:43:38">2019-07-13</div>
+                                    <div class="mdui-typo-headline mdui-m-b-3 index-list-title index-guo"><a href="https://caijh.github.io/post/spring-cloud-ru-he-jie-jue-feignribbon-di-yi-ci-qing-qiu-shi-bai-de-wen-ti/">Spring Cloud - 如何解决Feign/Ribbon第一次请求失败的问题</a></div>
+                                    <div class="mdui-typo-subheading mdui-m-b-2 index-neirong"><p>
+造成该问题的原因？
+Hystrix默认的超时时间是1秒，如果超过这个时间尚未响应，将会进入fallback代码。而首次请求往往会比较慢（由于Ribbon是懒加载的，在首次请求时，才会开始初始化相关类），这个响应时间可能就大于1秒了。
+
+
+...</p></div>
+                                    <div class="index-list-rm index-guo"><a href="https://caijh.github.io/post/spring-cloud-ru-he-jie-jue-feignribbon-di-yi-ci-qing-qiu-shi-bai-de-wen-ti/">Read More</a></div>
+                                </article>
+                                
+                               <article class="mdui-p-a-5 index-list mdui-m-b-3 animated fadeIn" style="animation-delay: 0.8s;animation-duration: 2s">
                                     <div class="mdui-typo-body-2 mdui-m-b-1" datetime="2019-07-08 18:49:35">2019-07-08</div>
-                                    <div class="mdui-typo-headline mdui-m-b-3 index-list-title index-guo"><a href="https://caijh.github.io/post/java-xian-cheng-chi">Java - 线程池</a></div>
+                                    <div class="mdui-typo-headline mdui-m-b-3 index-list-title index-guo"><a href="https://caijh.github.io/post/java-xian-cheng-chi/">Java - 线程池</a></div>
                                     <div class="mdui-typo-subheading mdui-m-b-2 index-neirong"><p>ThreadPoolExecutor的重要参数
 
 corePoolSize：核心线程数
 核心线程会一直存活，及时没有任务需要执行
 当线程数小于核心线程数时，即使有线程空闲，线程池也会优先创建新线程处理
 设置allowCoreThreadTi...</p></div>
-                                    <div class="index-list-rm index-guo"><a href="https://caijh.github.io/post/java-xian-cheng-chi">Read More</a></div>
+                                    <div class="index-list-rm index-guo"><a href="https://caijh.github.io/post/java-xian-cheng-chi/">Read More</a></div>
                                 </article>
                                 
                                <article class="mdui-p-a-5 index-list mdui-m-b-3 animated fadeIn" style="animation-delay: 0.8s;animation-duration: 2s">
                                     <div class="mdui-typo-body-2 mdui-m-b-1" datetime="2019-07-06 23:16:29">2019-07-06</div>
-                                    <div class="mdui-typo-headline mdui-m-b-3 index-list-title index-guo"><a href="https://caijh.github.io/post/kafka-acks-can-shu">Kafka-Acks参数</a></div>
+                                    <div class="mdui-typo-headline mdui-m-b-3 index-list-title index-guo"><a href="https://caijh.github.io/post/kafka-acks-can-shu/">Kafka-Acks参数</a></div>
                                     <div class="mdui-typo-subheading mdui-m-b-2 index-neirong"><p>kafka中用topic表示同类的消息，topic可以有1个或多个partition.
 kafka集群中一个broker负责一部分partition，在kafka集群中，每个Partition都有多个副本，其中一个副本叫做leader，其他...</p></div>
-                                    <div class="index-list-rm index-guo"><a href="https://caijh.github.io/post/kafka-acks-can-shu">Read More</a></div>
+                                    <div class="index-list-rm index-guo"><a href="https://caijh.github.io/post/kafka-acks-can-shu/">Read More</a></div>
                                 </article>
                                 
                                <article class="mdui-p-a-5 index-list mdui-m-b-3 animated fadeIn" style="animation-delay: 0.8s;animation-duration: 2s">
                                     <div class="mdui-typo-body-2 mdui-m-b-1" datetime="2019-07-06 22:18:45">2019-07-06</div>
-                                    <div class="mdui-typo-headline mdui-m-b-3 index-list-title index-guo"><a href="https://caijh.github.io/post/yuan-ma-yue-du-tomcat">源码阅读-tomcat</a></div>
+                                    <div class="mdui-typo-headline mdui-m-b-3 index-list-title index-guo"><a href="https://caijh.github.io/post/yuan-ma-yue-du-tomcat/">源码阅读-tomcat</a></div>
                                     <div class="mdui-typo-subheading mdui-m-b-2 index-neirong"><p>tomcat启动过程
 
 
@@ -89,22 +101,22 @@ kafka集群中一个broker负责一部分partition，在kafka集群中，每个P
 static {
         // Will always be non-null
         ...</p></div>
-                                    <div class="index-list-rm index-guo"><a href="https://caijh.github.io/post/yuan-ma-yue-du-tomcat">Read More</a></div>
+                                    <div class="index-list-rm index-guo"><a href="https://caijh.github.io/post/yuan-ma-yue-du-tomcat/">Read More</a></div>
                                 </article>
                                 
                                <article class="mdui-p-a-5 index-list mdui-m-b-3 animated fadeIn" style="animation-delay: 0.8s;animation-duration: 2s">
                                     <div class="mdui-typo-body-2 mdui-m-b-1" datetime="2019-07-03 11:17:17">2019-07-03</div>
-                                    <div class="mdui-typo-headline mdui-m-b-3 index-list-title index-guo"><a href="https://caijh.github.io/post/yuan-ma-yue-du-hashmap-concurrenthashmap">源码阅读-HashMap ConcurrentHashMap</a></div>
+                                    <div class="mdui-typo-headline mdui-m-b-3 index-list-title index-guo"><a href="https://caijh.github.io/post/yuan-ma-yue-du-hashmap-concurrenthashmap/">源码阅读-HashMap ConcurrentHashMap</a></div>
                                     <div class="mdui-typo-subheading mdui-m-b-2 index-neirong"><p>搬砖自 https://mp.weixin.qq.com/s/DTzd3jdtnnveffL-zcpmyg
 前言
 Map 这样的 Key Value 在软件开发中是非常经典的结构，常用于在内存中存放数据。
 本篇主要想讨论 Concurren...</p></div>
-                                    <div class="index-list-rm index-guo"><a href="https://caijh.github.io/post/yuan-ma-yue-du-hashmap-concurrenthashmap">Read More</a></div>
+                                    <div class="index-list-rm index-guo"><a href="https://caijh.github.io/post/yuan-ma-yue-du-hashmap-concurrenthashmap/">Read More</a></div>
                                 </article>
                                 
                                <article class="mdui-p-a-5 index-list mdui-m-b-3 animated fadeIn" style="animation-delay: 0.8s;animation-duration: 2s">
                                     <div class="mdui-typo-body-2 mdui-m-b-1" datetime="2019-07-02 22:42:43">2019-07-02</div>
-                                    <div class="mdui-typo-headline mdui-m-b-3 index-list-title index-guo"><a href="https://caijh.github.io/post/maven-fa-bu-zi-ji-de-maven-gou-jian-dao-zhong-yang-cang-ku">maven-发布自己的maven构件到中央仓库</a></div>
+                                    <div class="mdui-typo-headline mdui-m-b-3 index-list-title index-guo"><a href="https://caijh.github.io/post/maven-fa-bu-zi-ji-de-maven-gou-jian-dao-zhong-yang-cang-ku/">maven-发布自己的maven构件到中央仓库</a></div>
                                     <div class="mdui-typo-subheading mdui-m-b-2 index-neirong"><p>发布自己的jar包到中央仓库的好处：
 
 省去自建maven私服
@@ -113,36 +125,36 @@ Map 这样的 Key Value 在软件开发中是非常经典的结构，常用于�
 
 注册 sonatype的Jira 帐号
 注册地址: https://issues.sonatype.org/secure/Signup!...</p></div>
-                                    <div class="index-list-rm index-guo"><a href="https://caijh.github.io/post/maven-fa-bu-zi-ji-de-maven-gou-jian-dao-zhong-yang-cang-ku">Read More</a></div>
+                                    <div class="index-list-rm index-guo"><a href="https://caijh.github.io/post/maven-fa-bu-zi-ji-de-maven-gou-jian-dao-zhong-yang-cang-ku/">Read More</a></div>
                                 </article>
                                 
                                <article class="mdui-p-a-5 index-list mdui-m-b-3 animated fadeIn" style="animation-delay: 0.8s;animation-duration: 2s">
                                     <div class="mdui-typo-body-2 mdui-m-b-1" datetime="2019-07-01 17:38:57">2019-07-01</div>
-                                    <div class="mdui-typo-headline mdui-m-b-3 index-list-title index-guo"><a href="https://caijh.github.io/post/yuan-ma-yue-du-hashmap-de-shi-xian-yuan-li">源码阅读-HashMap的实现原理</a></div>
+                                    <div class="mdui-typo-headline mdui-m-b-3 index-list-title index-guo"><a href="https://caijh.github.io/post/yuan-ma-yue-du-hashmap-de-shi-xian-yuan-li/">源码阅读-HashMap的实现原理</a></div>
                                     <div class="mdui-typo-subheading mdui-m-b-2 index-neirong"><p>
 原文链接：https://blog.csdn.net/fenglibing/article/details/91565912
 
 HashMap的类图
 
 HashMap是Java开发当中使用得非常多的一种数据结构，因为其可以快速的定位到需要...</p></div>
-                                    <div class="index-list-rm index-guo"><a href="https://caijh.github.io/post/yuan-ma-yue-du-hashmap-de-shi-xian-yuan-li">Read More</a></div>
+                                    <div class="index-list-rm index-guo"><a href="https://caijh.github.io/post/yuan-ma-yue-du-hashmap-de-shi-xian-yuan-li/">Read More</a></div>
                                 </article>
                                 
                                <article class="mdui-p-a-5 index-list mdui-m-b-3 animated fadeIn" style="animation-delay: 0.8s;animation-duration: 2s">
                                     <div class="mdui-typo-body-2 mdui-m-b-1" datetime="2019-06-30 21:04:34">2019-06-30</div>
-                                    <div class="mdui-typo-headline mdui-m-b-3 index-list-title index-guo"><a href="https://caijh.github.io/post/she-ji-mo-shi-qiao-jie-mo-shi">设计模式-桥接模式</a></div>
+                                    <div class="mdui-typo-headline mdui-m-b-3 index-list-title index-guo"><a href="https://caijh.github.io/post/she-ji-mo-shi-qiao-jie-mo-shi/">设计模式-桥接模式</a></div>
                                     <div class="mdui-typo-subheading mdui-m-b-2 index-neirong"><p>定义
 
 Decouple an abstraction from its implementation so that the two can vary independently.（将抽象和实现解耦，使得两者可以独立地变化。）
 
 UML
 ...</p></div>
-                                    <div class="index-list-rm index-guo"><a href="https://caijh.github.io/post/she-ji-mo-shi-qiao-jie-mo-shi">Read More</a></div>
+                                    <div class="index-list-rm index-guo"><a href="https://caijh.github.io/post/she-ji-mo-shi-qiao-jie-mo-shi/">Read More</a></div>
                                 </article>
                                 
                                <article class="mdui-p-a-5 index-list mdui-m-b-3 animated fadeIn" style="animation-delay: 0.8s;animation-duration: 2s">
                                     <div class="mdui-typo-body-2 mdui-m-b-1" datetime="2019-06-30 21:02:13">2019-06-30</div>
-                                    <div class="mdui-typo-headline mdui-m-b-3 index-list-title index-guo"><a href="https://caijh.github.io/post/she-ji-mo-shi-xiang-yuan-mo-shi">设计模式-享元模式</a></div>
+                                    <div class="mdui-typo-headline mdui-m-b-3 index-list-title index-guo"><a href="https://caijh.github.io/post/she-ji-mo-shi-xiang-yuan-mo-shi/">设计模式-享元模式</a></div>
                                     <div class="mdui-typo-subheading mdui-m-b-2 index-neirong"><p>定义
 
 Use sharing to support large numbers of fine-grained objects efficiently.（使用共享对象可有效地支持大量的细粒度的对象。）
@@ -152,25 +164,16 @@ UML
 
 代码实现
 public...</p></div>
-                                    <div class="index-list-rm index-guo"><a href="https://caijh.github.io/post/she-ji-mo-shi-xiang-yuan-mo-shi">Read More</a></div>
+                                    <div class="index-list-rm index-guo"><a href="https://caijh.github.io/post/she-ji-mo-shi-xiang-yuan-mo-shi/">Read More</a></div>
                                 </article>
                                 
                                <article class="mdui-p-a-5 index-list mdui-m-b-3 animated fadeIn" style="animation-delay: 0.8s;animation-duration: 2s">
                                     <div class="mdui-typo-body-2 mdui-m-b-1" datetime="2019-06-30 21:00:34">2019-06-30</div>
-                                    <div class="mdui-typo-headline mdui-m-b-3 index-list-title index-guo"><a href="https://caijh.github.io/post/she-ji-mo-shi-jie-shi-qi-mo-shi">设计模式-解释器模式</a></div>
+                                    <div class="mdui-typo-headline mdui-m-b-3 index-list-title index-guo"><a href="https://caijh.github.io/post/she-ji-mo-shi-jie-shi-qi-mo-shi/">设计模式-解释器模式</a></div>
                                     <div class="mdui-typo-subheading mdui-m-b-2 index-neirong"><p>定义
 
 Given a language, define a representation for its grammar along with an interpreter that uses the representation to ...</p></div>
-                                    <div class="index-list-rm index-guo"><a href="https://caijh.github.io/post/she-ji-mo-shi-jie-shi-qi-mo-shi">Read More</a></div>
-                                </article>
-                                
-                               <article class="mdui-p-a-5 index-list mdui-m-b-3 animated fadeIn" style="animation-delay: 0.8s;animation-duration: 2s">
-                                    <div class="mdui-typo-body-2 mdui-m-b-1" datetime="2019-06-30 19:15:56">2019-06-30</div>
-                                    <div class="mdui-typo-headline mdui-m-b-3 index-list-title index-guo"><a href="https://caijh.github.io/post/she-ji-mo-shi-zhuang-tai-mo-shi">设计模式-状态模式</a></div>
-                                    <div class="mdui-typo-subheading mdui-m-b-2 index-neirong"><p>定义
-
-Allow an object to alter its behavior when its internal state changes.The object will appear to change its class.（当一...</p></div>
-                                    <div class="index-list-rm index-guo"><a href="https://caijh.github.io/post/she-ji-mo-shi-zhuang-tai-mo-shi">Read More</a></div>
+                                    <div class="index-list-rm index-guo"><a href="https://caijh.github.io/post/she-ji-mo-shi-jie-shi-qi-mo-shi/">Read More</a></div>
                                 </article>
                                 
 
